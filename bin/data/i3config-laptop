@@ -1,0 +1,64 @@
+###############################################
+# Laptop                                      #
+###############################################
+
+# monitors
+set $monitor_one eDP1
+set $monitor_two HDMI-0
+
+# bar 1
+bar {
+	status_command i3blocks -c ~/.config/i3/i3blocks.conf
+	output $monitor_one
+	tray_output none
+	colors {
+		background $bg-color
+		separator #757575
+		#                  border             background         text
+		focused_workspace  $focus-color       $focus-color       $text-color
+		active_workspace   $bg-color          $bg-color          $text-color
+		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+	}
+}
+
+# bar 2
+bar {
+	output $monitor_two
+	tray_output none
+	colors {
+		background $bg-color
+		separator #757575
+		#                  border             background         text
+		focused_workspace  $focus-color       $focus-color       $text-color
+		active_workspace   $bg-color          $bg-color          $text-color
+		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+	}
+}
+
+
+# load workspace layouts
+#1
+exec --no-startup-id i3-msg "workspace 1; exec steam; layout tabbed"
+#2
+exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/.config/i3/browser.json; exec google-chrome --disable-session-crashed-bubble"
+#3
+#exec --no-startup-id i3-msg "workspace 3; append_layout /home/eivind/.config/i3/terminals2.json; exec lxterminal; exec lxterminal"
+exec --no-startup-id i3-msg "workspace 3; exec lxterminal;"
+#4
+
+#5
+
+#6
+
+#7
+
+#8
+
+#9
+
+#10
+
+# remove urgent color from bar
+exec --no-startup-id $HOME/.bin/remove-urgent

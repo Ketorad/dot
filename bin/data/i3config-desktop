@@ -1,0 +1,93 @@
+###############################################
+# Desktop                                     #
+###############################################
+
+# monitors
+set $monitor_one DP-0
+set $monitor_two DP-2
+set $monitor_three DP-4
+
+workspace $workspace1 output $monitor_one
+workspace $workspace2 output $monitor_one
+workspace $workspace3 output $monitor_one
+workspace $workspace8 output $monitor_one
+workspace $workspace9 output $monitor_one
+workspace $workspace10 output $monitor_one
+
+workspace $workspace6 output $monitor_two
+workspace $workspace7 output $monitor_two
+
+workspace $workspace4 output $monitor_three
+workspace $workspace5 output $monitor_three
+
+
+# bar 1
+bar {
+	status_command i3blocks -c ~/.config/i3/i3blocks.conf
+	output $monitor_one
+	tray_output none
+	colors {
+		background $bg-color
+		separator #757575
+		#                  border             background         text
+		focused_workspace  $focus-color       $focus-color       $text-color
+		active_workspace   $bg-color          $bg-color          $text-color
+		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+	}
+}
+
+# bar 2
+bar {
+	output $monitor_two
+	tray_output none
+	colors {
+		background $bg-color
+		separator #757575
+		#                  border             background         text
+		focused_workspace  $focus-color       $focus-color       $text-color
+		active_workspace   $bg-color          $bg-color          $text-color
+		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+	}
+}
+
+# bar 3
+bar {
+	output $monitor_three
+	tray_output none
+	colors {
+		background $bg-color
+		separator #757575
+		#                  border             background         text
+		focused_workspace  $focus-color       $focus-color       $text-color
+		active_workspace   $bg-color          $bg-color          $text-color
+		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+	}
+}
+
+
+# load workspace layouts
+#1
+exec --no-startup-id i3-msg "workspace 1; exec steam; layout tabbed"
+#2
+exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/.config/i3/browser.json; exec google-chrome --disable-session-crashed-bubble"
+#3
+#exec --no-startup-id i3-msg "workspace 3; exec lxterminal"
+#4
+#exec --no-startup-id i3-msg "workspace 4; exec lxterminal"
+#5
+
+#6
+#exec --no-startup-id i3-msg "workspace 6; exec lxterminal"
+#7
+
+#8
+
+#9
+
+#10
+
+# remove urgent color from bar
+exec --no-startup-id $HOME/.bin/remove-urgent

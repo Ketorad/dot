@@ -1,0 +1,28 @@
+#!/bin/bash
+
+dataFileBase="$HOME/.bin/data/i3config-base"
+dataFileDesktop="$HOME/.bin/data/i3config-desktop"
+dataFileLaptop="$HOME/.bin/data/i3config-laptop"
+i3configFile="$HOME/.config/i3/config"
+
+userName=$(uname -n)
+
+cat $dataFileBase > $i3configFile
+
+echo >> $i3configFile
+echo >> $i3configFile
+
+if [ ! -e $dataFileBase ] || [ ! -e $dataFileDesktop ] || [ ! -e $dataFileLaptop ]; then
+	echo "Error: i3config datafile[s] missing"
+	echo "$dataFileBase"
+	echo "$dataFileDesktop"
+	echo "$dataFileLaptop"
+else
+	if [ $userName = "eivind-desktop" ]; then
+		cat $dataFileDesktop >> $i3configFile
+	elif [ $userName = "eivind-laptop" ]; then
+		cat $dataFileLaptop >> $i3configFile
+	fi
+fi
+
+echo "Writing i3config for \"$userName\""

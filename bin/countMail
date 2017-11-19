@@ -1,0 +1,32 @@
+#!/bin/bash
+# Count /var/mail/eivind mails and store value in file
+
+userName=$(uname -n)
+
+mailFile="/var/mail/eivind"
+dataFileLocal="/home/eivind/.bin/data/countedMails"
+dataFileRemote="/media/filserver/eivind/Backup/mail/$userName"
+
+countedMails=$(cat $mailFile | grep -c "Message-Id:")
+
+
+# Create datafileLocal if not exist
+if [ ! -e $dataFileLocal ]; then
+	echo "0" > $dataFileLocal
+fi
+
+
+# Check if filserver is mounted
+if [ $(cat /proc/mounts | grep -c filserver) -gt 0 ]; then
+	# Create datafileRemote if not exist
+	if [ ! -e $dataFileRemote ]; then
+	touch $dataFileRemote
+	fi
+
+
+	# Check if there is a change in counted mails, and update if there is
+	if [ $countedMails != $(cat $dataFileLocal) ]; then
+		echo $countedMails > $dataFileLocal
+		echo $countedMails > $dataFileRemote
+	fi
+fi

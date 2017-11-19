@@ -1,0 +1,13 @@
+#!/bin/bash
+# Set picture as wallpaper
+
+linkPath="$HOME/.wallpaper"
+folderPath=$(pwd)
+wallpaper="$1"
+
+if [[ $1 ]]; then
+	ln -sf $folderPath/$wallpaper $linkPath
+	echo "Setting wallpaper to $folderPath/$wallpaper"
+fi
+
+feh --bg-center --bg-fill --no-xinerama $linkPath

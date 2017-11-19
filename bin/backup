@@ -1,0 +1,32 @@
+#!/bin/bash
+# Backup chosen files or folders
+
+today=$(date '+%Y-%m-%d')
+dataFolder="/media/filserver/eivind/Backup"
+
+# Check if backup folder is available
+if [ ! -e $dataFolder ]; then
+	echo "$dataFolder not available"
+else
+	# Create today's backup folder if not exist
+	if [ ! -e $dataFolder/$today ]; then
+		mkdir $dataFolder/$today
+		# delete old today link
+		rm -f $dataFolder/today
+		# create today link to the new today's folder
+		#ln -s $dataFolder$today $dataFolder'today'
+		ln -s $dataFolder/$today $dataFolder/today
+	fi
+fi
+
+# Copy all files in arguments to backup folder
+for var in "$@" ; do
+	#echo \"$var\"
+	if [ ! -e "$var" ]; then
+		echo "Error: \"$var\" not found"
+	else
+		echo "Backing up \"$var\" ..."
+		cp -rf "$var" "$dataFolder/$today/"
+		echo "... done."
+	fi
+done

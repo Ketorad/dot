@@ -1,0 +1,39 @@
+#!/bin/bash
+# Cheat sheet for linux commands
+
+
+tar() {
+	echo "#To extract an uncompressed archive:"
+	echo "tar -xvf /path/to/foo.tar"
+	echo
+	echo "#To extract a .gz archive:"
+	echo "tar -xzvf /path/to/foo.tgz"
+	echo
+	echo "#To create a .gz archive:"
+	echo "tar -czvf /path/to/foo.tgz /path/to/foo/"
+	echo
+	echo "#To extract a .bz2 archive:"
+	echo "tar -xjvf /path/to/foo.tgz"
+	echo
+	echo "#To create a .bz2 archive:"
+	echo "-cjvf /path/to/foo.tgz /path/to/foo/"
+}
+
+
+user() {
+	echo "#Add existing user to group"
+	echo "sudo usermod -a -G groupName userName"
+}
+
+
+scanimage() {
+	echo "scanimage --format=png > <dest>"
+}
+
+
+case $1 in
+	tar) "$1" ;;
+	user) "$1" ;;
+	scanimage) "$1" ;;
+	*) echo "No entry for \"$1\"" ;;
+esac

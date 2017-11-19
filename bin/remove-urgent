@@ -1,0 +1,15 @@
+#!/bin/bash
+# remove i3 urgent colors on bar
+
+#sleep 1
+#wmctrl -r "chrome" -b remove,demands_attention
+#i3-msg "workspace 5; focus left, focus up"
+
+sleep 1
+i3-msg "workspace 5"
+sleep 1
+i3-msg "workspace 4"
+sleep 1
+i3-msg "workspace 2"
+sleep 1
+i3-msg "workspace 3"

@@ -1,0 +1,90 @@
+cmake_minimum_required(VERSION 3.0)
+project(Space_Invader_Clone)
+
+###############################################################################
+## file globbing ##############################################################
+###############################################################################
+
+file(GLOB_RECURSE sources src/*.cpp src/*.h)
+file(GLOB_RECURSE data    data/*)
+
+###############################################################################
+## target definitions #########################################################
+###############################################################################
+
+add_executable(${PROJECT_NAME} ${sources} ${data})
+
+target_include_directories(${PROJECT_NAME} PUBLIC src)
+
+file(COPY ${data} DESTINATION data)
+
+###############################################################################
+## dependencies ###############################################################
+###############################################################################
+
+include(FindPkgConfig)
+
+pkg_search_module(SDL2 REQUIRED sdl2)
+pkg_search_module(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+pkg_search_module(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+
+include_directories(${SDL2_INCLUDE_DIRS} ${SDL2IMAGE_INCLUDE_DIRS} ${SDL2TTF_INCLUDE_DIRS})
+target_link_libraries(${PROJECT_NAME} ${SDL2_LIBRARIES} ${SDL2IMAGE_LIBRARIES} ${SDL2TTF_LIBRARIES})
+
+# Compile commands for vim youcompleteme
+set(CMAKE_EXPORT_COMPILE_COMMANDS 1)
+
+###############################################################################
+## testing ####################################################################
+###############################################################################
+
+find_package(GTest)
+
+if(GTEST_FOUND)
+  add_executable(unit_tests ${sources_test} ${sources})
+
+  # This define is added to prevent collision with the main.
+  # It might be better solved by not adding the source with the main to the
+  # testing target.
+  target_compile_definitions(unit_tests PUBLIC UNIT_TESTS)
+
+  # This allows us to use the executable as a link library, and inherit all 
+  # linker options and library dependencies from it, by simply adding it as dependency.
+  set_target_properties(${PROJECT_NAME} PROPERTIES ENABLE_EXPORTS on)
+
+  target_link_libraries(unit_tests PUBLIC
+    ${GTEST_BOTH_LIBRARIES}
+	 ${PROJECT_NAME}
+  )
+
+  target_include_directories(unit_tests PUBLIC
+    ${GTEST_INCLUDE_DIRS} # doesn't do anything on linux
+  )
+  
+endif()
+
+###############################################################################
+## packaging ##################################################################
+###############################################################################
+
+# All install commands get the same destination. this allows us to use paths
+# relative to the executable.
+install(TARGETS ${PROJECT_NAME} DESTINATION ${PROJECT_NAME}_destination)
+
+# This is basically a repeat of the file copy instruction that copies the
+# data in the build directory, but here we tell cmake that we want it
+# in the package.
+install(DIRECTORY data DESTINATION ${PROJECT_NAME}_destination)
+
+# Now comes everything we need, to create a package
+# there are a lot more variables you can set, and some
+# you need to set for some package types, but we want to
+# be minimal here.
+set(CPACK_PACKAGE_NAME ${PROJECT_NAME})
+set(CPACK_PACKAGE_VERSION "1.0.0")
+
+# We don't want to split our program up into several incomplete pieces.
+set(CPACK_MONOLITHIC_INSTALL 1)
+
+# This must be last
+include(CPack)

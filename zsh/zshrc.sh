@@ -15,7 +15,7 @@
 # Settings
 	export VISUAL=vim
 
-source ~/dotfiles/zsh/plugins/fixls.zsh
+source ~/dot/zsh/plugins/fixls.zsh
 
 #Functions
 	# Custom cd
@@ -28,13 +28,13 @@ source ~/dotfiles/zsh/plugins/fixls.zsh
 # For vim mappings: 
 	stty -ixon
 
-source ~/dotfiles/zsh/plugins/oh-my-zsh/lib/history.zsh
-source ~/dotfiles/zsh/plugins/oh-my-zsh/lib/key-bindings.zsh
-source ~/dotfiles/zsh/plugins/oh-my-zsh/lib/completion.zsh
-source ~/dotfiles/zsh/plugins/vi-mode.plugin.zsh
-#source ~/dotfiles/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-#source ~/dotfiles/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source ~/dotfiles/zsh/keybindings.sh
+source ~/dot/zsh/plugins/oh-my-zsh/lib/history.zsh
+source ~/dot/zsh/plugins/oh-my-zsh/lib/key-bindings.zsh
+source ~/dot/zsh/plugins/oh-my-zsh/lib/completion.zsh
+source ~/dot/zsh/plugins/vi-mode.plugin.zsh
+#source ~/dot/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+#source ~/dot/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/dot/zsh/keybindings.sh
 
 # Fix for arrow-key searching
 # start typing + [Up-Arrow] - fuzzy find history forward
@@ -50,4 +50,4 @@ if [[ "${terminfo[kcud1]}" != "" ]]; then
 	bindkey "${terminfo[kcud1]}" down-line-or-beginning-search
 fi
 
-source ~/dotfiles/zsh/prompt.sh
+source ~/dot/zsh/prompt.sh

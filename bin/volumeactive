@@ -1,0 +1,26 @@
+#!/bin/bash
+# Adjust volume of active sound output
+
+minVolume=0
+maxVolume=100
+activeSink=$(pactl list short sinks | grep RUNNING | head -n1 | cut -f1)
+
+# check if activeSink is a number
+re='^[0-9]+$'
+if [[ $activeSink =~ $re ]]; then
+	if [ $1 = "mute" ]; then
+		pactl set-sink-mute $activeSink toggle
+	else
+		pactl set-sink-volume $activeSink $1
+	fi
+
+	# get the current volume
+	volume=$(pactl list sinks | grep -A 9 "Sink #$activeSink" | grep "Volume: " | expand | tr -s " " | cut -d "/" -f2 | tr -d " " | tr -d "%")
+
+	# make sure volume doesn't exede min and max
+	if (( $volume < $minVolume )); then
+		pactl set-sink-volume $activeSink $minVolume%
+	elif (( $volume > $maxVolume )); then
+		pactl set-sink-volume $activeSink $maxVolume%
+	fi
+fi

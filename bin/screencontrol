@@ -1,0 +1,268 @@
+#!/bin/bash
+# Control wich monitors to output
+
+
+# globals ---------------------
+
+userName=$(uname -n)
+
+monitorOne=""
+monitorTwo=""
+monitorThree=""
+
+positionOne="0x0"
+positionTwo="0x0"
+positionThree="0x0"
+
+if [[ $userName == "eivind-desktop" ]]; then
+	monitorOne="DP-0"
+	monitorTwo="DP-2"
+	monitorThree="DP-4"
+
+	positionOne="2560x0"
+	positionTwo="5120x0"
+	positionThree="0x0"
+elif [[ $userName == "eivind-laptop" ]]; then
+	monitorOne="eDP1"
+	monitorTwo="HDMI2"
+else
+	echo "Error: No screen profile for user $userName"
+	exit 0
+fi
+
+resolutionOne=$(xrandr | grep -A1 -m1 "$monitorOne connected" | tail -n1 | tr -s " " | cut -d " " -f2)
+resolutionTwo=$(xrandr | grep -A1 -m1 "$monitorTwo connected" | tail -n1 | tr -s " " | cut -d " " -f2)
+resolutionThree=$(xrandr | grep -A1 -m1 "$monitorThree connected" | tail -n1 | tr -s " " | cut -d " " -f2)
+
+xrandrString=""
+
+# -----------------------------
+
+
+# functions -------------------
+
+helpText() {
+	echo "Usage: $(basename $0) [monitor] [action]"
+	echo "Turn monitors on of off using xrandr."
+	echo
+	echo "[monitor] arguments:"
+	echo " all         all monitors"
+	echo " one         primary monitor"
+	echo " two"
+	echo " three"
+	echo
+	echo "[action] arguments:"
+	echo " on"
+	echo " off"
+	echo " toggle      toggle between on and off"
+	echo " switch      switches between modes. Only works with \"all\" and \"one\""
+	echo "              monitor arguments"
+}
+
+oneOn() {
+	if [[ $xrandrString ]]; then
+		xrandrString="$xrandrString --output $monitorOne --primary --mode $resolutionOne --pos $positionOne"
+	else
+		xrandrString="--output $monitorOne --mode $resolutionOne --pos $positionOne"
+	fi
+}
+
+oneOff() {
+	if [[ $xrandrString ]]; then
+		xrandrString="$xrandrString --output $monitorOne --off"
+	else
+		xrandrString="--output $monitorOne --off"
+	fi
+}
+
+oneToggle() {
+	if [[ $(xrandr | grep "$monitorOne connected" | grep "$resolutionOne") ]]; then
+		oneOff
+	else
+		oneOn
+	fi
+}
+
+twoOn() {
+	if [[ ! $resolutionTwo ]]; then
+		echo Error: $monitorTwo is not connected
+		exit 0
+	fi
+
+	if [[ $xrandrString ]]; then
+		xrandrString="$xrandrString --output $monitorTwo --mode $resolutionTwo --pos $positionTwo"
+	else
+		xrandrString="--output $monitorTwo --mode $resolutionTwo --pos $positionTwo"
+	fi
+}
+
+twoOff() {
+	if [[ ! $resolutionTwo ]]; then
+		echo Error: $monitorTwo is not connected
+		exit 0
+	fi
+
+	if [[ $xrandrString ]]; then
+		xrandrString="$xrandrString --output $monitorTwo --off"
+	else
+		xrandrString="--output $monitorTwo --off"
+	fi
+}
+
+twoToggle() {
+	if [[ $(xrandr | grep "$monitorTwo connected" | grep "$resolutionTwo") ]]; then
+		twoOff
+	else
+		twoOn
+	fi
+}
+
+threeOn() {
+	if [[ ! $resolutionThree ]]; then
+		echo Error: $monitorThree is not connected
+		exit 0
+	fi
+
+	if [[ $xrandrString ]]; then
+		xrandrString="$xrandrString --output $monitorThree --mode $resolutionThree --pos $positionThree"
+	else
+		xrandrString="--output $monitorThree --mode $resolutionThree --pos $positionThree"
+	fi
+}
+
+threeOff() {
+	if [[ ! $resolutionThree ]]; then
+		echo Error: $monitorThree is not connected
+		exit 0
+	fi
+
+	if [[ $xrandrString ]]; then
+		xrandrString="$xrandrString --output $monitorThree --off"
+	else
+		xrandrString="--output $monitorThree --off"
+	fi
+}
+
+threeToggle() {
+	if [[ $(xrandr | grep "$monitorThree connected" | grep "$resolutionThree") ]]; then
+		threeOff
+	else
+		threeOn
+	fi
+}
+
+allOn() {
+	if [[ $resolutionOne ]]; then
+		oneOn
+	fi
+	if [[ $resolutionTwo ]]; then
+		twoOn
+	fi
+	if [[ $resolutionThree ]]; then
+		threeOn
+	fi
+}
+
+allOff() {
+	if [[ $resolutionOne ]]; then
+		oneOff
+	fi
+	if [[ $resolutionTwo ]]; then
+		twoOff
+	fi
+	if [[ $resolutionThree ]]; then
+		threeOff
+	fi
+}
+
+allToggle() {
+	if [[ $(xrandr | grep "$monitorOne connected" | grep "$resolutionOne") ]]; then
+		allOff
+	else
+		allOn
+	fi
+}
+
+allSwitch() {
+	if [[ $(xrandr | grep "$monitorTwo connected" | grep "$resolutionTwo") ]]; then
+		oneOn
+		twoOff
+		if [[ $resolutionThree ]]; then
+			threeOff
+		fi
+	else
+		allOn
+	fi
+}
+
+oneSwitch() {
+	if [[ $(xrandr | grep "$monitorOne connected" | grep "$resolutionOne") ]]; then
+		oneOff
+		twoOn
+		if [[ $resolutionThree ]]; then
+			threeOff
+		fi
+	elif [[ $(xrandr | grep "$monitorTwo connected" | grep "$resolutionTwo") ]]; then
+		if [[ $resolutionThree ]]; then
+			oneOff
+			twoOff
+			threeOn
+		else
+			oneOn
+			twoOff
+		fi
+	else
+		oneOn
+		twoOff
+		if [[ $resolutionThree ]]; then
+			threeOff
+		fi
+	fi
+}
+
+# -----------------------------
+
+
+# arguments -------------------
+
+case $1 in
+	all)
+		case $2 in
+			on) allOn ;;
+			off) allOff ;;
+			toggle) allToggle ;;
+			switch) allSwitch ;;
+			*) helpText ;;
+		esac ;;
+	one)
+		case $2 in
+			on) oneOn ;;
+			off) oneOff ;;
+			toggle) oneToggle ;;
+			switch) oneSwitch ;;
+			*) helpText ;;
+		esac ;;
+	two)
+		case $2 in
+			on) twoOn ;;
+			off) twoOff ;;
+			toggle) twoToggle ;;
+			*) helpText ;;
+		esac ;;
+	three)
+		case $2 in
+			on) threeOn ;;
+			off) threeOff ;;
+			toggle) twoToggle ;;
+			*) helpText ;;
+		esac ;;
+	switch) switch ;;
+	*) helpText ;;
+esac
+
+# -----------------------------
+
+
+if [[ $xrandrString ]]; then
+	xrandr $xrandrString
+fi

@@ -1,0 +1,25 @@
+#!/bin/bash
+# Set mouse sensitivity
+
+
+# trackpad
+trackpadIds=$(xinput list | grep "Synaptics" | expand | tr -s " " | cut -d " " -f7 | tr -d "id=")
+for i in $trackpadids
+do
+	checkAccelProp=$(xinput list-props $i | grep -c "Accel Speed")
+	if [ $checkAccelProp -gt 0 ]; then
+		accelProp=$(xinput list-props $i | grep "Accel Speed" | grep -v "Default" | expand | tr -s " " |cut -d "(" -f2 | cut -d ")" -f1)
+		xinput set-prop $i $accelProp -1
+	fi
+done
+
+# gaming mouse
+gamingmouseids=$(xinput list | grep "Logitech Gaming Mouse G502" | expand | tr -s ' ' | cut -d ' ' -f7 | tr -d 'id=')
+for i in $gamingmouseids
+do
+	checkAccelProp=$(xinput list-props $i | grep -c "Accel Speed")
+	if [ $checkAccelProp -gt 0 ]; then
+		accelProp=$(xinput list-props $i | grep "Accel Speed" | grep -v "Default" | expand | tr -s " " |cut -d "(" -f2 | cut -d ")" -f1)
+		xinput set-prop $i $accelProp -1
+	fi
+done

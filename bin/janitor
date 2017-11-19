@@ -1,0 +1,40 @@
+#!/bin/bash
+# Delete files older than [x] days, and empty folders from [folder path].
+
+helpText() {
+	echo "Usage:"
+	echo "  $(basename $0) [folder path] [days] 		Delete files not accessed for [x] days."
+	exit 0
+}
+
+# check if number of arguments meets requirements
+if [[ $# != 2 ]]; then
+	helpText
+fi
+
+# check if argument nr 1 is a valid folder path
+folderPath=$1
+if [[ ! -d $folderPath ]]; then
+	echo "\'$folderPath\' is not a valid folder."
+	echo
+	helpText
+fi
+
+# make sure folder path ends with "/"
+folderPath+="/"
+folderPath=$(echo $folderPath | tr -s "/")
+
+# check if argument nr 2 is a valid number
+daysOlder=$2
+re="^[0-9]+$"
+if [[ ! $daysOlder =~ $re ]]; then
+	echo "$daysOlder is not a valid number"
+	echo
+	helpText
+fi
+
+# find and delete all files with access time older than argument
+find $folderPath -type f -atime +$daysOlder -delete
+
+# find and delete all empty folders
+find $folderPath -mindepth 1 -type d -empty -delete
