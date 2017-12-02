@@ -4,7 +4,7 @@
 userName=$(uname -n)
 
 mailFile="/var/mail/eivind"
-dataFileLocal="/home/eivind/.bin/data/countedMails"
+dataFileLocal="/home/eivind/dot/bin/data/countedMails"
 dataFileRemote="/media/filserver/eivind/Backup/mail/$userName"
 
 countedMails=$(cat $mailFile | grep -c "Message-Id:")
