@@ -7,6 +7,7 @@
 # Aliases
 	alias v="vim -p"
 	alias ls="ls --color=auto --group-directories-first -h"
+	alias lsa="ls --color=auto --group-directories-first -hA"
 	alias ll="ls --color=auto --group-directories-first -hl"
 	alias lla="ls --color=auto --group-directories-first -hlA"
 	
@@ -33,8 +34,8 @@ source ~/dot/zsh/plugins/oh-my-zsh/lib/history.zsh
 source ~/dot/zsh/plugins/oh-my-zsh/lib/key-bindings.zsh
 source ~/dot/zsh/plugins/oh-my-zsh/lib/completion.zsh
 source ~/dot/zsh/plugins/vi-mode.plugin.zsh
-#source ~/dot/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-#source ~/dot/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/dot/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/dot/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/dot/zsh/keybindings.sh
 
 # Fix for arrow-key searching
