@@ -1,2 +1,31 @@
 #!/bin/bash
 # Script to install dotfiles to the current user's homefolder
+
+# ZSH
+copy_zshrc_original() {
+	echo "* backing up .zshrc to .zshrc.original"
+	cp $HOME/.zshrc $HOME/.zshrc.original
+}
+
+
+write_zshrc() {
+	echo "* writing new .zshrc file"
+	echo "source '$HOME/dot/zsh/zshrc_manager.sh'" > $HOME/.zshrc
+}
+
+
+if [ -e "$HOME/.zshrc.original" ]; then
+	read -n 1 -p ".zshrc.original already exist. Overwrite [Y/n]? " answer
+	case ${answer:0:1} in
+		n|N )
+			echo
+			write_zshrc ;;
+		* )
+			echo
+			copy_zshrc_original
+			write_zshrc ;;
+	esac
+else
+	copy_zshrc_original
+	write_zshrc
+fi
