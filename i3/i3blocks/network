@@ -1,0 +1,21 @@
+#!/bin/bash
+# Count visible clients on network
+
+
+unavailChar="-"
+
+ipaddr=$(ip addr | grep -v "host lo" | grep "inet " | tail -n1)
+
+if ! [[ $(echo $ipaddr) ]]; then
+	netClients=$unavailChar
+else
+	ipaddr="$(echo $ipaddr | cut -d ' ' -f2 | cut -d '.' -f1,2,3).*"
+	netClients=$(nmap -sP $ipaddr | grep -c "Host is up")
+fi
+
+echo $netClients
+echo $netClients
+
+if [ $netClients = $unavailChar ]; then
+	echo "#FF0000"
+fi

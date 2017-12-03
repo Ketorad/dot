@@ -1,0 +1,32 @@
+{
+    "border": "none",
+    "current_border_width": 2,
+    "floating": "auto_off"
+    },
+    "name": "Steam",
+    "percent": 0.8,
+    "swallows": [
+       {
+       "class": "^Steam$",
+       "name": "^Steam$"
+       }
+    ],
+    "type": "con"
+}
+
+{
+    "border": "none",
+    "current_border_width": 2,
+    "floating": "auto_off"
+    },
+    "name": "Friends",
+    "percent": 0.2,
+    "swallows": [
+       {
+       "class": "^Steam$",
+       "name": "^Friends$"
+       }
+    ],
+    "type": "con"
+}
+

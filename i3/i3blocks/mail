@@ -1,0 +1,36 @@
+#!/bin/bash
+# i3blocks show mail count
+
+
+notAvailableChar='-'
+
+dataFileLocal="$HOME/dot/bin/data/countedMails"
+dataFileRemoteServer="$HOME/bac/mail/eivind-server"
+dataFileRemoteDesktop="$HOME/bac/mail/eivind-desktop"
+dataFileRemoteLaptop="$HOME/bac/mail/eivind-laptop"
+
+userName=$(uname -n)
+
+if [ $(cat /proc/mounts | grep -c filserver) -gt 0 ]; then
+	messageS=$(cat $dataFileRemoteServer)
+	messageD=$(cat $dataFileRemoteDesktop)
+	messageL=$(cat $dataFileRemoteLaptop)
+else
+	messageS=$notAvailableChar
+	if [ $userName = "eivind-desktop" ]; then
+		messageD=$(cat $dataFileLocal)
+		messageL=$notAvailableChar
+	elif [ $userName = "eivind-laptop" ]; then
+		messageD=$notAvailableChar
+		messageL=$(cat $dataFileLocal)
+	fi
+fi
+
+echo "S $messageS  D $messageD  L $messageL"
+echo "S $messageS  D $messageD  L $messageL"
+
+if ([ $messageS = "0" ] || [ $messageS = $notAvailableChar ]) && 
+	([ $messageD = "0" ] || [ $messageD = $notAvailableChar ]) && 
+	([ $messageL = "0" ] || [ $messageL = $notAvailableChar ]); then
+	echo "#555555"
+fi

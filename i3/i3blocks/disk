@@ -1,0 +1,33 @@
+#!/bin/bash
+# i3blocks show space left on disk
+
+# i3blocks instance
+device="${BLOCK_INSTANCE}"
+# low warning percentage
+lowPercentage=10
+unavailableChar="-"
+
+spaceAvail="$(df -P $device | grep / | tr -s ' ' | cut -d ' ' -f4)"
+spaceTotal="$(df -P $device | grep / | tr -s ' ' | cut -d ' ' -f2)"
+
+# message to be displayed
+message="$(df -h -P $device | grep / | tr -s ' ' | cut -d ' ' -f4)"
+
+# check if device is available by testing if spaceAvail is a number
+re='^[0-9]+$'
+if ! [[ $spaceAvail =~ $re ]]; then
+	message=$unavailableChar
+fi
+
+echo $message
+echo $message
+
+# check if value is less or equal to low warning percentage
+# and change color of text if it is
+let "lowWarn = $spaceTotal / (100 / $lowPercentage)"
+if [ $spaceAvail -lt $lowWarn ] || [ $spaceAvail -eq $lowWarn ]; then
+	echo "#FF0000"
+# check if device is unavailable and change color if it is
+elif [ $message = $unavailableChar ]; then
+	echo "#555555"
+fi

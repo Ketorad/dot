@@ -1,0 +1,9 @@
+#!/bin/sh
+
+ipaddr="$(ip addr show eth0 | grep -m 1 'inet ' | awk '{ print $2 }' | cut -f1 -d"/")"
+#echo "$(tput setaf 2)$ipaddr$(tput sgr0)"
+#echo "$ipaddr"
+
+#cat /proc/net/dev
+
+#cat /dev/ttyACM0 | grep -m 1 Temperature: | awk '{ print $2 }'

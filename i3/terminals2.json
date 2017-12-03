@@ -1,0 +1,27 @@
+{
+	"layout": "splith",
+	"percent": 1,
+	"type": "con",
+	"nodes": [
+		{
+			"name": "Terminal",
+			"percent": 0.5,
+			"swallows": [
+				{
+					"class": "Lxterminal"
+				}
+			],
+			"type": "con"
+		},
+		{
+			"name": "Terminal",
+			"percent": 0.5,
+			"swallows": [
+				{
+					"class": "Lxterminal"
+				}
+			],
+			"type": "con"
+		}
+	]
+}

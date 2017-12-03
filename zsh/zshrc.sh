@@ -6,8 +6,9 @@
 
 # Aliases
 	alias v="vim -p"
-	alias ll="ls -l"
-	alias lla="ls -la"
+	alias ls="ls --color=auto --group-directories-first -h"
+	alias ll="ls --color=auto --group-directories-first -hl"
+	alias lla="ls --color=auto --group-directories-first -hlA"
 	
 	# This is currently causing problems (fails when you run it anywhere that isn't a git project's root directory)
 	# alias vs="v `git status --porcelain | sed -ne 's/^ M //p'`"

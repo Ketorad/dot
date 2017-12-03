@@ -1,0 +1,10 @@
+{
+	"name": "Google Chrome",
+	"percent": null,
+	"swallows": [
+		{
+			"class": "Google-chrome"
+		}
+	],
+	"type": "con"
+}

@@ -12,16 +12,14 @@ else
 	if [ ! -e $dataFolder/$today ]; then
 		mkdir $dataFolder/$today
 		# delete old today link
-		rm -f $dataFolder/today
+		rm -f $dataFolder/last
 		# create today link to the new today's folder
-		#ln -s $dataFolder$today $dataFolder'today'
-		ln -s $dataFolder/$today $dataFolder/today
+		ln -s $dataFolder/$today $dataFolder/last
 	fi
 fi
 
 # Copy all files in arguments to backup folder
 for var in "$@" ; do
-	#echo \"$var\"
 	if [ ! -e "$var" ]; then
 		echo "Error: \"$var\" not found"
 	else

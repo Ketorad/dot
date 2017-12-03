@@ -1,0 +1,17 @@
+#!/bin/sh
+# Check temperatures
+
+
+userName=$(uname -n)
+
+if [ $userName = "eivind-desktop" ]; then
+		#message=$(head -n1 /dev/ttyACM0)
+		message="nabb"
+		if ! [ $(echo $message | cut -d ' ' -f1) = "#Temp:" ]; then
+			#message=$(head -n1 /dev/ttyACM0)
+			message="nabb"
+		fi
+
+	#echo $message
+	#echo $message
+fi
