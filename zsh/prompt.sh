@@ -38,7 +38,9 @@ set_prompt() {
 	fi
 
 	# Sudo: https://superuser.com/questions/195781/sudo-is-there-a-command-to-check-if-i-have-sudo-and-or-how-much-time-is-left
-	CAN_I_RUN_SUDO=$(sudo -n uptime 2>&1|grep "load"|wc -l)
+# 	Had to disable because errors kept generating mails about password required to run sudo
+#	CAN_I_RUN_SUDO=$(sudo -n uptime 2>&1|grep "load"|wc -l)
+	CAN_I_RUN_SUDO=0
 	if [ ${CAN_I_RUN_SUDO} -gt 0 ]
 	then
 		PS1+=', '
