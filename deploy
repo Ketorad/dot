@@ -4,7 +4,7 @@
 # ZSH
 if [[ $(command -v /usr/bin/zsh) ]]; then
 	echo "* Deploying zshrc.conf"
-	echo "source '$(dirname $0)/zsh/zshrc_manager.sh'" > $HOME/.zshrc
+	echo "source '$(pwd)/zsh/zshrc_manager.sh'" > $HOME/.zshrc
 else
 	echo "- zsh not installed. Skipping."
 fi
@@ -13,7 +13,7 @@ fi
 # Lxterminal
 if [[ $(command -v /usr/bin/lxterminal) ]]; then
 	echo "* Deploying lxterminal.conf"
-	echo "source '$(dirname $0)/lxterminal/lxterminal.conf'" > $HOME/.config/lxterminal/lxterminal.conf
+	ln -sf $(pwd)/lxterminal/lxterminal.conf $HOME/.config/lxterminal/lxterminal.conf
 else
 	echo "- lxterminal not installed. Skipping."
 fi
