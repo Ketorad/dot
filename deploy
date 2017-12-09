@@ -2,7 +2,7 @@
 # Script to install dotfiles to the current user's homefolder
 
 # ZSH
-if [[ $(command -v /usr/bin/zsh) ]]; then
+if [[ $(command -v zsh) ]]; then
 	echo "* Deploying zshrc.conf"
 	echo "source '$(pwd)/zsh/zshrc_manager.sh'" > $HOME/.zshrc
 else
@@ -11,7 +11,7 @@ fi
 
 
 # Vim
-if [[ $(command -v /usr/bin/vim) ]]; then
+if [[ $(command -v vim) ]]; then
 	echo "* Deploying .vimrc"
 	echo "so $HOME/dot/vim/vimrc.vim" > $HOME/.vimrc
 else
@@ -20,7 +20,7 @@ fi
 
 
 # Lxterminal
-if [[ $(command -v /usr/bin/lxterminal) ]]; then
+if [[ $(command -v lxterminal) ]]; then
 	echo "* Deploying lxterminal.conf"
 	ln -sf $(pwd)/lxterminal/lxterminal.conf $HOME/.config/lxterminal/lxterminal.conf
 else
@@ -29,7 +29,7 @@ fi
 
 
 # I3wm
-if [[ $(command -v /usr/bin/i3) ]]; then
+if [[ $(command -v i3) ]]; then
 	echo "* Deploying i3wm config"
 	ln -sf $(pwd)/i3/config $HOME/.config/i3/config
 else
