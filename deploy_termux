@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/data/data/com.termux/files/usr/bin/bash
 # Script to install dotfiles to the current user's homefolder
 
 # ZSH
