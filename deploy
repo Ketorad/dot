@@ -13,6 +13,8 @@ fi
 if [[ $(command -v vim) ]]; then
 	echo "* Deploying .vimrc"
 	echo "so $HOME/dot/vim/vimrc.vim" > $HOME/.vimrc
+	rm -rf $HOME/.vim
+	ln -sf $(pwd)/vim $HOME/.vim
 else
 	echo "- vim is not installed. Skipping."
 fi
