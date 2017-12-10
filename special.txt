@@ -1,0 +1,10 @@
+Key hex codes for linux
+	press CTRL+Shift+u
+
+00E6 - æ
+00F8 - ø
+00E5 - å
+
+00C6 - Æ
+00D8 - Ø
+00C5 - Å
