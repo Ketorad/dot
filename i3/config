@@ -131,8 +131,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # screenshot
-bindsym XF86Display exec "scrot ~/Pictures/Screenshots/Screenshot%Y-%m-%d%H:%M:%S.png"
-bindsym $mod+p exec "scrot ~/Pictures/Screenshots/Screenshot%Y-%m-%d%H:%M:%S.png"
+bindsym XF86Display exec "scrot ~/pic/Screenshots/Screenshot%Y-%m-%d%H:%M:%S.png"
+bindsym $mod+p exec "scrot ~/pic/Screenshots/Screenshot%Y-%m-%d%H:%M:%S.png"
 
 # default workspace
 assign [class="Steam"] $workspace1
@@ -180,8 +180,8 @@ exec --no-startup-id mousestuff
 
 # bar 1
 bar {
-	status_command i3blocks -c ~/.config/i3/i3blocks.conf
-	output $monitor_one
+	status_command i3blocks -c ~/dot/i3/i3blocks.conf
+#	output $monitor_one
 	tray_output none
 	colors {
 		background $bg-color
@@ -195,34 +195,34 @@ bar {
 }
 
 # bar 2
-bar {
-	output $monitor_two
-	tray_output none
-	colors {
-		background $bg-color
-		separator #757575
-		#                  border             background         text
-		focused_workspace  $focus-color       $focus-color       $text-color
-		active_workspace   $bg-color          $bg-color          $text-color
-		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-	}
-}
+#bar {
+#	output $monitor_two
+#	tray_output none
+#	colors {
+#		background $bg-color
+#		separator #757575
+#		#                  border             background         text
+#		focused_workspace  $focus-color       $focus-color       $text-color
+#		active_workspace   $bg-color          $bg-color          $text-color
+#		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+#		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+#	}
+#}
 
 # bar 3
-bar {
-	output $monitor_three
-	tray_output none
-	colors {
-		background $bg-color
-		separator #757575
-		#                  border             background         text
-		focused_workspace  $focus-color       $focus-color       $text-color
-		active_workspace   $bg-color          $bg-color          $text-color
-		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
-		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
-	}
-}
+#bar {
+#	output $monitor_three
+#	tray_output none
+#	colors {
+#		background $bg-color
+#		separator #757575
+#		#                  border             background         text
+#		focused_workspace  $focus-color       $focus-color       $text-color
+#		active_workspace   $bg-color          $bg-color          $text-color
+#		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
+#		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+#	}
+#}
 
 
 # load workspace layouts
