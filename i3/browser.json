@@ -1,9 +1,9 @@
 {
-	"name": "Google Chrome",
+	"name": "Chromium",
 	"percent": null,
 	"swallows": [
 		{
-			"class": "Google-chrome"
+			"class": "Chromium"
 		}
 	],
 	"type": "con"
