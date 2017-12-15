@@ -45,6 +45,17 @@ set $workspace10 "10"
 set $mod Mod4
 floating_modifier $mod
 
+bindsym Control+semicolon exec "xdotool key A"
+#bindsym Control+semicolon exec "xdotool key Shift+Ctrl+u; xdotool key 0; xdotool key 0; xdotool key d; xdotool key 8; xdotool key space"
+#bindsym Control+semicolon exec xdotool key Shift+Ctrl+u; exec xdotool key 0; exec xdotool key 0; \
+#	exec xdotool key d; exec xdotool key 8; exec xdotool key space
+#bindsym Control+semicolon exec echo "ø"
+#bindsym Control+semicolon exec bash -c "printf '\\u2014' | iconv -f UTF8 -t UTF16 | xvkbd -utf16 -delay 500 -file -"
+#bindsym Control+semicolon exec bash -c "printf '\\u00f8' | iconv -f UTF8 -t UTF16 | xvkbd -utf16 -delay 500 -file -"
+#bindsym Control+semicolon exec bash -c "printf '\\u00f8'"
+#bindsym Control+semicolon exec xvkdb -text '\u00f8'
+#bindsym Control+semicolon exec bash -c "xvkbd -xsendevent -utf16 -file ~/dot/i3/testchar"
+
 bindsym $mod+Tab exec $HOME/dot/i3/scripts/tab.sh
 bindsym $mod+Shift+Tab exec $HOME/dot/i3/scripts/tab.sh reverse
 
