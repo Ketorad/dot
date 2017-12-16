@@ -145,8 +145,8 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # screenshot
-bindsym XF86Display exec "scrot ~/pic/screenshots/Screenshot%Y-%m-%d%H:%M:%S.png"
-bindsym $mod+p exec "scrot ~/pic/screenshots/Screenshot%Y-%m-%d%H:%M:%S.png"
+bindsym XF86Display exec "scrot ~/pic/screenshots/screenshot%Y-%m-%d%H:%M:%S.png"
+bindsym $mod+p exec "scrot ~/pic/screenshots/screenshot%Y-%m-%d%H:%M:%S.png"
 
 # default workspace
 assign [class="Steam"] $workspace1
