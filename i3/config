@@ -69,6 +69,7 @@ bindsym $mod+Shift+q kill
 bindsym $mod+d exec $HOME/dot/bin/krofi
 
 bindsym $mod+Shift+x exec xset dpms 0 5 && xset +dpms && i3lock -n --color "$bg-color" && xset -dpms && xset s off
+#bindsym $mod+Shift+x exec xset dpms force suspend && i3lock -n --color "$bg-color" && xset -dpms && xset s off
 bindsym $mod+Shift+z exec systemctl suspend
 
 bindsym $mod+h focus left
