@@ -1,17 +1,19 @@
-#!/bin/sh
-# Check temperatures
+#!/bin/bash
+# Check temperature
 
+mediumWarning=60
+highWarning=75
 
-userName=$(uname -n)
+temperature=$(sensors -u | grep -m 1 -A 1 "Physical id 0:" | tail -n 1 | tr -s ' ' | cut -d ' ' -f3 | cut -d '.' -f1)
 
-if [ $userName = "eivind-desktop" ]; then
-		#message=$(head -n1 /dev/ttyACM0)
-		message="nabb"
-		if ! [ $(echo $message | cut -d ' ' -f1) = "#Temp:" ]; then
-			#message=$(head -n1 /dev/ttyACM0)
-			message="nabb"
-		fi
+echo "$temperature C"
+echo "$temperature C"
 
-	#echo $message
-	#echo $message
+# check colors
+if (( $temperature >= $highWarning )); then
+	echo "#FF0000"
+elif (( $temperature >= $mediumWarning )); then
+	echo "#FFFF00"
+else
+	echo "#00FFFF"
 fi
