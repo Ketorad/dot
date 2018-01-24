@@ -1,9 +1,36 @@
 #!/bin/bash
 # i3blocks show cpuload average
 
+yellowPercentage=80
+
+# available types: numThreads, 1min, 5min, 15min
+type="${BLOCK_INSTANCE}"
 
 cpus="$(nproc)"
 
-load="$(cut -d ' ' -f1,2,3 /proc/loadavg)"
+if [[ $type == "numThreads" ]]; then
+	echo "$cpus"
+	echo "$cpus"
+	exit
+elif [[ $type = "1min" ]]; then
+	load="$(cut -d ' ' -f1 /proc/loadavg)"
+elif [[ $type = "5min" ]]; then
+	load="$(cut -d ' ' -f2 /proc/loadavg)"
+elif [[ $type = "15min" ]]; then
+	load="$(cut -d ' ' -f3 /proc/loadavg)"
+else
+	echo "Error: instance wrong undefined"
+	echo "Error: instance wrong undefined"
+	echo "#FF0000"
+	exit
+fi
 
-echo "$cpus  $load"
+echo "$load"
+echo "$load"
+
+# check for color
+if (( $(echo $load'>='$cpus | bc -l) )); then
+	echo "#FF0000"
+elif (( $(echo $load'>='$cpus'*'$yellowPercentage'/'100 | bc -l) )); then
+	echo "#FFFF00"
+fi
