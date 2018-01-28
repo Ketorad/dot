@@ -11,9 +11,9 @@ echo "$temperature C"
 
 # check colors
 if (( $temperature >= $highWarning )); then
-	echo "#FF0000"
+	echo "#FF4444"
 elif (( $temperature >= $mediumWarning )); then
-	echo "#FFFF00"
+	echo "#44FF44"
 else
-	echo "#00FFFF"
+	echo "#0088FF"
 fi
