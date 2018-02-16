@@ -4,7 +4,7 @@
 mediumWarning=60
 highWarning=75
 
-temperature=$(sensors -u | grep -m 1 -A 1 "Physical id 0:" | tail -n 1 | tr -s ' ' | cut -d ' ' -f3 | cut -d '.' -f1)
+temperature=$(sensors -u | grep -m 1 -A 1 "id 0:" | tail -n 1 | tr -s ' ' | cut -d ' ' -f3 | cut -d '.' -f1)
 
 echo "$temperature C"
 echo "$temperature C"
