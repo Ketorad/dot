@@ -63,7 +63,7 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exit
 
-bindsym $mod+Return exec i3-sensible-terminal
+bindsym $mod+Return exec lxterminal
 bindsym $mod+Shift+q kill
 #bindsym $mod+d exec i3-dmenu-desktop
 bindsym $mod+d exec $HOME/dot/bin/krofi
