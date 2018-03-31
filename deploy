@@ -4,6 +4,12 @@
 # .gitconfig
 echo "* Deploying .gitconfig"
 cp -f .gitconfig $HOME/
+
+# .gtkrc-2.0
+echo "* Deploying .gtkrc-2.0"
+cp -f .gtkrc-2.0 $HOME/
+cp -f .gtkrc-2.0.mine $HOME/
+
 # .profile
 echo "* Deploying .profile"
 cp -f .profile $HOME/
