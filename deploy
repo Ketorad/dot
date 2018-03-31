@@ -1,6 +1,9 @@
 #!/bin/bash
 # Script to install dotfiles to the current user's homefolder
 
+# .profile
+cp -f .profile $HOME/
+
 # ZSH
 if [[ $(command -v zsh) ]]; then
 	echo "* Deploying zshrc.conf"
