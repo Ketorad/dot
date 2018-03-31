@@ -2,6 +2,7 @@
 # Script to install dotfiles to the current user's homefolder
 
 # .profile
+echo "* Deploying .profile"
 cp -f .profile $HOME/
 
 # ZSH
