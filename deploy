@@ -1,6 +1,9 @@
 #!/bin/bash
 # Script to install dotfiles to the current user's homefolder
 
+# .gitconfig
+echo "* Deploying .gitconfig"
+cp -f .gitconfig $HOME/
 # .profile
 echo "* Deploying .profile"
 cp -f .profile $HOME/
