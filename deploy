@@ -12,8 +12,7 @@ cp -f gtkrc-2.0.mine $HOME/.gtkrc-2.0.mine
 
 # .config/gtk-3.0
 echo "* Deploying .config/gtkrc-3.0"
-cp -f gtkrc-3.0/bookmarks $HOME/.config/gtk-3.0/
-cp -f gtkrc-3.0/settings.ini $HOME/.config/gtk-3.0/
+cp -rf gtk-3.0 $HOME/.config/
 
 # .profile
 echo "* Deploying .profile"
