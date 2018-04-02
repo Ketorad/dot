@@ -16,6 +16,7 @@
 
 # Settings
 	export VISUAL=vim
+	export PATH=$PATH:/$HOME/dot/bin
 
 source ~/dot/zsh/plugins/fixls.zsh
 
