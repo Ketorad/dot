@@ -176,22 +176,22 @@ exec --no-startup-id mousestuff
 ###############################################
 
 # monitors
-#set $monitor_one DP-0
-#set $monitor_two DP-2
-#set $monitor_three DP-4
+set $monitor_one DP-0
+set $monitor_two DP-2
+set $monitor_three DP-4
 
-#workspace $workspace1 output $monitor_one
-#workspace $workspace2 output $monitor_one
-#workspace $workspace3 output $monitor_one
+workspace $workspace1 output $monitor_one
+workspace $workspace2 output $monitor_one
+workspace $workspace3 output $monitor_one
 #workspace $workspace8 output $monitor_one
 #workspace $workspace9 output $monitor_one
 #workspace $workspace10 output $monitor_one
 
-#workspace $workspace6 output $monitor_two
-#workspace $workspace7 output $monitor_two
+workspace $workspace6 output $monitor_two
+workspace $workspace7 output $monitor_two
 
-#workspace $workspace4 output $monitor_three
-#workspace $workspace5 output $monitor_three
+workspace $workspace4 output $monitor_three
+workspace $workspace5 output $monitor_three
 
 
 # bar 1
