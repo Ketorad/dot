@@ -169,12 +169,6 @@ exec xset s off
 exec xset -dpms
 exec xset b off
 
-# set mouse properties
-exec --no-startup-id mousestuff
-###############################################
-# Desktop                                     #
-###############################################
-
 # monitors
 set $monitor_one DP-0
 set $monitor_two DP-2
@@ -262,5 +256,11 @@ exec --no-startup-id i3-msg "workspace 3; exec lxterminal; exec /home/eivind/dot
 
 #10
 
+# class window properties
+for_window [class="Freecad" title="Formula editor"] floating enable
+
 # remove urgent color from bar
 exec --no-startup-id $HOME/dot/bin/remove-urgent
+
+# set mouse properties
+exec --no-startup-id $HOME/dot/bin/mousestuff
