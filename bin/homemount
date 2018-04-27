@@ -8,15 +8,12 @@ timeout=10
 start() {
 	user="eivind"
 	serverLocal="eivind-server"
-	serverLocalIP="192.168.0.1"
 	serverRemote="ketorad.com"
 	serverFound=""
 
 	while ! [[ $serverFound ]]; do
 		if [[ $(ssh-keyscan $serverLocal 2>&1 | grep "#" | head -n1) ]]; then
 			serverFound=$serverLocal
-		elif [[ $(ssh-keyscan $serverLocalIP 2>&1 | grep "#" | head -n1) ]];then
-			serverFound=$serverLocalIP
 		elif [[ $(ssh-keyscan $serverRemote 2>&1 | grep "#" | head -n1) ]];then
 			serverFound=$serverRemote
 		else
