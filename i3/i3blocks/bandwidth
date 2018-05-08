@@ -1,0 +1,45 @@
+#!/bin/bash
+# show network activity on default internet interface
+
+interval=1
+whiteSpace="          "
+minLength=8
+
+interface=$(cat /proc/net/route | sed 's/\t/ /g' | cut -d ' ' -f1,3 | grep -v Iface | grep -v 00000000 | cut -d ' ' -f1)
+
+down1=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f3)
+up1=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f11)
+
+sleep $interval
+
+down2=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f3)
+up2=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f11)
+
+downSum=$((down2 - down1 / interval));
+upSum=$((up2 - up1 / interval));
+
+if (( downSum >= 1000000 )); then
+	downSum="$((downSum / 1000000)) MB/s"
+elif (( downSum >= 1000 )); then
+	downSum="$((downSum /1000)) KB/s"
+else
+	downSum="$downSum B/s"
+fi
+
+if (( upSum >= 1000000 )); then
+	upSum="$((upSum / 1000000)) MB/s"
+elif (( upSum >= 1000 )); then
+	upSum="$((upSum /1000)) KB/s"
+else
+	upSum="$upSum B/s"
+fi
+
+downSumCount=${#downSum}
+downSumWhiteSpaceNum=$((minLength - downSumCount))
+downSumWhiteSpace=${whiteSpace:0:downSumWhiteSpaceNum}
+upSumCount=${#upSum}
+upSumWhiteSpaceNum=$((minLength - upSumCount))
+upSumWhiteSpace=${whiteSpace:0:upSumWhiteSpaceNum}
+
+echo "$downSumWhiteSpace$downSum $upSumWhiteSpace$upSum"
+echo $downSumCount - $downSumWhiteSpaceNum
