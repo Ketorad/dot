@@ -15,8 +15,8 @@ sleep $interval
 down2=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f3)
 up2=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f11)
 
-downSum=$((down2 - down1 / interval));
-upSum=$((up2 - up1 / interval));
+downSum=$(((down2 - down1) / interval));
+upSum=$(((up2 - up1) / interval));
 
 if (( downSum >= 1000000 )); then
 	downSum="$((downSum / 1000000)) MB/s"
