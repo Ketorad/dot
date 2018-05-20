@@ -1,0 +1,53 @@
+#!/bin/bash
+# show bandwidth usage on server from logfile
+
+logFilePath=/media/filserver/eivind/Backup/data
+logFile=bandwidth.log
+
+whiteSpace="          "
+minLength=8
+
+
+# check if logfile path exist
+if [ ! -f $logFilePath/$logFile ]; then
+	echo " -  - "
+	echo " -  - "
+	echo "#555555"
+	exit
+fi
+
+
+# get download and upload values from logfile
+download=$(tail -n 1 $logFilePath/$logFile | cut -d ' ' -f2)
+upload=$(tail -n 1 $logFilePath/$logFile | cut -d ' ' -f3)
+
+
+# change value from bytes/s to either KB/s or MB/s based on magnitude
+if (( download >= 1000000 )); then
+	download="$((download / 1000000)) MB/s"
+elif (( download >= 1000 )); then
+	download="$((download / 1000)) KB/s"
+else
+	download="0 KB/s"
+fi
+
+if (( upload >= 1000000 )); then
+	upload="$((upload / 1000000)) MB/s"
+elif (( upload >= 1000 )); then
+	upload="$((upload / 1000)) KB/s"
+else
+	upload="0 KB/s"
+fi
+
+
+# add whitespace to maintain constant line length
+downloadCount=${#download}
+downloadWhiteSpaceNum=$((minLength - downloadCount))
+downloadWhiteSpace=${whiteSpace:0:downloadWhiteSpaceNum}
+
+uploadCount=${#upload}
+uploadWhiteSpaceNum=$((minLength - uploadCount))
+uploadWhiteSpace=${whiteSpace:0:uploadWhiteSpaceNum}
+
+
+echo "$downloadWhiteSpace$download $uploadWhiteSpace$upload"

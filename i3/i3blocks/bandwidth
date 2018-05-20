@@ -44,4 +44,3 @@ upSumWhiteSpaceNum=$((minLength - upSumCount))
 upSumWhiteSpace=${whiteSpace:0:upSumWhiteSpaceNum}
 
 echo "$downSumWhiteSpace$downSum $upSumWhiteSpace$upSum"
-echo $downSumCount - $downSumWhiteSpaceNum
