@@ -63,3 +63,11 @@ if [[ $(command -v ranger) ]]; then
 else
 	echo "- ranger is not installed. Skipping."
 fi
+
+# qutebrowser
+if [[ $(command -v qutebrowser) ]]; then
+	echo "* Deploying qutebrowser config files"
+	ln -sf $(pwd)/qutebrowser $HOME/.config/qutebrowser
+else
+	echo "- qutebrowser is not installed. Skipping."
+fi
