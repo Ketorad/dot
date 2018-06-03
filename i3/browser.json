@@ -1,9 +1,9 @@
 {
-	"name": "Chromium",
+	"name": "Qutebrowser",
 	"percent": null,
 	"swallows": [
 		{
-			"class": "Chromium"
+			"class": "qutebrowser"
 		}
 	],
 	"type": "con"
