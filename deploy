@@ -58,6 +58,9 @@ fi
 # ranger
 if [[ $(command -v ranger) ]]; then
 	echo "* Deploying ranger config files"
+	if [ -d $HOME/.config/ranger ]; then
+		rm -rf $HOME/.config/ranger/*
+	fi
 	ln -sf $(pwd)/ranger/config/rc.conf $HOME/.config/ranger/rc.conf
 	ln -sf $(pwd)/ranger/config/rifle.conf $HOME/.config/ranger/rifle.conf
 else
