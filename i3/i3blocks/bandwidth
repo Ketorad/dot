@@ -1,7 +1,7 @@
 #!/bin/bash
 # show network activity on default internet interface
 
-interval=1
+interval=60
 whiteSpace="          "
 minLength=8
 
