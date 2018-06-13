@@ -1,0 +1,13 @@
+#!/bin/bash
+# Update hosts git and apply to /etc/hosts
+
+git -C hosts pull
+
+if ! [ -f /etc/hosts.begin ]; then
+	sudo cp /etc/hosts /etc/hosts.begin
+fi
+
+cp -f /etc/hosts.begin hosts.generated
+grep '^0.0.0.0' hosts/hosts >> hosts.generated
+
+sudo cp -f hosts.generated /etc/hosts
