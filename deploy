@@ -1,29 +1,49 @@
 #!/bin/bash
 # Script to install dotfiles to the current user's homefolder
 
+
+# copy bin files to /usr/local/bin
+echo "* Deploying bin files to /usr/local/bin"
+sudo cp -f bin/* /usr/local/bin/
+
+
+# copy systemd services
+if [[ $(command -v sshfs) ]]; then
+	echo "* Deploying mount-fileserver systemd service"
+	sudo cp -f systemd_services/k_mount-fileserver.service /lib/systemd/system/
+	sudo chmod 644 /lib/systemd/system/k_mount-fileserver.service
+else
+	echo "X sshfs not installed. Skipping mount-fileserver systemd service."
+fi
+
+
 # .gitconfig
 echo "* Deploying .gitconfig"
 cp -f gitconfig $HOME/.gitconfig
+
 
 # .gtkrc-2.0
 echo "* Deploying .gtkrc-2.0"
 cp -f gtkrc-2.0 $HOME/.gtkrc-2.0
 cp -f gtkrc-2.0.mine $HOME/.gtkrc-2.0.mine
 
+
 # .config/gtk-3.0
 echo "* Deploying .config/gtkrc-3.0"
 cp -rf gtk-3.0 $HOME/.config/
 
+
 # .profile
 echo "* Deploying .profile"
 cp -f profile $HOME/.profile
+
 
 # zsh
 if [[ $(command -v zsh) ]]; then
 	echo "* Deploying zshrc.conf"
 	echo "source '$(pwd)/zsh/zshrc_manager.sh'" > $HOME/.zshrc
 else
-	echo "- zsh is not installed. Skipping."
+	echo "X zsh is not installed. Skipping."
 fi
 
 
@@ -34,7 +54,7 @@ if [[ $(command -v vim) ]]; then
 	rm -rf $HOME/.vim
 	ln -sf $(pwd)/vim $HOME/.vim
 else
-	echo "- vim is not installed. Skipping."
+	echo "X vim is not installed. Skipping."
 fi
 
 
@@ -43,7 +63,7 @@ if [[ $(command -v lxterminal) ]]; then
 	echo "* Deploying lxterminal.conf"
 	ln -sf $(pwd)/lxterminal/lxterminal.conf $HOME/.config/lxterminal/lxterminal.conf
 else
-	echo "- lxterminal is not installed. Skipping."
+	echo "X lxterminal is not installed. Skipping."
 fi
 
 
@@ -52,8 +72,9 @@ if [[ $(command -v i3) ]]; then
 	echo "* Deploying i3wm config"
 	ln -sf $(pwd)/i3/config $HOME/.config/i3/config
 else
-	echo "- i3wm is not installed. Skipping."
+	echo "X i3wm is not installed. Skipping."
 fi
+
 
 # ranger
 if [[ $(command -v ranger) ]]; then
@@ -61,13 +82,15 @@ if [[ $(command -v ranger) ]]; then
 	ln -sf $(pwd)/ranger/rc.conf $HOME/.config/ranger/rc.conf
 	ln -sf $(pwd)/ranger/rifle.conf $HOME/.config/ranger/rifle.conf
 else
-	echo "- ranger is not installed. Skipping."
+	echo "X ranger is not installed. Skipping."
 fi
+
 
 # qutebrowser
 if [[ $(command -v qutebrowser) ]]; then
 	echo "* Deploying qutebrowser config files"
+	rm $HOME/.config/qutebrowser
 	ln -sf $(pwd)/qutebrowser $HOME/.config/qutebrowser
 else
-	echo "- qutebrowser is not installed. Skipping."
+	echo "X qutebrowser is not installed. Skipping."
 fi

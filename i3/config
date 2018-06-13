@@ -67,11 +67,9 @@ bindsym $mod+Shift+e exit
 
 bindsym $mod+Return exec lxterminal
 bindsym $mod+Shift+q kill
-#bindsym $mod+d exec i3-dmenu-desktop
-bindsym $mod+d exec $HOME/dot/bin/krofi
+bindsym $mod+d exec /usr/local/bin/k_rofi
 
 bindsym $mod+Shift+x exec xset dpms 0 5 && xset +dpms && i3lock -n --color "$bg-color" && xset -dpms && xset s off
-#bindsym $mod+Shift+x exec xset dpms force suspend && i3lock -n --color "$bg-color" && xset -dpms && xset s off
 bindsym $mod+Shift+z exec systemctl suspend
 
 bindsym $mod+h focus left
@@ -128,19 +126,19 @@ bindsym $mod+Control+k resize grow height 10 px or 10 ppt
 bindsym $mod+Control+l resize grow width 10 px or 10 ppt
 
 # pulse audio
-bindsym XF86AudioRaiseVolume exec --no-startup-id ~/dot/bin/volumeactive +5%
-bindsym $mod+Up exec --no-startup-id ~/dot/bin/volumeactive +5%
-bindsym XF86AudioLowerVolume exec --no-startup-id ~/dot/bin/volumeactive -5%
-bindsym $mod+Down exec --no-startup-id ~/dot/bin/volumeactive -5%
-bindsym XF86AudioMute exec --no-startup-id ~/dot/bin/volumeactive mute
+bindsym XF86AudioRaiseVolume exec --no-startup-id /usr/local/bin/k_volume-active +5%
+bindsym $mod+Up exec --no-startup-id /usr/local/bin/k_volume-active +5%
+bindsym XF86AudioLowerVolume exec --no-startup-id /usr/local/bin/k_volume-active -5%
+bindsym $mod+Down exec --no-startup-id /usr/local/bin/k_volume-active -5%
+bindsym XF86AudioMute exec --no-startup-id /usr/local/bin/k_volume-active mute
 
 # screen brightness
 bindsym XF86MonBrightnessUp exec xbacklight -inc 10
 bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 
 # monitor control
-bindsym $mod+Shift+m exec --no-startup-id $HOME/dot/bin/screencontrol all switch && $HOME/dot/bin/wallpaper
-bindsym $mod+Shift+n exec --no-startup-id $HOME/dot/bin/screencontrol one switch && $HOME/dot/bin/wallpaper
+bindsym $mod+Shift+m exec --no-startup-id /usr/local/bin/k_screencontrol all switch && /usr/local/bin/k_wallpaper
+bindsym $mod+Shift+n exec --no-startup-id /usr/local/bin/k_screencontrol one switch && /usr/local/bin/k_wallpaper
 
 # media player
 bindsym XF86AudioPlay exec playerctl play
@@ -160,10 +158,10 @@ assign [class="Pavucontrol"] $workspace10
 # -
 
 # Startup programs-------------
-exec --no-startup-id nm-applet
+#exec --no-startup-id nm-applet
 exec --no-startup-id compton -b --backend glx --vsync opengl-swc
 #exec_always feh --bg-scale --no-xinerama /home/eivind/.wallpaper
-exec_always $HOME/dot/bin/wallpaper
+exec_always /usr/local/bin/k_wallpaper
 
 # remove screen timeout and console beep
 #exec xset s noblank
@@ -244,7 +242,7 @@ exec --no-startup-id i3-msg "workspace 1; exec steam; layout tabbed"
 #exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec chromium --disable-session-crashed-bubble --disable-infobars"
 exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec qutebrowser"
 #3
-exec --no-startup-id i3-msg "workspace 3; exec lxterminal; exec /home/eivind/dot/bin/Nextcloud-2.3.3-x86_64.AppImage"
+exec --no-startup-id i3-msg "workspace 3; exec lxterminal; exec /usr/local/bin/nextcloud"
 #4
 #exec --no-startup-id i3-msg "workspace 4; exec lxterminal"
 #5
@@ -263,7 +261,8 @@ exec --no-startup-id i3-msg "workspace 3; exec lxterminal; exec /home/eivind/dot
 for_window [class="Freecad" title="Formula editor"] floating enable
 
 # remove urgent color from bar
-exec --no-startup-id $HOME/dot/bin/remove-urgent
+exec --no-startup-id /usr/local/bin/k_remove-urgent
 
 # set mouse properties
-exec --no-startup-id $HOME/dot/bin/mousestuff
+exec --no_startup-id sleep 2
+exec --no-startup-id /usr/local/bin/k_mousestuff

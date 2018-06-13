@@ -1,0 +1,11 @@
+[Unit]
+Description=mount the filserver via sshfs
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/k_mount-fileserver start
+ExecStop=/usr/local/bin/k_mount-fileserver stop
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
