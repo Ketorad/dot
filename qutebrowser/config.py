@@ -1457,6 +1457,7 @@ c.zoom.default = '125%'
 # config.bind('K', 'tab-prev')
 # config.bind('L', 'forward')
 # config.bind('M', 'bookmark-add')
+config.bind('M', 'hint links spawn mpv {hint-url}')
 # config.bind('N', 'search-prev')
 # config.bind('O', 'set-cmd-text -s :open -t')
 # config.bind('PP', 'open -t -- {primary}')
