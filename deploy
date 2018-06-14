@@ -8,13 +8,13 @@ sudo cp -f bin/* /usr/local/bin/
 
 
 # copy systemd services
-if [[ $(command -v sshfs) ]]; then
-	echo "* Deploying mount-fileserver systemd service"
-	sudo cp -f systemd_services/k_mount-fileserver.service /lib/systemd/system/
-	sudo chmod 644 /lib/systemd/system/k_mount-fileserver.service
-else
-	echo "X sshfs not installed. Skipping mount-fileserver systemd service."
-fi
+#if [[ $(command -v sshfs) ]]; then
+#	echo "* Deploying mount-fileserver systemd service"
+#	sudo cp -f systemd_services/k_mount-fileserver.service /lib/systemd/system/
+#	sudo chmod 644 /lib/systemd/system/k_mount-fileserver.service
+#else
+#	echo "X sshfs not installed. Skipping mount-fileserver systemd service."
+#fi
 
 
 # .gitconfig
@@ -40,9 +40,8 @@ cp -f profile $HOME/.profile
 
 # bashrc
 echo "* Deploying .bashrc"
-echo ". ~/dot/bashrc" > $HOME/.bashrc
-echo ". ~/dot/bash_aliases" > $HOME/.bash_aliases
-echo ". ~/dot/bash_logout" > $HOME/.bash_logout
+echo ". ~/dot/bash/bashrc" > $HOME/.bashrc
+echo ". ~/dot/bash/bash_logout" > $HOME/.bash_logout
 
 
 # zsh
