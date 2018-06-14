@@ -1350,7 +1350,11 @@
 ## used by prepending the search engine name to the search term, e.g.
 ## `:open google qutebrowser`.
 ## Type: Dict
-# c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}'}
+c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}'
+        , 'g': 'https://www.google.com/search?hl=en&q={}'
+        , 'y': 'http://www.youtube.com/results?search_query={}&aq=f'
+        , 'pmd': 'https://www.pornmd.com/straight/{}?quality=hd&min_duration=600'
+        , 'yw': 'http://no.yachtworld.com/core/listing/cache/searchResults.jsp?is=false&sm=3&searchtype=homepage&Ntk=boatsNO&type=%28Sail%29&slim=quick&currencyid=1012&luom=126&toLength=50&cit=true&fromLength=40&man={}&No=0&Ns=PBoat_sortByPriceAsc%7C0'}
 
 ## Page(s) to open at the start.
 ## Type: List of FuzzyUrl, or FuzzyUrl
@@ -1448,7 +1452,7 @@ c.zoom.default = '125%'
 # config.bind('=', 'zoom')
 # config.bind('?', 'set-cmd-text ?')
 # config.bind('@', 'run-macro')
-# config.bind('B', 'set-cmd-text -s :quickmark-load -t')
+# config.bind('B', 'set-cmd-text -s : quickmark-load -t')
 # config.bind('D', 'tab-close -o')
 # config.bind('F', 'hint all tab')
 # config.bind('G', 'scroll-to-perc')
