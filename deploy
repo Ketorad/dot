@@ -38,13 +38,20 @@ echo "* Deploying .profile"
 cp -f profile $HOME/.profile
 
 
+# bashrc
+echo "* Deploying .bashrc"
+echo ". ~/dot/bashrc" > $HOME/.bashrc
+echo ". ~/dot/bash_aliases" > $HOME/.bash_aliases
+echo ". ~/dot/bash_logout" > $HOME/.bash_logout
+
+
 # zsh
-if [[ $(command -v zsh) ]]; then
-	echo "* Deploying zshrc.conf"
-	echo "source '$(pwd)/zsh/zshrc_manager.sh'" > $HOME/.zshrc
-else
-	echo "X zsh is not installed. Skipping."
-fi
+#if [[ $(command -v zsh) ]]; then
+#	echo "* Deploying zshrc.conf"
+#	echo "source '$(pwd)/zsh/zshrc_manager.sh'" > $HOME/.zshrc
+#else
+#	echo "X zsh is not installed. Skipping."
+#fi
 
 
 # vim
