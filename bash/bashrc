@@ -94,8 +94,9 @@ if ! shopt -oq posix; then
   fi
 fi
 
-export EDITOR='/usr/bin/vim'
-export PS1="nabben: "
+export EDITOR="/usr/bin/vim"
+export PS1="\[\033[38;5;2m\]\h\[$(tput sgr0)\]\[\033[38;5;15m\] [\[$(tput bold)\]\[$(tput sgr0)\]\[\033[38;5;12m\]\W\[$(tput sgr0)\]\[$(tput sgr0)\]\[\033[38;5;15m\]] \$?\\$: \[$(tput sgr0)\]"
+
 
 # enable vi mode
 set -o vi

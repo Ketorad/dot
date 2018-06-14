@@ -2,3 +2,4 @@
 
 bind -m vi-insert '"\C-l": clear-screen'
 bind -m vi-insert '"\C-g":"git add . && git commit -a && git push\n"'
+bind -m vi-insert '"\C-h":"cd \n"'
