@@ -17,9 +17,9 @@ if [ -n "$BASH_VERSION" ]; then
 fi
 
 # set PATH so it includes user's private bin if it exists
-if [ -d "$HOME/dot/bin" ] ; then
-    PATH="$HOME/dot/bin:$PATH"
-fi
+#if [ -d "$HOME/dot/bin" ] ; then
+#    PATH="$HOME/dot/bin:$PATH"
+#fi
 
 if ! [ $TERM = "xterm" ]; then
 	setterm -blength 0
