@@ -8,6 +8,3 @@ settings:
       q: quit
       w: session-save
       wq: quit --save
-  url.searchengines:
-    global:
-      DEFAULT: https://duckduckgo.com/?q={}
