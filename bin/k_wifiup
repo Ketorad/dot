@@ -1,53 +1,57 @@
 #!/bin/bash
 # Automaticly connect to wifi networks matching keys found in /etc/network/interfaces.d/
 
+ESSIDfilesPath="/etc/network/interfaces.d/"
+
 
 helpText() {
 	echo "Usage: $(basename $0) [WIRELESS INTERFACE]"
 	echo "Automaticly connect to wifi networks matching keys found in /etc/network/interfaces.d/"
+	exit
 }
 
 
 # check if number of arguments is valid
 if [[ $# != 1 ]]; then
 	helpText
-	exit
 fi
 
 
 # check if argument is a valid wifi interface
-if [[ ! $(grep $1 /proc/net/wireless) ]]; then
+if [[ ! -d "/sys/class/net/$1/wireless" ]]; then
 	echo "Error: $1 is not a valid wireless interface."
 	helpText
 fi
 
 
+connectedESSID=$(iwgetid $1 --raw)
+while [[ $connectedESSID ]]; do
+	sleep 30
+	connectedESSID=$(/sbin/iwgetid $1 --raw)
+done
 
 
-#today=$(date '+%Y-%m-%d')
-#dataFolder="/media/filserver/eivind/Backup"
+# make sure network card is up to be able to scan
+ip link set $1 up
 
-# Check if backup folder is available
-#if [ ! -e $dataFolder ]; then
-#	echo "$dataFolder not available"
-#else
-	# Create today's backup folder if not exist
-#	if [ ! -e $dataFolder/$today ]; then
-#		mkdir $dataFolder/$today
-#		# delete old today link
-#		rm -f $dataFolder/last
-#		# create today link to the new today's folder
-#		ln -s $dataFolder/$today $dataFolder/last
-#	fi
-#fi
-#
-## Copy all files in arguments to backup folder
-#for var in "$@" ; do
-#	if [ ! -e "$var" ]; then
-#		echo "Error: \"$var\" not found"
-#	else
-#		echo "Backing up \"$var\" ..."
-#		cp -rf "$var" "$dataFolder/$today/"
-#		echo "... done."
-#	fi
-#done
+
+# to store each element in array by newline and not space
+# we temporary change the $IFS global variable
+IFS_backup=$IFS
+IFS=$'\n'
+scannedESSIDs=( $(iwlist $1 scan | grep ESSID: | sort -u | cut -d '"' -f2) )
+ESSIDfiles=( $(ls -b $ESSIDfilesPath) )
+
+for (( i = 0; i < ${#scannedESSIDs[@]}; i++ )); do
+	for (( j = 0; j < ${#ESSIDfiles[@]}; j++ )); do
+		fileESSID=$(cat $ESSIDfilesPath${ESSIDfiles[$j]} | grep -m 1 ssid | cut -d '"' -f 2)
+		if [[ $fileESSID == ${scannedESSIDs[$i]} ]]; then
+			ifup -i $ESSIDfilesPath${ESSIDfiles[$j]} $1
+			if [[ $(iwgetid $1 --raw) ]]; then
+				exit
+			fi
+		fi
+	done
+done
+
+IFS=$IFS_backup

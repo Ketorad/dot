@@ -1,0 +1,10 @@
+[Unit]
+Description=connect to wifi networks found in /etc/network/interfaces.d/
+After=network.target
+
+[Service]
+ExecStart=/usr/local/bin/k_wifiup wlp3s0
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
