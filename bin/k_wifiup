@@ -1,6 +1,7 @@
 #!/bin/bash
 # Automaticly connect to wifi networks matching keys found in /etc/network/interfaces.d/
 
+
 ESSIDfilesPath="/etc/network/interfaces.d/"
 
 
@@ -24,36 +25,76 @@ if [[ ! -d "/sys/class/net/$1/wireless" ]]; then
 fi
 
 
-connectedESSID=$(iwgetid $1 --raw)
-while [[ $connectedESSID ]]; do
-	sleep 30
-	connectedESSID=$(/sbin/iwgetid $1 --raw)
-done
-
-
 # make sure network card is up to be able to scan
 ip link set $1 up
 
 
-# to store each element in array by newline and not space
-# we temporary change the $IFS global variable
-IFS_backup=$IFS
-IFS=$'\n'
-scannedESSIDs=( $(iwlist $1 scan | grep ESSID: | sort -u | cut -d '"' -f2) )
-ESSIDfiles=( $(ls -b $ESSIDfilesPath) )
+while [[ 1 ]]; do
+	connectedESSID=$(iwgetid $1 --raw)
 
+	if [[ $connectedESSID ]]; then
+		sleep 60
+	else
+		# to store each element in array by newline and not space
+		# we temporary change the $IFS global variable
+		IFS_backup=$IFS
+		IFS=$'\n'
+		scannedESSIDs=( $(iwlist $1 scan | grep ESSID: | sort -u | cut -d '"' -f2) )
+		ESSIDfiles=( $(ls -b $ESSIDfilesPath) )
 
-for (( i = 0; i < ${#scannedESSIDs[@]}; i++ )); do
-	for (( j = 0; j < ${#ESSIDfiles[@]}; j++ )); do
-		fileESSID=$(cat $ESSIDfilesPath${ESSIDfiles[$j]} | grep -m 1 ssid | cut -d '"' -f 2)
-		if [[ $fileESSID == ${scannedESSIDs[$i]} ]]; then
-			ifup -i $ESSIDfilesPath${ESSIDfiles[$j]} $1
-			if [[ $(iwgetid $1 --raw) ]]; then
-				exit
-			fi
-		fi
-	done
+		for (( i = 0; i < ${#scannedESSIDs[@]}; i++ )); do
+			for (( j = 0; j < ${#ESSIDfiles[@]}; j++ )); do
+				fileESSID=$(cat $ESSIDfilesPath${ESSIDfiles[$j]} | grep -m 1 ssid | cut -d '"' -f 2)
+				if [[ $fileESSID == ${scannedESSIDs[$i]} ]]; then
+					ifup -i $ESSIDfilesPath${ESSIDfiles[$j]} $1
+					if [[ $(iwgetid $1 --raw) ]]; then
+						sleep 10
+						break; break
+					fi
+				fi
+			done
+		done
+
+		IFS=$IFS_backup
+	fi
 done
 
 
-IFS=$IFS_backup
+
+#connectedESSID=$(iwgetid $1 --raw)
+#while [[ $connectedESSID ]]; do
+#	sleep 60
+#	connectedESSID=$(/sbin/iwgetid $1 --raw)
+#done
+#
+
+## make sure network card is up to be able to scan
+#ip link set $1 up
+#
+#
+#while [[ 1 ]]; do
+#	# to store each element in array by newline and not space
+#	# we temporary change the $IFS global variable
+#	IFS_backup=$IFS
+#	IFS=$'\n'
+#	scannedESSIDs=( $(iwlist $1 scan | grep ESSID: | sort -u | cut -d '"' -f2) )
+#	ESSIDfiles=( $(ls -b $ESSIDfilesPath) )
+#
+#	for (( i = 0; i < ${#scannedESSIDs[@]}; i++ )); do
+#		for (( j = 0; j < ${#ESSIDfiles[@]}; j++ )); do
+#			fileESSID=$(cat $ESSIDfilesPath${ESSIDfiles[$j]} | grep -m 1 ssid | cut -d '"' -f 2)
+#			if [[ $fileESSID == ${scannedESSIDs[$i]} ]]; then
+#				ifup -i $ESSIDfilesPath${ESSIDfiles[$j]} $1
+#				if [[ $(iwgetid $1 --raw) ]]; then
+#					sleep 10
+#					exit
+#				fi
+#			fi
+#		done
+#	done
+
+
+#	IFS=$IFS_backup
+
+#	sleep 60
+#done
