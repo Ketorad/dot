@@ -1,0 +1,59 @@
+#!/bin/bash
+# log network bandwidth usage to file
+
+helpText() {
+	echo "Usage: $(basename $0) [NETWORK INTERFACE] [INTERVAL IN SECONDS] [LOGFILE]"
+	echo "Logs bandwidth usage per second. Average over interval."
+	exit
+}
+
+# check if number of arguments is valid
+if [[ $# != 3 ]]; then
+	helpText
+fi
+
+# check if 1st argument is a valid network interface
+if [[ ! -d "/sys/class/net/$1" ]]; then
+	echo "Error: $1 is not a valid network interface."
+	echo
+	helpText
+fi
+interface=$1
+
+#check if 2nd argument is a number
+re='^[0-9]+$'
+if [[ ! $2 =~ $re ]]; then
+	echo "Error: $2 is not a number."
+	echo
+	helpText
+fi
+interval=$2
+
+#check if 3rd argument filepath exist
+if [[ ! -d $3 ]]; then
+	echo "Error: $3 is an invalid path."
+	echo
+	helpText
+fi
+logFile=$3
+
+
+lastDown=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f3)
+lastUp=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f11)
+
+while [[ 1 ]]; do
+	sleep $interval
+
+	currentDown=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f3)
+	currentUp=$(cat /proc/net/dev | grep $interface | tr -s ' ' | cut -d ' ' -f11)
+
+	downSum=$(((currentDown - lastDown) / interval));
+	upSum=$(((currentUp - lastUp) / interval));
+
+	currentTime=$(date '+%y:%m:%d:%H:%M:%S')
+
+	echo "$currentTime $downSum $upSum" >> $logFile
+
+	lastDown=$currentDown
+	lastUp=$currentUp
+done
