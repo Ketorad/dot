@@ -29,7 +29,6 @@ filename=$3
 
 
 wpaPassphrase=$(wpa_passphrase "$essid" $passphrase | grep -v "#psk=" | grep "psk=" | cut -d '=' -f 2)
-#wpaPassphrase=$(wpa_passphrase "$essid" $passphrase | grep "psk=" | grep -v ")
 
 echo "auto $interface" > $savedpath$filename
 echo "iface $interface inet dhcp" >> $savedpath$filename

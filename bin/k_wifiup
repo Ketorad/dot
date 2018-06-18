@@ -37,6 +37,8 @@ while [[ 1 ]]; do
 		scannedESSIDs=( $(iwlist $1 scan | grep ESSID: | sort -u | cut -d '"' -f2) )
 		ESSIDfiles=( $(ls -b $ESSIDfilesPath) )
 
+		ifdown $1
+
 		for (( i = 0; i < ${#scannedESSIDs[@]}; i++ )); do
 			for (( j = 0; j < ${#ESSIDfiles[@]}; j++ )); do
 				fileESSID=$(cat $ESSIDfilesPath${ESSIDfiles[$j]} | grep -m 1 ssid | cut -d '"' -f 2)
