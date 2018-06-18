@@ -1,0 +1,40 @@
+#!/bin/bash
+# Makes a new wifi profile and save it to /etc/network/interfaces.d/
+
+savedpath="/etc/network/interfaces.d/"
+interface="wlp3s0"
+
+helpText() {
+	echo "Usage: $(basename $0) [ESSID] [PASSPHRASE] [FILENAME]"
+	echo "Makes a new wifi profile and save it to /etc/network/interfaces.d/"
+	exit
+}
+
+# check if number of arguments is valid
+if [[ $# != 3 ]]; then
+	echo "Error: Takes 3 arguments."
+	echo
+	helpText
+fi
+
+essid=$1
+passphrase=$2
+filename=$3
+
+#if [[ -f "/etc/network/interfaces.d/$filename" ]]; then
+#	echo "A file named "$filename" already exist. Overwrite? (y/n) "
+#	echo "Aborting"
+#	exit
+#fi
+
+
+wpaPassphrase=$(wpa_passphrase "$essid" $passphrase | grep -v "#psk=" | grep "psk=" | cut -d '=' -f 2)
+#wpaPassphrase=$(wpa_passphrase "$essid" $passphrase | grep "psk=" | grep -v ")
+
+echo "auto $interface" > $savedpath$filename
+echo "iface $interface inet dhcp" >> $savedpath$filename
+echo -e "\twpa-ssid \"$essid\"" >> $savedpath$filename
+echo -e "\twpa-psk $wpaPassphrase" >> $savedpath$filename
+
+echo "Stored to \"$savedpath$filename\""
+echo $wpaPassphrase
