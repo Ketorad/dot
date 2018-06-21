@@ -1,5 +1,8 @@
 # Personal aliases for my .bashrc
 
+# fix for reading alias as sudo
+alias sudo='sudo '
+
 # ls
 alias ll='ls -l'
 alias la='ls -A'
