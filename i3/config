@@ -242,7 +242,7 @@ exec --no-startup-id i3-msg "workspace 1; exec steam; layout tabbed"
 #exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec chromium --disable-session-crashed-bubble --disable-infobars"
 exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec qutebrowser"
 #3
-exec --no-startup-id i3-msg "workspace 3; exec lxterminal; exec /usr/local/bin/nextcloud"
+exec --no-startup-id i3-msg "workspace 3; exec lxterminal"
 #4
 #exec --no-startup-id i3-msg "workspace 4; exec lxterminal"
 #5
