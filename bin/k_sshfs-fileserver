@@ -6,7 +6,6 @@ timeout=10
 
 
 start() {
-	user="eivind"
 	serverLocal="eivind-server"
 	serverRemote="ketorad.com"
 	serverFound=""
@@ -23,7 +22,7 @@ start() {
 
 	notify-send "Connected to filserver at $serverFound."
 
-	sshfs $user@$serverFound:/media/filserver /media/filserver -f -o "uid=1000,gid=1000,idmap=user,allow_other,ServerAliveInterval=$timeout,serverAliveCountMax=1"
+	sshfs $serverFound:/media/filserver /media/filserver -f -o "ServerAliveInterval=$timeout,serverAliveCountMax=1"
 	notify-send "Disconnected from filserver."
 }
 

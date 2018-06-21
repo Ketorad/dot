@@ -1,8 +1,9 @@
 [Unit]
-Description=mount the filserver via sshfs
+Description=Mount fileserver via sshfs for %I
 After=network.target
 
 [Service]
+User=%i
 ExecStart=/usr/local/bin/k_mount-fileserver start
 ExecStop=/usr/local/bin/k_mount-fileserver stop
 Restart=always
