@@ -747,39 +747,39 @@ c.downloads.location.remember = False
 
 ## Font used in the completion categories.
 ## Type: Font
-# c.fonts.completion.category = 'bold 10pt monospace'
+c.fonts.completion.category = 'bold 14pt monospace'
 
 ## Font used in the completion widget.
 ## Type: Font
-# c.fonts.completion.entry = '10pt monospace'
+c.fonts.completion.entry = '14pt monospace'
 
 ## Font used for the debugging console.
 ## Type: QtFont
-# c.fonts.debug_console = '10pt monospace'
+c.fonts.debug_console = '14pt monospace'
 
 ## Font used for the downloadbar.
 ## Type: Font
-# c.fonts.downloads = '10pt monospace'
+c.fonts.downloads = '14pt monospace'
 
 ## Font used for the hints.
 ## Type: Font
-# c.fonts.hints = 'bold 10pt monospace'
+c.fonts.hints = 'bold 14pt monospace'
 
 ## Font used in the keyhint widget.
 ## Type: Font
-# c.fonts.keyhint = '10pt monospace'
+c.fonts.keyhint = '14pt monospace'
 
 ## Font used for error messages.
 ## Type: Font
-# c.fonts.messages.error = '10pt monospace'
+c.fonts.messages.error = '14pt monospace'
 
 ## Font used for info messages.
 ## Type: Font
-# c.fonts.messages.info = '10pt monospace'
+c.fonts.messages.info = '14pt monospace'
 
 ## Font used for warning messages.
 ## Type: Font
-# c.fonts.messages.warning = '10pt monospace'
+c.fonts.messages.warning = '14pt monospace'
 
 ## Default monospace fonts. Whenever "monospace" is used in a font
 ## setting, it's replaced with the fonts listed here.
@@ -788,15 +788,15 @@ c.downloads.location.remember = False
 
 ## Font used for prompts.
 ## Type: Font
-# c.fonts.prompts = '10pt sans-serif'
+c.fonts.prompts = '14pt sans-serif'
 
 ## Font used in the statusbar.
 ## Type: Font
-# c.fonts.statusbar = '10pt monospace'
+c.fonts.statusbar = '14pt monospace'
 
 ## Font used in the tab bar.
 ## Type: QtFont
-# c.fonts.tabs = '10pt monospace'
+c.fonts.tabs = '14pt monospace'
 
 ## Font family for cursive fonts.
 ## Type: FontFamily
@@ -1451,6 +1451,7 @@ config.bind('<Ctrl-d>', 'hint links spawn youtube-dl "{hint-url}" -o "dwn/%(titl
 # config.bind('<F5>', 'reload')
 # config.bind('<Return>', 'follow-selected')
 # config.bind('<back>', 'back')
+config.bind('<Shift-Backspace>', 'back')
 # config.bind('<forward>', 'forward')
 # config.bind('=', 'zoom')
 # config.bind('?', 'set-cmd-text ?')
