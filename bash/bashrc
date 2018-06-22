@@ -94,6 +94,7 @@ if ! shopt -oq posix; then
   fi
 fi
 
+export PATH="$PATH:$HOME/dot/bin"
 export EDITOR="vim"
 export TERMINAL="lxterminal"
 export BROWSER="qutebrowser"

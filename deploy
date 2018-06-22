@@ -3,8 +3,8 @@
 
 
 # copy bin files to /usr/local/bin
-echo "* Deploying bin files to /usr/local/bin"
-sudo cp -f bin/* /usr/local/bin/
+#echo "* Deploying bin files to /usr/local/bin"
+#sudo cp -f bin/* /usr/local/bin/
 
 
 # copy systemd services

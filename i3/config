@@ -64,7 +64,8 @@ bindsym $mod+Shift+Tab exec $HOME/dot/i3/scripts/tab.sh reverse
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-bindsym $mod+Shift+e exit
+#bindsym $mod+Shift+e exit
+bindsym $mod+Shift+e exec i3-msg "exit"; logout
 
 bindsym $mod+Return exec lxterminal
 bindsym $mod+Shift+q kill

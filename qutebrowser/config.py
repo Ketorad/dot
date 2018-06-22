@@ -1380,7 +1380,7 @@ c.zoom.default = '125%'
 
 ## Available zoom levels.
 ## Type: List of Perc
-# c.zoom.levels = ['25%', '33%', '50%', '67%', '75%', '90%', '100%', '110%', '125%', '150%', '175%', '200%', '250%', '300%', '400%', '500%']
+c.zoom.levels = ['25%', '33%', '50%', '67%', '75%', '90%', '100%', '110%', '125%', '150%', '175%', '200%', '250%', '300%', '400%', '500%']
 
 ## Number of zoom increments to divide the mouse wheel movements to.
 ## Type: Int
@@ -1388,12 +1388,13 @@ c.zoom.default = '125%'
 
 ## Apply the zoom factor on a frame only to the text or to all content.
 ## Type: Bool
-# c.zoom.text_only = False
+c.zoom.text_only = True
 
 ## Bindings for normal mode
 # config.bind("'", 'enter-mode jump_mark')
 # config.bind('+', 'zoom-in')
-# config.bind('-', 'zoom-out')
+config.bind('=', 'zoom-in')
+config.bind('-', 'zoom-out')
 # config.bind('.', 'repeat-command')
 # config.bind('/', 'set-cmd-text /')
 # config.bind(':', 'set-cmd-text :')
