@@ -4,8 +4,8 @@ After=network.target
 
 [Service]
 User=%i
-ExecStart=/usr/local/bin/k_sshfs-fileserver start
-ExecStop=/usr/local/bin/k_sshfs-fileserver stop
+ExecStart=k_sshfs-fileserver start
+ExecStop=k_sshfs-fileserver stop
 Restart=always
 
 [Install]
