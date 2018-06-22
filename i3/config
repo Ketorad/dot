@@ -6,8 +6,9 @@
 #exec --no-startup-id $HOME/.bin/screencontrol all on
 
 #font pango:Cantarell Regular 12
-#font pango:Monospace 12
-font pango:Noto Mono Regular 11
+font pango:Monospace Regular 14
+#font pango:Noto Mono Regular 11
+#font Inconsolata 14
 #hide_edge_borders both
 new_window pixel 4
 
