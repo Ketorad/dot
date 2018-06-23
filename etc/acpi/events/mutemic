@@ -1,0 +1,2 @@
+event=button/f20
+action=amixer -c 0 sset Mic toggle -q

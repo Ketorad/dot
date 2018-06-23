@@ -135,8 +135,8 @@ bindsym $mod+Down exec --no-startup-id $HOME/dot/bin/k_volume-active -5%
 bindsym XF86AudioMute exec --no-startup-id $HOME/dot/bin/k_volume-active mute
 
 # screen brightness
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10
+#bindsym XF86MonBrightnessUp exec xbacklight -inc 10
+#bindsym XF86MonBrightnessDown exec xbacklight -dec 10
 
 # monitor control
 bindsym $mod+Shift+m exec --no-startup-id $HOME/dot/bin/k_screencontrol all switch && $HOME/dot/bin/k_wallpaper

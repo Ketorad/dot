@@ -1,0 +1,2 @@
+event=video/brightnessdown
+action=/home/eivind/dot/bin/k_brightness -10

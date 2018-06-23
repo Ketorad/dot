@@ -1,3 +1,44 @@
 #!/bin/bash
+# Change monitor brightness
 
-xrandr --output eDP-1 --brightness 0.8
+
+# CHECKS ---
+
+helpText() {
+	echo "Usage: $(basename $0) [INCREMENT PERCENTAGE]."
+	echo -e "\tIncrement has to be an integer. It can be a negative number."
+	exit
+}
+
+# check if number of arguments is valid
+if [[ $# != 1 ]]; then
+	helpText
+fi
+
+# check if argument is a number
+re='^-?[0-9]+$'
+if [[ ! $1 =~ $re ]]; then
+	helpText
+fi
+increment=$1
+
+
+# VARIABLES ---
+
+folderPath="/sys/class/backlight/intel_backlight"
+maxBrightness=$(cat $folderPath/max_brightness)
+currentBrightness=$(cat $folderPath/brightness)
+increment=$(( increment * (maxBrightness / 100) ))
+
+
+# PROGRAM ---
+
+currentBrightness=$((currentBrightness + increment))
+
+if (( $currentBrightness < 0 )); then
+	currentBrightness=0
+elif (( $currentBrightness > $maxBrightness )); then
+	currentBrightness=$maxBrightness
+fi
+
+echo $currentBrightness > $folderPath/brightness
