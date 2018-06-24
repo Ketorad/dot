@@ -9,6 +9,14 @@ alias la='ls -A'
 alias lla='ls -lA'
 alias llr='ls -lRsA'
 
+# cd with ls
+c() {
+	cd $1;
+	pwd;
+	ls;
+}
+alias cd='c'
+
 # xclip
 alias cb='sed -e '"'"'s/^/"/g'"'"' -e '"'"'s/$/"/g'"'"' | tr -d '"'"'\n'"'"' | xclip -selection clipboard'
 #alias cb='sed -e 's/^/"/g' -e 's/$/"/g' | tr -d '\n' | xclip -selection clipboard'
