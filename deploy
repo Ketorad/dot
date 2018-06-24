@@ -99,8 +99,13 @@ fi
 # qutebrowser
 if [[ $(command -v qutebrowser) ]]; then
 	echo "* Deploying qutebrowser config files"
-	rm $HOME/.config/qutebrowser
+	if [[ -d $HOME/.config/qutebrowser ]]; then
+		rm -rf $HOME/.config/qutebrowser
+	fi
 	ln -sf $(pwd)/qutebrowser $HOME/.config/qutebrowser
+	if [[ ! -d $HOME/.local/share/qutebrowser ]]; then
+		mkdir $HOME/.local/share/qutebrowser
+	fi
 	ln -sf $(pwd)/qutebrowser/userscripts $HOME/.local/share/qutebrowser/userscripts
 else
 	echo -e "'\t'X qutebrowser is not installed. Skipping."
