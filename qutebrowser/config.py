@@ -1354,7 +1354,8 @@ c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}'
         , 'g': 'https://www.google.com/search?hl=en&q={}'
         , 'y': 'http://www.youtube.com/results?search_query={}&aq=f'
         , 'pmd': 'https://www.pornmd.com/straight/{}?quality=hd&min_duration=600'
-        , 'yw': 'http://no.yachtworld.com/core/listing/cache/searchResults.jsp?is=false&sm=3&searchtype=homepage&Ntk=boatsNO&type=%28Sail%29&slim=quick&currencyid=1012&luom=126&toLength=50&cit=true&fromLength=40&man={}&No=0&Ns=PBoat_sortByPriceAsc%7C0'}
+        , 'yw': 'http://no.yachtworld.com/core/listing/cache/searchResults.jsp?is=false&sm=3&searchtype=homepage&Ntk=boatsNO&type=%28Sail%29&slim=quick&currencyid=1012&luom=126&toLength=50&cit=true&fromLength=40&man={}&No=0&Ns=PBoat_sortByPriceAsc%7C0'
+        , 'aw': 'https://wiki.archlinux.org/?search{}'}
 
 ## Page(s) to open at the start.
 ## Type: List of FuzzyUrl, or FuzzyUrl
@@ -1388,7 +1389,7 @@ c.zoom.levels = ['25%', '33%', '50%', '67%', '75%', '90%', '100%', '110%', '125%
 
 ## Apply the zoom factor on a frame only to the text or to all content.
 ## Type: Bool
-c.zoom.text_only = True
+c.zoom.text_only = False
 
 ## Bindings for normal mode
 # config.bind("'", 'enter-mode jump_mark')
