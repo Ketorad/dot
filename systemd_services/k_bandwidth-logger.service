@@ -1,0 +1,10 @@
+[Unit]
+Description=logs bandwidth usage on default gateway interface
+After=network.target
+
+[Service]
+ExecStart=/home/eivind/server-bandwidth.sh
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
