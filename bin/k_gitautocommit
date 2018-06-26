@@ -36,6 +36,6 @@ else
 	if [[ $(git status --porcelain) ]]; then
 		git add . && git commit -m "$(date)" && git push
 	else
-		exho "nothing...."
+		echo "nothing...."
 	fi
 fi
