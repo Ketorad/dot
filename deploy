@@ -24,8 +24,8 @@ cp -f gitconfig $HOME/.gitconfig
 
 # .gtkrc-2.0
 echo "* Deploying .gtkrc-2.0"
-cp -f gtkrc-2.0 $HOME/.gtkrc-2.0
-cp -f gtkrc-2.0.mine $HOME/.gtkrc-2.0.mine
+cp -f gtk-2.0/gtkrc-2.0 $HOME/.gtkrc-2.0
+cp -f gtk-2.0/gtkrc-2.0.mine $HOME/.gtkrc-2.0.mine
 
 
 # .config/gtk-3.0
@@ -42,15 +42,6 @@ cp -f profile $HOME/.profile
 echo "* Deploying .bashrc"
 echo ". ~/dot/bash/bashrc" > $HOME/.bashrc
 echo ". ~/dot/bash/bash_logout" > $HOME/.bash_logout
-
-
-# zsh
-#if [[ $(command -v zsh) ]]; then
-#	echo "* Deploying zshrc.conf"
-#	echo "source '$(pwd)/zsh/zshrc_manager.sh'" > $HOME/.zshrc
-#else
-#	echo -e "'\t'X zsh is not installed. Skipping."
-#fi
 
 
 # vim

@@ -11,6 +11,8 @@ font pango:Monospace Regular 14
 #font Inconsolata 14
 #hide_edge_borders both
 new_window pixel 4
+gaps inner 20
+gaps outer 0
 
 set $bg-color              #000000
 set $inactive-bg-color     #000000
