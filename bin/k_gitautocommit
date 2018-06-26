@@ -26,16 +26,25 @@ fi
 
 # PROGRAM ---
 
+# pull
+
+# push
 if [[ $1 ]]; then
+	#pull
+	git -C "$1" up
+	#push
 	if [[ $(git -C "$1" status --porcelain) ]]; then
 		git -C "$1" add . && git -C "$1" commit -m "$(date)" && git -C "$1" push
 	else
-		echo "nothing to do....exiting"
+		exit
 	fi
+	#pull
+	git up
+	#push
 else
 	if [[ $(git status --porcelain) ]]; then
 		git add . && git commit -m "$(date)" && git push
 	else
-		echo "nothing...."
+		exit
 	fi
 fi
