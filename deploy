@@ -25,7 +25,6 @@ cp -f gitconfig $HOME/.gitconfig
 # .gtkrc-2.0
 echo "* Deploying .gtkrc-2.0"
 cp -f gtk-2.0/gtkrc-2.0 $HOME/.gtkrc-2.0
-cp -f gtk-2.0/gtkrc-2.0.mine $HOME/.gtkrc-2.0.mine
 
 
 # .config/gtk-3.0
