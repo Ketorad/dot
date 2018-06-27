@@ -1,16 +1,9 @@
-###############################################
-# Base                                        #
-###############################################
+# i3-gaps config
 
-# Visual --------------------
-#exec --no-startup-id $HOME/.bin/screencontrol all on
 
-#font pango:Cantarell Regular 12
-font pango:Monospace Regular 14
-#font pango:Noto Mono Regular 11
-#font Inconsolata 14
-#hide_edge_borders both
-new_window pixel 4
+font pango:Inconsolata 14
+
+default_border pixel 4
 gaps inner 20
 gaps outer 0
 
@@ -21,12 +14,12 @@ set $inactive-text-color   #555555
 set $urgent-bg-color       #e53935
 set $border-color          #dddddd
 set $inactive-border-color #000000
-set $indicator-color       #ffffff
+set $indicator-color       #000000
 set $focus-color           #333333
 
 
 # window colors         border                 background           text                 indicator        child_border
-client.focused          $border-color          $bg-color            $text-color          $indicator-color $border-color
+client.focused          $border-color          $bg-color            $text-color          $border-color    $border-color
 client.unfocused        $inactive-border-color $inactive-bg-color   $inactive-text-color $indicator-color $inactive-border-color
 client.focused_inactive $inactive-border-color $inactive-bg-color   $inactive-text-color $indicator-color $inactive-border-color
 client.urgent           $urgent-bg-color       $urgent-bg-color     $text-color          $indicator-color $inactive-border-color
@@ -50,28 +43,16 @@ set $workspace10 "10"
 set $mod Mod4
 floating_modifier $mod
 
-bindsym Control+semicolon exec "xdotool key A"
-#bindsym Control+semicolon exec "xdotool key Shift+Ctrl+u; xdotool key 0; xdotool key 0; xdotool key d; xdotool key 8; xdotool key space"
-#bindsym Control+semicolon exec xdotool key Shift+Ctrl+u; exec xdotool key 0; exec xdotool key 0; \
-#	exec xdotool key d; exec xdotool key 8; exec xdotool key space
-#bindsym Control+semicolon exec echo "ø"
-#bindsym Control+semicolon exec bash -c "printf '\\u2014' | iconv -f UTF8 -t UTF16 | xvkbd -utf16 -delay 500 -file -"
-#bindsym Control+semicolon exec bash -c "printf '\\u00f8' | iconv -f UTF8 -t UTF16 | xvkbd -utf16 -delay 500 -file -"
-#bindsym Control+semicolon exec bash -c "printf '\\u00f8'"
-#bindsym Control+semicolon exec xvkdb -text '\u00f8'
-#bindsym Control+semicolon exec bash -c "xvkbd -xsendevent -utf16 -file ~/dot/i3/testchar"
-
 bindsym $mod+Tab exec $HOME/dot/i3/scripts/tab.sh
 bindsym $mod+Shift+Tab exec $HOME/dot/i3/scripts/tab.sh reverse
 
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
-#bindsym $mod+Shift+e exit
-bindsym $mod+Shift+e exec i3-msg "exit"; logout
+bindsym $mod+Shift+e exec $HOME/dot/i3/scripts/exit-i3
 
-bindsym $mod+Return exec lxterminal
+bindsym $mod+Return exec $HOME/dot/i3/scripts/focus-split && lxterminal
 bindsym $mod+Shift+q kill
-bindsym $mod+d exec $HOME/dot/bin/k_rofi
+bindsym $mod+d exec $HOME/dot/i3/scripts/focus-split && $HOME/dot/bin/k_rofi
 
 bindsym $mod+Shift+x exec xset dpms 0 5 && xset +dpms && i3lock -n --color "$bg-color" && xset -dpms && xset s off
 bindsym $mod+Shift+z exec systemctl suspend
@@ -136,10 +117,6 @@ bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/dot/bin/k_volume-active 
 bindsym $mod+Down exec --no-startup-id $HOME/dot/bin/k_volume-active -5%
 bindsym XF86AudioMute exec --no-startup-id $HOME/dot/bin/k_volume-active mute
 
-# screen brightness
-#bindsym XF86MonBrightnessUp exec xbacklight -inc 10
-#bindsym XF86MonBrightnessDown exec xbacklight -dec 10
-
 # monitor control
 bindsym $mod+Shift+m exec --no-startup-id $HOME/dot/bin/k_screencontrol all switch && $HOME/dot/bin/k_wallpaper
 bindsym $mod+Shift+n exec --no-startup-id $HOME/dot/bin/k_screencontrol one switch && $HOME/dot/bin/k_wallpaper
@@ -162,13 +139,10 @@ assign [class="Pavucontrol"] $workspace10
 # -
 
 # Startup programs-------------
-#exec --no-startup-id nm-applet
 exec --no-startup-id compton -b --backend glx --vsync opengl-swc
-#exec_always feh --bg-scale --no-xinerama /home/eivind/.wallpaper
 exec_always $HOME/dot/bin/k_wallpaper
 
 # remove screen timeout and console beep
-#exec xset s noblank
 exec xset s off
 exec xset -dpms
 exec xset b off
@@ -270,3 +244,5 @@ for_window [class="Freecad" title="Formula editor"] floating enable
 # set mouse properties
 exec --no_startup-id sleep 2
 exec --no-startup-id $HOME/dot/bin/k_mousestuff
+
+#exec --no-startup-id exec xdotool search --onlyvisible . behave %@ focus exec $HOME/dot/i3/scripts/focus-split

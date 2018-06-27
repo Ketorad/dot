@@ -6,15 +6,16 @@
 
 helpText() {
 	echo "Usage: $(basename $0) [IMAGE FILE]"
+	echo -e "\t$(basename $0)\tRefresh current wallpaper"
 	echo "Copy image file to \"$HOME/dot/wallpaper\", and set as wallpaper using feh."
 	exit
 }
 
-if [[ $# != 1 ]]; then
+if [[ $# > 1 ]]; then
 	helptext
 fi
 
-if [[ ! -f $1 ]]; then
+if [[ $1 ]] && [[ ! -f $1 ]]; then
 	echo "Error: \"$1\" does not exist."
 	echo
 	helptext
@@ -29,6 +30,8 @@ targetFile="$HOME/dot/wallpaper"
 
 # PROGRAM ---
 
-cp -f "$wallpaperFile" $targetFile
+if [[ $1 ]]; then
+	cp -f "$wallpaperFile" $targetFile
+fi
 
 feh --bg-center --bg-fill --no-xinerama $targetFile

@@ -12,7 +12,7 @@ alias llr='ls -lRsA'
 # cd with ls
 c() {
 	cd $1;
-	echo -e "\t$(pwd)";
+	echo " --- $(pwd) ---";
 	ls;
 }
 alias cd='c'

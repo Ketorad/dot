@@ -1,57 +1,50 @@
 #!/bin/bash
-# pull all git and subgits from folder
+# Adds, commits with date, and pushes git.
 
-targetPath=$(pwd)
 
+# CHECKS ---
 
 helpText() {
-	echo "Pull all git and subgits within folder."
+	echo -e "Usage: $(basename $0)\tCommits working dir."
+	echo -e "\t$(basename $0) [DIR PATH]\tCommits path dir."
+	echo "Adds, commits width date, and pushes with git."
+	exit
+}
+
+if [[ $# > 1 ]]; then
+	echo "Error: Too many arguments"
 	echo
-	echo "	$(basename $0) 			Pull from current folder."
-	echo "	$(basename $0) [folder path] 	Pull from specified folder."
-	exit 0
-}
+	helpText
+fi
 
-
-findGits() {
-	targetGits=$(find $targetPath -type d -name .git)
-	if ! [[ $targetGits ]]; then
-		echo "Error: No .git found."
-		helpText
-	fi
-}
-
-
-pullFrom() {
-	for gitFolder in $targetGits; do
-		cd $(dirname $gitFolder) && git checkout master && git up
-	done
-}
-
-
-# check for too many arguments
-if [[ $2 ]]; then
-	echo "Error: Too many arguments."
+if [[ $1 ]] && [[ ! -d $1 ]]; then
+	echo -e "Error: \"$1\" is not a valid path."
+	echo
 	helpText
 fi
 
 
-# check for argument
+# PROGRAM ---
+
+# pull
+
+# push
 if [[ $1 ]]; then
-	if [[ $1 == "help" ]]; then
-		helpText
-	# check for non valid folder path in argument
-	elif ! [[ -d $1 ]]; then
-		echo "Error: $1 is not a valid folder path."
-		helpText
-	# run program with argument
+	#pull
+	git -C "$1" up
+	#push
+	if [[ $(git -C "$1" status --porcelain) ]]; then
+		git -C "$1" add . && git -C "$1" commit -m "$(date)" && git -C "$1" push
 	else
-		targetPath=$1
-		findGits
-		pullFrom
+		exit
 	fi
-# run program without argument
+	#pull
+	git up
+	#push
 else
-	findGits
-	pullFrom
+	if [[ $(git status --porcelain) ]]; then
+		git add . && git commit -m "$(date)" && git push
+	else
+		exit
+	fi
 fi
