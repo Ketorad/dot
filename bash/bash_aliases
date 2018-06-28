@@ -11,7 +11,7 @@ alias llr='ls -lRsA'
 
 # cd with ls
 c() {
-	cd $1;
+	cd "$1";
 	echo " --- $(pwd) ---";
 	ls;
 }
