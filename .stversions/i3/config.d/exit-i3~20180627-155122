@@ -1,0 +1,5 @@
+#!/bin/bash
+# Exit i3 and logout of bash
+
+i3-msg exit
+exec pkill -KILL -u eivind bash

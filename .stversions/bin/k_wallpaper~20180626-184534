@@ -1,0 +1,34 @@
+#!/bin/bash
+# Set picture as wallpaper
+
+
+# CHECKS ---
+
+helpText() {
+	echo "Usage: $(basename $0) [IMAGE FILE]"
+	echo "Copy image file to \"$HOME/dot/wallpaper\", and set as wallpaper using feh."
+	exit
+}
+
+if [[ $# != 1 ]]; then
+	helptext
+fi
+
+if [[ ! -f $1 ]]; then
+	echo "Error: \"$1\" does not exist."
+	echo
+	helptext
+fi
+
+
+# VARIABLES ---
+
+wallpaperFile=$1
+targetFile="$HOME/dot/wallpaper"
+
+
+# PROGRAM ---
+
+cp -f "$wallpaperFile" $targetFile
+
+feh --bg-center --bg-fill --no-xinerama $targetFile

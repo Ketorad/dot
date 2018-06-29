@@ -1,0 +1,50 @@
+#!/bin/bash
+# Adds, commits with date, and pushes git.
+
+
+# CHECKS ---
+
+helpText() {
+	echo -e "Usage: $(basename $0)\tCommits working dir."
+	echo -e "\t$(basename $0) [DIR PATH]\tCommits path dir."
+	echo "Adds, commits width date, and pushes with git."
+	exit
+}
+
+if [[ $# > 1 ]]; then
+	echo "Error: Too many arguments"
+	echo
+	helpText
+fi
+
+if [[ $1 ]] && [[ ! -d $1 ]]; then
+	echo -e "Error: \"$1\" is not a valid path."
+	echo
+	helpText
+fi
+
+
+# PROGRAM ---
+
+# pull
+
+# push
+if [[ $1 ]]; then
+	#pull
+	git -C "$1" up
+	#push
+	if [[ $(git -C "$1" status --porcelain) ]]; then
+		git -C "$1" add . && git -C "$1" commit -m "$(date)" && git -C "$1" push
+	else
+		exit
+	fi
+	#pull
+	git up
+	#push
+else
+	if [[ $(git status --porcelain) ]]; then
+		git add . && git commit -m "$(date)" && git push
+	else
+		exit
+	fi
+fi

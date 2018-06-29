@@ -1,0 +1,112 @@
+#!/bin/bash
+# Script to install dotfiles to the current user's homefolder
+
+
+# copy bin files to /usr/local/bin
+#echo "* Deploying bin files to /usr/local/bin"
+#sudo cp -f bin/* /usr/local/bin/
+
+
+# copy systemd services
+#if [[ $(command -v sshfs) ]]; then
+#	echo "* Deploying mount-fileserver systemd service"
+#	sudo cp -f systemd_services/k_mount-fileserver.service /lib/systemd/system/
+#	sudo chmod 644 /lib/systemd/system/k_mount-fileserver.service
+#else
+#	echo -e "'\t'X sshfs not installed. Skipping mount-fileserver systemd service."
+#fi
+
+
+# .gitconfig
+echo "* Deploying .gitconfig"
+cp -f gitconfig $HOME/.gitconfig
+
+
+# .gtkrc-2.0
+echo "* Deploying .gtkrc-2.0"
+cp -f gtkrc-2.0 $HOME/.gtkrc-2.0
+cp -f gtkrc-2.0.mine $HOME/.gtkrc-2.0.mine
+
+
+# .config/gtk-3.0
+echo "* Deploying .config/gtkrc-3.0"
+cp -rf gtk-3.0 $HOME/.config/
+
+
+# .profile
+echo "* Deploying .profile"
+cp -f profile $HOME/.profile
+
+
+# bashrc
+echo "* Deploying .bashrc"
+echo ". ~/dot/bash/bashrc" > $HOME/.bashrc
+echo ". ~/dot/bash/bash_logout" > $HOME/.bash_logout
+
+
+# zsh
+#if [[ $(command -v zsh) ]]; then
+#	echo "* Deploying zshrc.conf"
+#	echo "source '$(pwd)/zsh/zshrc_manager.sh'" > $HOME/.zshrc
+#else
+#	echo -e "'\t'X zsh is not installed. Skipping."
+#fi
+
+
+# vim
+if [[ $(command -v vim) ]]; then
+	echo "* Deploying .vimrc"
+	echo "so $HOME/dot/vim/vimrc.vim" > $HOME/.vimrc
+	rm -rf $HOME/.vim
+	ln -sf $(pwd)/vim $HOME/.vim
+else
+	echo -e "'\t'X vim is not installed. Skipping."
+fi
+
+
+# lxterminal
+if [[ $(command -v lxterminal) ]]; then
+	echo "* Deploying lxterminal.conf"
+	ln -sf $(pwd)/lxterminal/lxterminal.conf $HOME/.config/lxterminal/lxterminal.conf
+else
+	echo -e "'\t'X lxterminal is not installed. Skipping."
+fi
+
+
+# i3wm
+if [[ $(command -v i3) ]]; then
+	echo "* Deploying i3wm config"
+	ln -sf $(pwd)/i3/config $HOME/.config/i3/config
+else
+	echo -e "'\t'X i3wm is not installed. Skipping."
+fi
+
+
+# ranger
+if [[ $(command -v ranger) ]]; then
+	if [[ ! -d $HOME/.config/ranger ]]; then
+		mkdir $HOME/.config/ranger
+	fi
+	echo "* Deploying ranger config files"
+	ln -sf $(pwd)/ranger/rc.conf $HOME/.config/ranger/rc.conf
+	ln -sf $(pwd)/ranger/rifle.conf $HOME/.config/ranger/rifle.conf
+	ln -sf $(pwd)/ranger/scope.sh $HOME/.config/ranger/scope.sh
+else
+	echo -e "'\t'X ranger is not installed. Skipping."
+fi
+
+
+# qutebrowser
+if [[ $(command -v qutebrowser) ]]; then
+	echo "* Deploying qutebrowser config files"
+	if [[ -d $HOME/.config/qutebrowser ]]; then
+		rm -rf $HOME/.config/qutebrowser
+	fi
+	ln -sf $(pwd)/qutebrowser $HOME/.config/qutebrowser
+	if [[ ! -d $HOME/.local/share/qutebrowser ]]; then
+		mkdir $HOME/.local/share/qutebrowser
+	fi
+	ln -sf $(pwd)/qutebrowser/userscripts $HOME/.local/share/qutebrowser/userscripts
+else
+	echo -e "'\t'X qutebrowser is not installed. Skipping."
+fi

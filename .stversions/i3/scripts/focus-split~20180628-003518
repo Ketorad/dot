@@ -1,0 +1,5 @@
+#!/bin/bash
+# Toggle focused window's split between vertical and horizontal based on window size
+
+#xdotool getwindowfocus getwindowgeometry
+xdotool search --onlyvisible . behave %@ focus exec i3-msg "split v"
