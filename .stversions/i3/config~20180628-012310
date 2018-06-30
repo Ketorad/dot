@@ -2,7 +2,8 @@
 
 
 font pango:Inconsolata 14
-new_window pixel 1
+
+default_border pixel 4
 gaps inner 20
 gaps outer 0
 
@@ -13,12 +14,12 @@ set $inactive-text-color   #555555
 set $urgent-bg-color       #e53935
 set $border-color          #dddddd
 set $inactive-border-color #000000
-set $indicator-color       #ff0000
+set $indicator-color       #000000
 set $focus-color           #333333
 
 
 # window colors         border                 background           text                 indicator        child_border
-client.focused          $border-color          $bg-color            $text-color          $indicator-color $border-color
+client.focused          $border-color          $bg-color            $text-color          $border-color    $border-color
 client.unfocused        $inactive-border-color $inactive-bg-color   $inactive-text-color $indicator-color $inactive-border-color
 client.focused_inactive $inactive-border-color $inactive-bg-color   $inactive-text-color $indicator-color $inactive-border-color
 client.urgent           $urgent-bg-color       $urgent-bg-color     $text-color          $indicator-color $inactive-border-color
@@ -49,9 +50,9 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec $HOME/dot/i3/scripts/exit-i3
 
-bindsym $mod+Return exec lxterminal
+bindsym $mod+Return exec $HOME/dot/i3/scripts/focus-split && lxterminal
 bindsym $mod+Shift+q kill
-bindsym $mod+d exec $HOME/dot/bin/k_rofi
+bindsym $mod+d exec $HOME/dot/i3/scripts/focus-split && $HOME/dot/bin/k_rofi
 
 bindsym $mod+Shift+x exec xset dpms 0 5 && xset +dpms && i3lock -n --color "$bg-color" && xset -dpms && xset s off
 bindsym $mod+Shift+z exec systemctl suspend
@@ -243,3 +244,5 @@ for_window [class="Freecad" title="Formula editor"] floating enable
 # set mouse properties
 exec --no_startup-id sleep 2
 exec --no-startup-id $HOME/dot/bin/k_mousestuff
+
+#exec --no-startup-id exec xdotool search --onlyvisible . behave %@ focus exec $HOME/dot/i3/scripts/focus-split

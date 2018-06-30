@@ -237,6 +237,7 @@ exec --no-startup-id i3-msg "workspace 3; exec lxterminal"
 
 # class window properties
 for_window [class="Freecad" title="Formula editor"] floating enable
+for_window [class="FreeCAD" title="Formula editor"] floating enable
 
 # remove urgent color from bar
 #exec --no-startup-id $HOME/dot/bin/k_remove-urgent
