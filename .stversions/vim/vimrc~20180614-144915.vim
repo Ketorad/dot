@@ -71,8 +71,4 @@ nnoremap <C-L> <C-W><C-L>
 inoremap {<CR> {<CR>}<C-O>k<C-O>A<cr>
 inoremap {; {<CR>};<C-O>k<C-O>A<cr>
 
-" Copy and Paste
-vnoremap <C-c> "*y :let @+=@*<CR>
-map <C-v> "+P
-
 colo mycolors
