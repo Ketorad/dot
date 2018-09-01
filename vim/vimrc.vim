@@ -41,8 +41,11 @@ set splitright
 
 " YouCompleteMe
 " Prevent preview window for autocomplete function to show
-let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+"let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
+let g:ycm_confirm_extra_conf = 0
 let g:ycm_key_invoke_completion = '<C-Space>'
+let g:ycm_server_python_interpreter = '/usr/bin/python2'
 "let g:ycm_autoclose_preview_window_after_completion = '1'
 filetype on
 
@@ -72,7 +75,7 @@ inoremap {<CR> {<CR>}<C-O>k<C-O>A<cr>
 inoremap {; {<CR>};<C-O>k<C-O>A<cr>
 
 " Copy and Paste
-vnoremap <C-c> "*y :let @+=@*<CR>
-map <C-v> "+P
+"vnoremap <C-c> "*y :let @+=@*<CR>
+"map <C-v> "+P
 
 colo mycolors

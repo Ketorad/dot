@@ -82,6 +82,20 @@ file (COPY \"\${library_dir}/\" DESTINATION \${build_library_dir})
 
 # Compile commands for vim youcompleteme
 set(CMAKE_EXPORT_COMPILE_COMMANDS 1)" > $cmakeFile
+
+	# make folders
+	if [[ ! -d build ]]; then
+		mkdir build
+	fi
+	if [[ ! -d include ]]; then
+		mkdir include
+	fi
+	if [[ ! -d lib ]]; then
+		mkdir lib
+	fi
+	if [[ ! -d src ]]; then
+		mkdir src
+	fi
 }
 
 

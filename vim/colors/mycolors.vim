@@ -17,12 +17,12 @@ hi TabLineSel 		ctermfg=White 			ctermbg=Black
 
 hi ErrorMsg 		ctermfg=White 			ctermbg=DarkRed
 hi SpecialKey 		ctermfg=DarkGrey
-hi EndOfBuffer 	ctermfg=Black 			ctermbg=NONE
+hi EndOfBuffer 	ctermfg=Grey 			ctermbg=NONE
 
 syntax enable
 
 " syntax highlighting
-hi Comment 			ctermfg=DarkGrey
+hi Comment 			ctermfg=Grey
 
 hi Constant 		ctermfg=Yellow
 	hi String 			ctermfg=DarkRed

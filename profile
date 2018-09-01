@@ -21,6 +21,6 @@ fi
 #    PATH="$HOME/dot/bin:$PATH"
 #fi
 
-if ! [ $TERM = "xterm" ]; then
-	setterm -blength 0
-fi
+#if ! [ $TERM = "xterm" ]; then
+#	setterm -blength 0
+#fi

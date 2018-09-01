@@ -747,39 +747,39 @@ c.downloads.location.remember = False
 
 ## Font used in the completion categories.
 ## Type: Font
-c.fonts.completion.category = 'bold 14pt monospace'
+c.fonts.completion.category = 'bold 12pt monospace'
 
 ## Font used in the completion widget.
 ## Type: Font
-c.fonts.completion.entry = '14pt monospace'
+c.fonts.completion.entry = '12pt monospace'
 
 ## Font used for the debugging console.
 ## Type: QtFont
-c.fonts.debug_console = '14pt monospace'
+c.fonts.debug_console = '12pt monospace'
 
 ## Font used for the downloadbar.
 ## Type: Font
-c.fonts.downloads = '14pt monospace'
+c.fonts.downloads = '12pt monospace'
 
 ## Font used for the hints.
 ## Type: Font
-c.fonts.hints = 'bold 14pt monospace'
+c.fonts.hints = 'bold 12pt monospace'
 
 ## Font used in the keyhint widget.
 ## Type: Font
-c.fonts.keyhint = '14pt monospace'
+c.fonts.keyhint = '12pt monospace'
 
 ## Font used for error messages.
 ## Type: Font
-c.fonts.messages.error = '14pt monospace'
+c.fonts.messages.error = '12pt monospace'
 
 ## Font used for info messages.
 ## Type: Font
-c.fonts.messages.info = '14pt monospace'
+c.fonts.messages.info = '12pt monospace'
 
 ## Font used for warning messages.
 ## Type: Font
-c.fonts.messages.warning = '14pt monospace'
+c.fonts.messages.warning = '12pt monospace'
 
 ## Default monospace fonts. Whenever "monospace" is used in a font
 ## setting, it's replaced with the fonts listed here.
@@ -788,15 +788,15 @@ c.fonts.messages.warning = '14pt monospace'
 
 ## Font used for prompts.
 ## Type: Font
-c.fonts.prompts = '14pt sans-serif'
+c.fonts.prompts = '12pt sans-serif'
 
 ## Font used in the statusbar.
 ## Type: Font
-c.fonts.statusbar = '14pt monospace'
+c.fonts.statusbar = '12pt monospace'
 
 ## Font used in the tab bar.
 ## Type: QtFont
-c.fonts.tabs = '14pt monospace'
+c.fonts.tabs = '12pt monospace'
 
 ## Font family for cursive fonts.
 ## Type: FontFamily
@@ -825,19 +825,23 @@ c.fonts.tabs = '14pt monospace'
 ## Default font size (in pixels) for regular text.
 ## Type: Int
 # c.fonts.web.size.default = 16
+c.fonts.web.size.default = 14
 
 ## Default font size (in pixels) for fixed-pitch text.
 ## Type: Int
 # c.fonts.web.size.default_fixed = 13
+c.fonts.web.size.default_fixed = 14
 
 ## Hard minimum font size (in pixels).
 ## Type: Int
 # c.fonts.web.size.minimum = 0
+c.fonts.web.size.minimum = 14
 
 ## Minimum logical font size (in pixels) that is applied when zooming
 ## out.
 ## Type: Int
 # c.fonts.web.size.minimum_logical = 6
+c.fonts.web.size.minimum_logical = 14
 
 ## When a hint can be automatically followed without pressing Enter.
 ## Type: String
@@ -1147,7 +1151,7 @@ c.fonts.tabs = '14pt monospace'
 
 ## Open new tabs (middleclick/ctrl+click) in the background.
 ## Type: Bool
-# c.tabs.background = False
+c.tabs.background = False
 
 ## Mouse button with which to close tabs.
 ## Type: String
@@ -1214,7 +1218,7 @@ c.fonts.tabs = '14pt monospace'
 
 ## Switch between tabs using the mouse wheel.
 ## Type: Bool
-# c.tabs.mousewheel_switching = True
+c.tabs.mousewheel_switching = False
 
 ## Position of new tabs opened from another tab.
 ## Type: NewTabPosition
@@ -1223,7 +1227,7 @@ c.fonts.tabs = '14pt monospace'
 ##   - next: After the current tab.
 ##   - first: At the beginning.
 ##   - last: At the end.
-# c.tabs.new_position.related = 'next'
+c.tabs.new_position.related = 'last'
 
 ## Position of new tabs which aren't opened from another tab.
 ## Type: NewTabPosition
@@ -1442,9 +1446,8 @@ config.bind('-', 'zoom-out')
 # config.bind('<Ctrl-W>', 'tab-close')
 # config.bind('<Ctrl-X>', 'navigate decrement')
 # config.bind('<Ctrl-^>', 'tab-focus last')
-config.bind('<Ctrl-a>', 'spawn youtube-dl -x --audio-format mp3 "{url}" -o "dwn/%(title)s.%(ext)s"')
+config.bind('<Ctrl-a>', 'spawn youtube-dl -x --audio-format mp3 --audio-quality 0 "{url}" -o "dwn/%(title)s.%(ext)s"')
 config.bind('<Ctrl-d>', 'spawn youtube-dl "{url}" -o "dwn/%(title)s.%(ext)s"')
-#config.bind('<Ctrl-a>', 'hint links spawn youtube-dl -x "{hint-url}" -o "dwn/%(title)s.%(ext)s"')
 # config.bind('<Ctrl-h>', 'home')
 # config.bind('<Ctrl-p>', 'tab-pin')
 # config.bind('<Ctrl-s>', 'stop')
@@ -1542,7 +1545,7 @@ config.bind('k', 'scroll-page 0 -0.5')
 # config.bind('tsu', 'config-cycle -p -t -u {url} content.javascript.enabled ;; reload')
 # config.bind('u', 'undo')
 # config.bind('v', 'enter-mode caret')
-config.bind('v', 'spawn --userscript blackout_yt ;; spawn mpv --fs {url}')
+config.bind('v', 'spawn --userscript blackout_yt ;; spawn k_mpv {url}')
 # config.bind('wB', 'set-cmd-text -s :bookmark-load -w')
 # config.bind('wO', 'set-cmd-text :open -w {url:pretty}')
 # config.bind('wP', 'open -w -- {primary}')

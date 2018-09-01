@@ -3,8 +3,5 @@
 
 config_version: 2
 settings:
-  aliases:
-    global:
-      q: quit
-      w: session-save
-      wq: quit --save
+  fonts.web.size.minimum_logical:
+    global: 12

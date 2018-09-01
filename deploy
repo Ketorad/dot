@@ -24,12 +24,19 @@ cp -f gitconfig $HOME/.gitconfig
 
 # .gtkrc-2.0
 echo "* Deploying .gtkrc-2.0"
+if [[ ! -d $HOME/.config/gtk-2.0 ]]; then
+	mkdir $HOME/.config/gtk-2.0
+fi
 cp -f gtk-2.0/gtkrc-2.0 $HOME/.gtkrc-2.0
+cp -f gtk-2.0/gtkfilechooser.ini $HOME/.config/gtk-2.0/
 
 
 # .config/gtk-3.0
 echo "* Deploying .config/gtkrc-3.0"
-cp -rf gtk-3.0 $HOME/.config/
+if [[ ! -d $HOME/.config/gtk-3.0 ]]; then
+	mkdir $HOME/.config/gtk-3.0
+fi
+cp -f gtk-3.0/settings.ini $HOME/.config/gtk-3.0/
 
 
 # .profile
@@ -55,11 +62,20 @@ fi
 
 
 # lxterminal
-if [[ $(command -v lxterminal) ]]; then
-	echo "* Deploying lxterminal.conf"
-	ln -sf $(pwd)/lxterminal/lxterminal.conf $HOME/.config/lxterminal/lxterminal.conf
+#if [[ $(command -v lxterminal) ]]; then
+#	echo "* Deploying lxterminal.conf"
+#	ln -sf $(pwd)/lxterminal/lxterminal.conf $HOME/.config/lxterminal/lxterminal.conf
+#else
+#	echo -e "'\t'X lxterminal is not installed. Skipping."
+#fi
+
+
+# urxvt
+if [[ $(command -v urxvt) ]]; then
+	echo "* Deploying .Xdefaults for urxvt."
+	ln -sf $(pwd)/urxvt/Xdefaults $HOME/.Xdefaults
 else
-	echo -e "'\t'X lxterminal is not installed. Skipping."
+	echo -e "'\t'X urxvt is not installed. Skipping."
 fi
 
 

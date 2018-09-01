@@ -3,16 +3,17 @@
 
 font pango:Inconsolata 14
 
-default_border pixel 4
-gaps inner 20
+default_border pixel 1
+gaps inner 10
 gaps outer 0
+smart_gaps on
 
 set $bg-color              #000000
 set $inactive-bg-color     #000000
 set $text-color            #f3f4f5
 set $inactive-text-color   #555555
 set $urgent-bg-color       #e53935
-set $border-color          #dddddd
+set $border-color          #dd00dd
 set $inactive-border-color #000000
 set $indicator-color       #000000
 set $focus-color           #333333
@@ -50,12 +51,13 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec $HOME/dot/i3/scripts/exit-i3
 
-bindsym $mod+Return exec $HOME/dot/i3/scripts/focus-split && lxterminal
+bindsym $mod+Return exec $HOME/dot/i3/scripts/focus-split && urxvt
 bindsym $mod+Shift+q kill
 bindsym $mod+d exec $HOME/dot/i3/scripts/focus-split && $HOME/dot/bin/k_rofi
 
 bindsym $mod+Shift+x exec xset dpms 0 5 && xset +dpms && i3lock -n --color "$bg-color" && xset -dpms && xset s off
-bindsym $mod+Shift+z exec systemctl suspend
+bindsym $mod+Shift+z exec systemctl suspend && xset dpms 0 5 && xset +dpms && i3lock -n --color "$bg-color" && xset -dpms && xset s off
+
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -110,12 +112,16 @@ bindsym $mod+Control+j resize shrink height 10 px or 10 ppt
 bindsym $mod+Control+k resize grow height 10 px or 10 ppt
 bindsym $mod+Control+l resize grow width 10 px or 10 ppt
 
-# pulse audio
-bindsym XF86AudioRaiseVolume exec --no-startup-id $HOME/dot/bin/k_volume-active +5%
-bindsym $mod+Up exec --no-startup-id $HOME/dot/bin/k_volume-active +5%
-bindsym XF86AudioLowerVolume exec --no-startup-id $HOME/dot/bin/k_volume-active -5%
-bindsym $mod+Down exec --no-startup-id $HOME/dot/bin/k_volume-active -5%
-bindsym XF86AudioMute exec --no-startup-id $HOME/dot/bin/k_volume-active mute
+# audio
+bindsym XF86AudioRaiseVolume exec --no-startup-id amixer -c 0 set Master 5%+ unmute -q
+bindsym XF86AudioLowerVolume exec --no-startup-id amixer -c 0 set Master 5%- unmute -q
+bindsym $mod+Up exec --no-startup-id amixer -c 0 set Master 5%+ unmute -q
+bindsym $mod+Down exec --no-startup-id amixer -c 0 set Master 5%- unmute -q
+bindsym XF86AudioMute exec --no-startup-id amixer -c 0 sset Master toggle -q
+
+# brightness
+bindsym XF86MonBrightnessUp exec --no-startup-id $HOME/dot/bin/k_brightness 10
+bindsym XF86MonBrightnessDown exec --no-startup-id $HOME/dot/bin/k_brightness -10
 
 # monitor control
 bindsym $mod+Shift+m exec --no-startup-id $HOME/dot/bin/k_screencontrol all switch && $HOME/dot/bin/k_wallpaper
@@ -220,13 +226,13 @@ exec --no-startup-id i3-msg "workspace 1; exec steam; layout tabbed"
 #exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec chromium --disable-session-crashed-bubble --disable-infobars"
 exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec qutebrowser"
 #3
-exec --no-startup-id i3-msg "workspace 3; exec lxterminal"
+exec --no-startup-id i3-msg "workspace 3; exec urxvt"
 #4
-#exec --no-startup-id i3-msg "workspace 4; exec lxterminal"
+#exec --no-startup-id i3-msg "workspace 4; exec urxvt"
 #5
 
 #6
-#exec --no-startup-id i3-msg "workspace 6; exec lxterminal"
+#exec --no-startup-id i3-msg "workspace 6; exec urxvt"
 #7
 
 #8
