@@ -1,0 +1,29 @@
+# Personal aliases for my .bashrc
+
+# fix for reading alias as sudo
+alias sudo='sudo '
+
+# ls
+alias ll='ls -l'
+alias la='ls -A'
+alias lla='ls -lA'
+alias llr='ls -lRsA'
+
+# cd with ls
+c() {
+	if [[ $1 ]]; then
+		cd "$1";
+	else
+		cd;
+	fi
+	echo " --- $(pwd) ---";
+	ls;
+}
+alias cd="c"
+
+# xclip
+alias cb='sed -e '"'"'s/^/"/g'"'"' -e '"'"'s/$/"/g'"'"' | tr -d '"'"'\n'"'"' | xclip -selection clipboard'
+#alias cb='sed -e 's/^/"/g' -e 's/$/"/g' | tr -d '\n' | xclip -selection clipboard'
+
+# date
+alias date='date "+%a %y:%m:%d:%H:%M:%S"'

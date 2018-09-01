@@ -1,0 +1,57 @@
+#!/bin/bash
+# Automaticly connect to wifi networks matching keys found in /etc/network/interfaces.d/
+
+ESSIDfilesPath="/etc/network/interfaces.d/"
+
+helpText() {
+	echo "Usage: $(basename $0) [WIRELESS INTERFACE]"
+	echo "Automaticly connect to wifi networks matching keys found in /etc/network/interfaces.d/"
+	exit
+}
+
+# check if number of arguments is valid
+if [[ $# != 1 ]]; then
+	helpText
+fi
+
+# check if argument is a valid wifi interface
+if [[ ! -d "/sys/class/net/$1/wireless" ]]; then
+	echo "Error: $1 is not a valid wireless interface."
+	helpText
+fi
+
+
+# make sure network card is up to be able to scan
+ip link set $1 up
+
+while [[ 1 ]]; do
+	connectedESSID=$(iwgetid $1 --raw)
+
+	if [[ $connectedESSID ]]; then
+		sleep 60
+	else
+		# to store each element in array by newline and not space
+		# we temporary change the $IFS global variable
+		IFS_backup=$IFS
+		IFS=$'\n'
+		scannedESSIDs=( $(iwlist $1 scan | grep ESSID: | sort -u | cut -d '"' -f2) )
+		ESSIDfiles=( $(ls -b $ESSIDfilesPath) )
+
+		ifdown $1
+
+		for (( i = 0; i < ${#scannedESSIDs[@]}; i++ )); do
+			for (( j = 0; j < ${#ESSIDfiles[@]}; j++ )); do
+				fileESSID=$(cat $ESSIDfilesPath${ESSIDfiles[$j]} | grep -m 1 ssid | cut -d '"' -f 2)
+				if [[ $fileESSID == ${scannedESSIDs[$i]} ]]; then
+					ifup -i $ESSIDfilesPath${ESSIDfiles[$j]} $1
+					if [[ $(iwgetid $1 --raw) ]]; then
+						sleep 10
+						break; break
+					fi
+				fi
+			done
+		done
+
+		IFS=$IFS_backup
+	fi
+done
