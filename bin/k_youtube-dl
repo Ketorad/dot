@@ -60,7 +60,17 @@ if [[ $3 ]]; then
 	fi
 fi
 
-# video
+# write filenames into array
+updateFileArray() {
+	IFS_backup=$IFS
+	IFS=$'\n'
+	videoFiles=( $(/bin/ls -1 $videoPath | awk '/.mp4$|.flv$/ {print}') )
+	audioFiles=( $(/bin/ls -1 $audioPath | awk '/.mp3$/ {print}') )
+	IFS=$IFS_backup
+}
+
+# download video files
+updateFileArray
 dateAfter=$(/bin/date --date="-$daysOld day" "+%Y%m%d")
 
 if [[ $sourceURL ]]; then
@@ -73,14 +83,7 @@ for (( i = 0; i < ${#URLs[@]}; i++ )); do
 		youtube-dl -f best -ciwv --dateafter $dateAfter --playlist-end $maxDownloads --match-filter "duration >= $minDuration" -o "$videoPath%(uploader)s - %(title)s.%(ext)s" "${URLs[$i]}"
 done
 
-# audio
-IFS_backup=$IFS
-IFS=$'\n'
-videoFiles=( $(/bin/ls -1 $videoPath | awk '/.mp4$|.flv$/ {print}') )
-audioFiles=( $(/bin/ls -1 $audioPath | awk '/.mp3$/ {print}') )
-IFS=$IFS_backup
-
-# make audio files from video files
+# convert video files into audio files
 for (( i = 0; i < ${#videoFiles[@]}; i++ )); do
 	videoFileName=$(basename -- "${videoFiles[$i]}")
 	videoFileName="${videoFileName%.*}"
@@ -100,19 +103,40 @@ for (( i = 0; i < ${#videoFiles[@]}; i++ )); do
 done
 
 # delete extraneus audiofiles
-#for (( i = 0; i < ${#audioFiles[@]}; i++ )); do
-#	audioFileName=$(basename -- "${audioFiles[$j]}")
-#	audioFileName="${audioFileName%.*}"
-#	foundVideoFile="false"
-#	for (( j = 0; j < ${#videoFiles[@]}; j++ )); do
-#		videoFileName=$(basename -- "${videoFiles[$i]}")
-#		videoFileName="${videoFileName%.*}"
-#		if [[ $audioFileName == $videoFileName ]]; then
-#			foundVideoFile="true"
-#			break
-#		fi
-#	done
-#	if [[ $foundVideoFile == "false" ]]; then
-#		rm -f "$audioPath${audioFiles[$i]}"
-#	fi
-#done
+updateFileArray
+for (( i = 0; i < ${#audioFiles[@]}; i++ )); do
+	audioFileName=$(basename -- "${audioFiles[$i]}")
+	audioFileName="${audioFileName%.*}"
+	foundVideoFile="false"
+	for (( j = 0; j < ${#videoFiles[@]}; j++ )); do
+		videoFileName=$(basename -- "${videoFiles[$j]}")
+		videoFileName="${videoFileName%.*}"
+		if [[ $audioFileName == $videoFileName ]]; then
+			foundVideoFile="true"
+			break
+		fi
+	done
+	if [[ $foundVideoFile == "false" ]]; then
+		echo "deleting $audioPath${audioFiles[$i]}"
+		rm -f "$audioPath${audioFiles[$i]}"
+	fi
+done
+
+# delete extraneus videofiles
+for (( i = 0; i < ${#videoFiles[@]}; i++ )); do
+	videoFileName=$(basename -- "${videoFiles[$i]}")
+	videoFileName="${videoFileName%.*}"
+	foundAudioFile="false"
+	for (( j = 0; j < ${#audioFiles[@]}; j++ )); do
+		audioFileName=$(basename -- "${audioFiles[$j]}")
+		audioFileName="${audioFileName%.*}"
+		if [[ $videoFileName == $audioFileName ]]; then
+			foundAudioFile="true"
+			break
+		fi
+	done
+	if [[ $foundAudioFile == "false" ]]; then
+		echo "deleting $videoPath${videoFiles[$i]}"
+		rm -f "$videoPath${videoFiles[$i]}"
+	fi
+done
