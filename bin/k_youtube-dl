@@ -69,39 +69,6 @@ updateFileArray() {
 	IFS=$IFS_backup
 }
 
-# download video files
-updateFileArray
-dateAfter=$(/bin/date --date="-$daysOld day" "+%Y%m%d")
-
-if [[ $sourceURL ]]; then
-	URLs=( $sourceURL )
-else
-	URLs=( $(cat $sourceFile | awk '/^https:\/\/|^http:\/\// {print}') )
-fi
-
-for (( i = 0; i < ${#URLs[@]}; i++ )); do
-		youtube-dl -f best -ciwv --dateafter $dateAfter --playlist-end $maxDownloads --match-filter "duration >= $minDuration" -o "$videoPath%(uploader)s - %(title)s.%(ext)s" "${URLs[$i]}"
-done
-
-# convert video files into audio files
-for (( i = 0; i < ${#videoFiles[@]}; i++ )); do
-	videoFileName=$(basename -- "${videoFiles[$i]}")
-	videoFileName="${videoFileName%.*}"
-	foundAudioFile="false"
-	for (( j = 0; j < ${#audioFiles[@]}; j++ )); do
-		audioFileName=$(basename -- "${audioFiles[$j]}")
-		audioFileName="${audioFileName%.*}"
-		if [[ $videoFileName == $audioFileName ]]; then
-			foundAudioFile="true"
-			break
-		fi
-	done
-	if [[ $foundAudioFile == "false" ]]; then
-		ffmpeg -i "$videoPath${videoFiles[$i]}" "$videoPath$videoFileName.mp3"
-		mv "$videoPath$videoFileName.mp3" "$audioPath"
-	fi
-done
-
 # delete extraneus audiofiles
 updateFileArray
 for (( i = 0; i < ${#audioFiles[@]}; i++ )); do
@@ -117,7 +84,7 @@ for (( i = 0; i < ${#audioFiles[@]}; i++ )); do
 		fi
 	done
 	if [[ $foundVideoFile == "false" ]]; then
-		echo "deleting $audioPath${audioFiles[$i]}"
+		#echo "deleting $audioPath${audioFiles[$i]}"
 		rm -f "$audioPath${audioFiles[$i]}"
 	fi
 done
@@ -136,7 +103,40 @@ for (( i = 0; i < ${#videoFiles[@]}; i++ )); do
 		fi
 	done
 	if [[ $foundAudioFile == "false" ]]; then
-		echo "deleting $videoPath${videoFiles[$i]}"
+		#echo "deleting $videoPath${videoFiles[$i]}"
 		rm -f "$videoPath${videoFiles[$i]}"
+	fi
+done
+
+# download video files
+dateAfter=$(/bin/date --date="-$daysOld day" "+%Y%m%d")
+
+if [[ $sourceURL ]]; then
+	URLs=( $sourceURL )
+else
+	URLs=( $(cat $sourceFile | awk '/^https:\/\/|^http:\/\// {print}') )
+fi
+
+for (( i = 0; i < ${#URLs[@]}; i++ )); do
+		youtube-dl -q -f best -ciwv --dateafter $dateAfter --playlist-end $maxDownloads --match-filter "duration >= $minDuration" -o "$videoPath%(uploader)s - %(title)s.%(ext)s" "${URLs[$i]}" 2>/dev/null
+done
+
+# convert video files into audio files
+updateFileArray
+for (( i = 0; i < ${#videoFiles[@]}; i++ )); do
+	videoFileName=$(basename -- "${videoFiles[$i]}")
+	videoFileName="${videoFileName%.*}"
+	foundAudioFile="false"
+	for (( j = 0; j < ${#audioFiles[@]}; j++ )); do
+		audioFileName=$(basename -- "${audioFiles[$j]}")
+		audioFileName="${audioFileName%.*}"
+		if [[ $videoFileName == $audioFileName ]]; then
+			foundAudioFile="true"
+			break
+		fi
+	done
+	if [[ $foundAudioFile == "false" ]]; then
+		ffmpeg -loglevel quiet -i "$videoPath${videoFiles[$i]}" "$videoPath$videoFileName.mp3"
+		mv "$videoPath$videoFileName.mp3" "$audioPath"
 	fi
 done

@@ -1,0 +1,9 @@
+#!/bin/bash
+# Open urxvt at current working dir
+
+
+if [[ -f "/tmp/cwd" ]] ; then
+	urxvt -cd $(cat /tmp/cwd)
+else
+    urxvt
+fi

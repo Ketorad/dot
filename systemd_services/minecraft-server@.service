@@ -1,0 +1,13 @@
+[Unit]
+Description=Minecraft server
+After=network.target
+
+[Service]
+User=%i
+ExecStart=/home/minecraft/games/minecraft-server/run
+Restart=on-failure
+SuccessExitStatus=3 4
+RestartForceExitStatus=3 4
+
+[Install]
+WantedBy=multi-user.target

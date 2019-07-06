@@ -20,16 +20,15 @@ start() {
 		fi
 	done
 
-	#notify-send "Connected to filserver at $serverFound."
+	/usr/bin/notify-send "Connected to filserver at $serverFound."
 
 	sshfs $serverFound:/media/filserver /mnt/fileserver -f -o "ServerAliveInterval=$timeout,serverAliveCountMax=1"
-	#notify-send "Disconnected from filserver."
+	/usr/bin/notify-send "Disconnected from filserver."
 }
 
 
 stop() {
 	if [[ $(cat /proc/mounts | grep "/mnt/fileserver") ]]; then
-		#notify-send "Unmounting fileserver"
 		fusermount -u /mnt/fileserver
 	fi
 }

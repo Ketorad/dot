@@ -37,7 +37,7 @@ set $workspace6 "6"
 set $workspace7 "7"
 set $workspace8 "8"
 set $workspace9 "9"
-set $workspace10 "10"
+set $workspace10 "0"
 
 
 # Key bindings --------------
@@ -51,13 +51,15 @@ bindsym $mod+Shift+c reload
 bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec $HOME/dot/i3/scripts/exit-i3
 
-bindsym $mod+Return exec $HOME/dot/i3/scripts/focus-split && urxvt
+bindsym $mod+Return exec $HOME/dot/i3/scripts/focus-split && $HOME/dot/i3/scripts/open-urxvt
+bindsym $mod+o exec $HOME/dot/i3/scripts/focus-split && qutebrowser
 bindsym $mod+Shift+q kill
 bindsym $mod+d exec $HOME/dot/i3/scripts/focus-split && $HOME/dot/bin/k_rofi
 
-bindsym $mod+Shift+x exec xset dpms 0 5 && xset +dpms && i3lock -n --color "$bg-color" && xset -dpms && xset s off
-bindsym $mod+Shift+z exec systemctl suspend && xset dpms 0 5 && xset +dpms && i3lock -n --color "$bg-color" && xset -dpms && xset s off
-
+#bindsym $mod+Shift+x exec killall xset dpms 0 0 5 && i3lock -n --color "$bg-color" && xset -dpms && xset s off
+bindsym $mod+Shift+x exec $HOME/dot/i3/scripts/lock-screen-steam
+bindsym $mod+Shift+z exec xset dpms 0 0 5 && systemctl suspend && i3lock -n --color "$bg-color" && xset -dpms && xset s off
+bindsym $mod+q exec xclip -o -selection clipboard | qrencode -s 20 -o - | feh -
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down
@@ -120,8 +122,10 @@ bindsym $mod+Down exec --no-startup-id amixer -c 0 set Master 5%- unmute -q
 bindsym XF86AudioMute exec --no-startup-id amixer -c 0 sset Master toggle -q
 
 # brightness
-bindsym XF86MonBrightnessUp exec --no-startup-id $HOME/dot/bin/k_brightness 10
-bindsym XF86MonBrightnessDown exec --no-startup-id $HOME/dot/bin/k_brightness -10
+bindsym XF86MonBrightnessUp exec --no-startup-id sudo /usr/local/sbin/k_brightness 10
+bindsym XF86MonBrightnessDown exec --no-startup-id sudo /usr/local/sbin/k_brightness -10
+bindsym $mod+Shift+Up exec --no-startup-id sudo /usr/local/sbin/k_brightness 10
+bindsym $mod+Shift+Down exec --no-startup-id sudo /usr/local/sbin/k_brightness -10
 
 # monitor control
 bindsym $mod+Shift+m exec --no-startup-id $HOME/dot/bin/k_screencontrol all switch && $HOME/dot/bin/k_wallpaper
@@ -134,18 +138,16 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # screenshot
-bindsym XF86Display exec "scrot ~/pic/screenshots/screenshot%Y-%m-%d%H:%M:%S.png"
-bindsym $mod+p exec "scrot ~/pic/screenshots/screenshot%Y-%m-%d%H:%M:%S.png"
+bindsym XF86Display exec "scrot ~/dks/pic/screenshots/screenshot%Y-%m-%d%H:%M:%S.png"
+bindsym $mod+p exec "scrot ~/dks/pic/screenshots/screenshot%Y-%m-%d%H:%M:%S.png"
 
 # default workspace
-assign [class="Steam"] $workspace1
-assign [class="Mumble"] $workspace8
-assign [class="Transmission-gtk"] $workspace9
-assign [class="Pavucontrol"] $workspace10
+assign [class="Steam"] $workspace10
 # -
 
 # Startup programs-------------
-exec --no-startup-id compton -b --backend glx --vsync opengl-swc
+#exec --no-startup-id compton -b --backend glx --vsync opengl-swc
+exec --no-startup-id compton -b --backend glx --vsync
 exec_always $HOME/dot/bin/k_wallpaper
 
 # remove screen timeout and console beep
@@ -155,28 +157,27 @@ exec xset b off
 
 # monitors
 set $monitor_one DP-0
-set $monitor_two DP-2
-set $monitor_three DP-4
+set $monitor_two DP-4
+set $monitor_three DP-2
 
 workspace $workspace1 output $monitor_one
 workspace $workspace2 output $monitor_one
 workspace $workspace3 output $monitor_one
-workspace $workspace4 output $monitor_one
-#workspace $workspace8 output $monitor_one
-#workspace $workspace9 output $monitor_one
-#workspace $workspace10 output $monitor_one
-
+workspace $workspace4 output $monitor_two
+workspace $workspace5 output $monitor_two
 workspace $workspace6 output $monitor_two
-#workspace $workspace7 output $monitor_two
-
-workspace $workspace5 output $monitor_three
+workspace $workspace7 output $monitor_three
+workspace $workspace8 output $monitor_three
+workspace $workspace9 output $monitor_three
+workspace $workspace10 output $monitor_one
 
 
 # bar 1
 bar {
-	status_command i3blocks -c ~/dot/i3/i3blocks.conf
+#	status_command i3blocks -c ~/dot/i3/i3blocks.conf
+	status_command ~/dot/i3/i3baranoid/i3baranoid
 #	output $monitor_one
-	tray_output none
+#	tray_output none
 	colors {
 		background $bg-color
 		separator #757575
@@ -221,12 +222,12 @@ bar {
 
 # load workspace layouts
 #1
-exec --no-startup-id i3-msg "workspace 1; exec steam; layout tabbed"
+#exec --no-startup-id i3-msg "workspace 1; exec steam; layout tabbed"
 #2
 #exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec chromium --disable-session-crashed-bubble --disable-infobars"
-exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec qutebrowser"
+#exec --no-startup-id i3-msg "workspace 2; append_layout /home/eivind/dot/i3/browser.json; exec qutebrowser"
 #3
-exec --no-startup-id i3-msg "workspace 3; exec urxvt"
+#exec --no-startup-id i3-msg "workspace 3; exec urxvt"
 #4
 #exec --no-startup-id i3-msg "workspace 4; exec urxvt"
 #5
@@ -244,12 +245,18 @@ exec --no-startup-id i3-msg "workspace 3; exec urxvt"
 # class window properties
 for_window [class="Freecad" title="Formula editor"] floating enable
 for_window [class="FreeCAD" title="Formula editor"] floating enable
+for_window [class="feh"] floating enable
 
 # remove urgent color from bar
 #exec --no-startup-id $HOME/dot/bin/k_remove-urgent
 
 # set mouse properties
-exec --no_startup-id sleep 2
-exec --no-startup-id $HOME/dot/bin/k_mousestuff
+#exec --no-startup-id i3-msg "exec sleep 2 && $HOME/dot/bin/k_mousestuff"
+exec $HOME/dot/bin/k_mousestuff
+
+# swap esc, caps and set keyboard layout toggle
+exec setxkbmap -option "caps:swapescape" -option "grp:alt_shift_toggle" -layout us,no
 
 #exec --no-startup-id exec xdotool search --onlyvisible . behave %@ focus exec $HOME/dot/i3/scripts/focus-split
+
+exec $HOME/dot/i3/profiles

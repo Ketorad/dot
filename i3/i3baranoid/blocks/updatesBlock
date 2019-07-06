@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+updatesBlockPriority=3
+updatesBlockInterval=3600
+updatesBlock() {
+	if (( barTimer >= updatesBlockTimer )); then
+		updatesBlockTimer=$(( barTimer + updatesBlockInterval ))
+
+		clearText updatesBlock
+
+		# pacman
+		addText updatesBlock "pac:" "$colorDarkYellow"
+		repoPackages=$(pacman -Qu | wc -l)
+		if (( $repoPackages > 0 )); then
+			addText updatesBlock "$repoPackages" "$colorWhite"
+		else
+			addText updatesBlock "$repoPackages" "$colorGray"
+		fi
+
+		# aur
+		addText updatesBlock " aur:" "$colorDarkBlue"
+		aurPackages=$(yay -Pua | wc -l)
+		if (( $aurPackages > 0 )); then
+			addText updatesBlock "$aurPackages" "$colorWhite"
+		else
+			addText updatesBlock "$aurPackages" "$colorGray"
+		fi
+	fi
+}

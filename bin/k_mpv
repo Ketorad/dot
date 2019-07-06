@@ -2,11 +2,15 @@
 # stream videoes with mpv using resolution found with xrandr
 # 		dependencies: 	xrandr
 # 							mpv
+# 							(qutebrowser) for opening dissenter width video
 
+dissenterUrl="https://dissenter.com/discussion/begin?url="
 helpText() {
-	echo "Usage: $(basename $0) URL"
+	echo "Usage: $(basename $0) [-f] URL"
 	echo
-	echo "Opens mpv in fullscreen streaming URL in the resolution found on first monitor."
+	echo "Opens mpv at the URL in the resolution found on first monitor."
+	echo "	-f: Start in fullscreen."
+	echo "	-d: Start in mpv and qutebrowser window width dissenter."
 	exit 0
 }
 
@@ -22,17 +26,16 @@ if [[ ! $(command -v mpv) ]]; then
 fi
 
 # check number of arguments.
-if [[ $# != 1 ]] ; then
+if [[ $# < 1 || $# > 2 ]] ; then
 	echo "Error: Wrong number of arguments!"
 	echo
 	helpText
 fi
 
-# check if argument 1 is an url.
-if [[ $(echo $1 | awk '/^https:\/\/|^http:\/\// {print}') ]]; then
-	sourceURL=$1
-else
-	echo "Error: $1 is not a valid URL!"
+url=${@: -1}
+# check if last argument is an url
+if [[ ! $(echo $url | awk '/^https:\/\/|^http:\/\// {print}') ]]; then
+	echo "Error: $url is not a valid URL!"
 	echo
 	helpText
 fi
@@ -42,4 +45,14 @@ resolution=$(xrandr | grep -m 1 "\*" | tr -s " " | cut -d " " -f 2 | cut -d "x" 
 
 # start streaming the video
 echo "Starting video in $resolution."
-mpv --fs --ytdl-format="best[height<=$resolution]" $sourceURL
+if [[ $1 == "-f" ]]; then
+	echo "starting in fullscreen"
+	mpv --fs --ytdl-format="best[height<=$resolution]" $url
+elif [[ $1 == "-d" ]]; then
+	#k_focus-split && mpv --ytdl-format="best[height<=$resolution]" $url & sleep 5 && k_focus-split && qutebrowser ":open -w $dissenterUrl$url"
+	k_focus-split && qutebrowser ":open -w $dissenterUrl$url" & sleep 1 && k_focus-split && mpv --ytdl-format="best[height<=$resolution]" $url
+	#k_focus-split && mpv --ytdl-format="best[height<=$resolution]" $url & sleep 5 && k_focus-split && brave $dissenterUrl$url
+else
+	echo "starting in window"
+	k_focus-split && mpv --ytdl-format="best[height<=$resolution]" $url
+fi

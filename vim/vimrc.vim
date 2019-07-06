@@ -1,3 +1,11 @@
+"colorscheme 0x7A69_dark
+"colorscheme space-vim-dark
+"colorscheme molokai
+"colorscheme adventurous
+"colorscheme MountainDew
+colorscheme ketoradColors
+"colorscheme random
+
 set backspace=2		" Backspace deletes like most programs in insert mode
 set nocompatible	" Use Vim settings, rather than Vi settings
 set ruler		" show the cursor position all the time
@@ -6,64 +14,63 @@ set incsearch 		" do incremental searching
 set hlsearch		" highlight matches
 set autowrite		" automaticly :write before running commands
 set noswapfile
-set cursorline
+set nocursorline
 
 " Switch syntax highlighting on, when the terminal has colors
 if(&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
 	syntax on
 endif
 
-" For all text files set 'textwidth' to 78 characters.
-autocmd FileType text setlocal textwidth=78
+" Set background outside range to get transparency.
+hi Normal ctermbg=NONE
+
+" For all text files set 'textwidth' to X(78) characters.
+autocmd FileType text setlocal textwidth=110
 
 " Autoindent
-filetype plugin indent on
+"filetype plugin indent on
+filetype plugin on
 
-" Softtabs, 2 spaces
+" Tabs
+set noexpandtab
+set shiftround
+set smartindent
+set autoindent
+
 set tabstop=3
 set shiftwidth=3
-"set expandtab
-"set autoindent
 
 " Display extra whitespace
+"set list listchars=tab:»·,trail:·
 set list listchars=tab:»·,trail:·
 
 " Highlight line number of where cursor currently is
 "hi CursorLineNr guifg=#050505
 
 " Numbers
-set number
+set number relativenumber
+"set number
 set numberwidth=4
 
 " Open new split panes to right and bottom, wich feels more natural
 set splitbelow
 set splitright
 
-" YouCompleteMe
-" Prevent preview window for autocomplete function to show
-"let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
-let g:ycm_global_ycm_extra_conf = '/usr/share/vim/vimfiles/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
-let g:ycm_confirm_extra_conf = 0
-let g:ycm_key_invoke_completion = '<C-Space>'
-let g:ycm_server_python_interpreter = '/usr/bin/python2'
-"let g:ycm_autoclose_preview_window_after_completion = '1'
-filetype on
-
-set completeopt-=preview
-let g:ycm_add_preview_to_completeopt = '1'
-autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-
-highlight YcmErrorSection ctermbg=Red guibg=#ff0000
-
 " Key mapping
 map <F2> :NERDTree<CR>
+map <F6> :setlocal spell! spelllang=en<CR>
 map t :tabn<CR>
 map T :tabp<CR>
+inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
 
 nnoremap Q <nop>		" prevent ex mode
 "nnoremap K <nop>		" prevent man pages for words under cursor
-nnoremap J <C-d>
-nnoremap K <C-u>
+nnoremap J <C-d>zz
+nnoremap K <C-u>zz
+
+" Normal navigation
+nnoremap j jzz
+nnoremap k kzz
 
 " Split navigation
 nnoremap <C-H> <C-W><C-H>
@@ -71,11 +78,23 @@ nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 
+" Clear search
+nnoremap /<CR> :let @/=""<cr>
+
+" Autocomplete curly brackets
 inoremap {<CR> {<CR>}<C-O>k<C-O>A<cr>
 inoremap {; {<CR>};<C-O>k<C-O>A<cr>
 
 " Copy and Paste
-"vnoremap <C-c> "*y :let @+=@*<CR>
+vnoremap <C-c> "*y :let @+=@*<CR>
 "map <C-v> "+P
 
-colo mycolors
+" HTML filetype mappings
+autocmd FileType html,php call SetHtmlOptions()
+function SetHtmlOptions()
+	nnoremap <F3> ggO<!DOCTYPE html><CR><html lang="<++>"><CR><Tab><head><CR><Tab><meta charset="UTF-8"><CR><meta name="description" content="<++>"><CR><meta name="viewport" content="width=device-width, initial-scale=1.0"><CR><meta http-equiv="X-UA-Compatible" content="ie=edge"><CR><!--<link rel="stylesheet" type="text/css" href="">--><CR><!--<script type="text/javascript" src=""></script>--><CR><title><++></title><CR><BS></head><CR><body><CR></body><CR><BS></html><Esc>gg0
+	inoremap ;i <em></em><Space><++><Esc>FeT>i
+	inoremap ;b <b></b><Space><++><Esc>FbT>i
+	inoremap ;p <p></p><Space><++><Esc>FpT>i
+endfunction
+set autoindent

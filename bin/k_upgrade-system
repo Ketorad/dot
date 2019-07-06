@@ -1,0 +1,61 @@
+#!/bin/bash
+# Backup "/" and "/boot" partitions, then upgrade system.
+
+
+backupFolder="$HOME/bak/system_backups/$(cat /etc/hostname)"
+if [[ ! -d "$backupFolder" ]]; then
+	echo
+	echo "Error: Backup folder \"$backupFolder\" does not exist!"
+	exit
+fi
+
+bootEfiPartition=$(grep -w /boot/efi /proc/mounts | awk '{print $1}')
+if [[ ! $bootEfiPartition ]]; then
+	bootPartition=$(grep -w /boot /proc/mounts | awk '{print $1}')
+fi
+
+rootPartition=$(grep -w / /proc/mounts | awk '{print $1}')
+if [[ ! $rootPartition ]]; then
+	echo
+	echo "Error: Root partition does not exist!"
+	exit
+fi
+
+
+# Backup system
+if [[ $bootEfiPartition ]]; then
+	echo
+	echo "Backing up $bootEfiPartition \"/boot/efi\" ..."
+	sudo dd if=$bootEfiPartition conv=sync,noerror bs=64K status=progress | gzip -c | dd of=$backupFolder/boot.efi.img.gz
+elif [[ $bootPartition ]]; then
+	echo
+	echo "Backing up $bootPartition \"/boot\" ..."
+	sudo dd if=$bootPartition conv=sync,noerror bs=64K status=progress | gzip -c | dd of=$backupFolder/boot.img.gz
+fi
+
+echo
+echo "Backing up $rootPartition \"/\" ..."
+sudo dd if=$rootPartition conv=sync,noerror bs=64K status=progress | gzip -c | dd of=$backupFolder/root.img.gz
+
+
+# Upgrade system
+echo
+echo "Upgrading system ..."
+
+if [[ $(command -v pacman) ]]; then
+	sudo pacman -Syu # update and upgrade packages
+	sudo pacman -Rns $(pacman -Qtdq) # remove orphaned and unused packages
+	sudo pacman -Scc # remove unused downloaded files from cache
+
+	if [[ $(command -v yay) ]]; then
+		yay -Syua # update and upgrade AUR packages
+	fi
+
+else
+	echo
+	echo "Error: No supported package managers found!"
+	exit
+fi
+
+echo
+echo "... done."

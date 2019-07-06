@@ -1,0 +1,42 @@
+{
+   "checksum": "6409bcb50c51fcf64310f1222d41e97d",
+   "roots": {
+      "bookmark_bar": {
+         "children": [ {
+            "date_added": "13202735907909795",
+            "id": "11",
+            "name": "Youtube",
+            "type": "url",
+            "url": "https://www.youtube.com/feed/subscriptions"
+         }, {
+            "date_added": "13202735946384369",
+            "id": "12",
+            "name": "Reddit",
+            "type": "url",
+            "url": "https://www.reddit.com/"
+         } ],
+         "date_added": "13202692374284248",
+         "date_modified": "13202735946384369",
+         "id": "1",
+         "name": "Bookmarks bar",
+         "type": "folder"
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13202692374284251",
+         "date_modified": "0",
+         "id": "2",
+         "name": "Other bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13202692374284252",
+         "date_modified": "0",
+         "id": "3",
+         "name": "Mobile bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}

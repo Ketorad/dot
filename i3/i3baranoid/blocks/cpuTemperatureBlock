@@ -1,0 +1,32 @@
+#!/bin/bash
+
+
+cpuTemperatureBlockPriority=3
+cpuTemperatureBlockInterval=5
+cpuTemperatureBlock() {
+	if (( barTimer >= cpuTemperatureBlockTimer )); then
+		cpuTemperatureBlockTimer=$(( barTimer + cpuTemperatureBlockInterval ))
+		local cpuTemperatureMedium=60
+		local cpuTemperatureHigh=75
+
+		local cpuTemperature=$(sensors -u | grep -m 1 -A 1 "id 0:" | tail -n 1 | tr -s ' ' | cut -d ' ' -f3\
+		  	| cut -d '.' -f1)
+
+		if (( $cpuTemperature < $cpuTemperatureMedium)); then
+			local cpuTemperatureColor="$colorGreen"
+			local cpuTemperatureTypeColor="$colorDarkGreen"
+		elif (( $cpuTemperature < $cpuTemperatureHigh)); then
+			local cpuTemperatureColor="$colorYellow"
+			local cpuTemperatureTypeColor="$colorDarkYellow"
+		else
+			local cpuTemperatureColor="$colorRed"
+			local cpuTemperatureTypeColor="$colorDarkRed"
+		fi
+
+# print out
+		clearText cpuTemperatureBlock
+
+		addText cpuTemperatureBlock "$cpuTemperature" "$cpuTemperatureColor"
+		addText cpuTemperatureBlock "C" "$cpuTemperatureTypeColor"
+	fi
+}

@@ -1,0 +1,80 @@
+#!/bin/bash
+# Mount a device through sshfs
+
+connectionTimeout=10
+sleepTime=30
+
+
+helpText() {
+	echo "Usage: $(basename $0) [user@]address:/server/mount/point [alternative_address_1,2,3...] /path/to/mount"
+	echo "       $(basename $0) stop /path/to/mount"
+	echo
+	echo "Mount a device through sshfs"
+	exit 0
+}
+
+
+# variables: "/path/to/mount"
+stop() {
+	if [[ $(cat /proc/mounts | grep "$1") ]]; then
+		notify-send "Disconnected from \"$1\""
+		fusermount3 -u $1
+	fi
+}
+
+
+# --- Checks ---
+if [[ $# < 2 ]]; then
+	helpText
+fi
+
+
+if [[ $1 == "stop" ]]; then
+	stop "$2"
+	exit 0
+fi
+
+
+mountPoint="${!#}"
+if [[ ! -d $mountPoint ]]; then
+	echo "Error: Mountpoint \"$mountPoint\" does not exist!"
+	echo
+	helpText
+
+elif [[ $(ls -A $mountPoint) ]]; then
+	echo "Error: Mountpoint \"$mountPoint\" is not empty!"
+	echo
+	helpText
+fi
+# --- /Checks ---
+
+
+servers=( "$@" )
+servers=( ${servers[@]:0:(( ${#servers[@]} - 1 ))} )
+
+serverUser=$(echo ${servers[0]} | grep "@" | cut -d "@" -f 1)
+serverMountPoint=$(echo ${servers[0]} | cut -d ":" -f 2)
+if [[ $serverUser ]]; then
+	servers[0]=$(echo ${servers[0]} | cut -d "@" -f 2)
+fi
+servers[0]=$(echo ${servers[0]} | cut -d ":" -f 1)
+
+stop $mountPoint
+
+while :; do
+	for server in ${servers[@]}; do
+			echo $server
+		if [[ $(ssh-keyscan $server 2>&1 | grep -m 1 "#") ]]; then
+			notify-send "Connecting to \"$server\""
+			echo $serverUser
+			if [[ $serverUser ]]; then
+				sshfs $serverUser@$server:$serverMountPoint $mountPoint -f -o "ServerAliveInterval=$connectionTimeout,serverAliveCountMax=1"
+			else
+				sshfs $server:$serverMountPoint $mountPoint -f -o "ServerAliveInterval=$connectionTimeout,serverAliveCountMax=1"
+			fi
+			break
+		fi
+	done
+
+	sleep $sleepTime
+done

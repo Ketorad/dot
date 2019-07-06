@@ -1,0 +1,42 @@
+#!/bin/bash
+
+
+cpuLoadBlockPriority=3
+cpuLoadBlockInterval=10
+cpuLoadBlock() {
+	if (( barTimer >= cpuLoadBlockTimer )); then
+		cpuLoadBlockTimer=$(( barTimer + cpuLoadBlockInterval ))
+
+		local cpus="$(nproc)"
+		local load1="$(cut -d ' ' -f1 /proc/loadavg)"
+		local load5="$(cut -d ' ' -f2 /proc/loadavg)"
+		local load15="$(cut -d ' ' -f3 /proc/loadavg)"
+
+		clearText cpuLoadBlock
+		addText cpuLoadBlock "$cpus" "$colorWhite"
+
+		if (( $(echo $load1'>='$cpus | bc -l) )); then
+			addText cpuLoadBlock " $load1" "$colorRed"
+		elif (( $(echo $load1'>='$cpus'*'80'/'100 | bc -l) )); then
+			addText cpuLoadBlock " $load1" "$colorYellow"
+		else
+			addText cpuLoadBlock " $load1" "$colorGreen"
+		fi
+
+		if (( $(echo $load5'>='$cpus | bc -l) )); then
+			addText cpuLoadBlock " $load5" "$colorRed"
+		elif (( $(echo $load5'>='$cpus'*'80'/'100 | bc -l) )); then
+			addText cpuLoadBlock " $load5" "$colorYellow"
+		else
+			addText cpuLoadBlock " $load5" "$colorGreen"
+		fi
+
+		if (( $(echo $load15'>='$cpus | bc -l) )); then
+			addText cpuLoadBlock " $load15" "$colorRed"
+		elif (( $(echo $load15'>='$cpus'*'80'/'100 | bc -l) )); then
+			addText cpuLoadBlock " $load15" "$colorYellow"
+		else
+			addText cpuLoadBlock " $load15" "$colorGreen"
+		fi
+	fi
+}

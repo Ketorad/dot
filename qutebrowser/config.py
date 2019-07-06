@@ -509,7 +509,7 @@
 ##   - true
 ##   - false
 ##   - ask
-# c.content.geolocation = 'ask'
+c.content.geolocation = True
 
 ## Value to send in the `Accept-Language` header.
 ## Type: String
@@ -632,13 +632,13 @@
 ##   - true
 ##   - false
 ##   - ask
-# c.content.notifications = 'ask'
+c.content.notifications = False
 
 ## Allow pdf.js to view PDF files in the browser. Note that the files can
 ## still be downloaded by clicking the download button in the pdf.js
 ## viewer.
 ## Type: Bool
-# c.content.pdfjs = False
+c.content.pdfjs = False
 
 ## Enable plugins in Web pages.
 ## Type: Bool
@@ -671,7 +671,7 @@
 ##   - true
 ##   - false
 ##   - ask
-# c.content.ssl_strict = 'ask'
+c.content.ssl_strict = False
 
 ## List of user stylesheet filenames to use.
 ## Type: List of File, or File
@@ -730,7 +730,7 @@ c.downloads.location.remember = False
 ## Duration (in milliseconds) to wait before removing finished downloads.
 ## If set to -1, downloads are never removed.
 ## Type: Int
-# c.downloads.remove_finished = -1
+c.downloads.remove_finished = 5000
 
 ## Editor (and arguments) to use for the `open-editor` command. The
 ## following placeholders are defined: * `{file}`: Filename of the file
@@ -1344,6 +1344,7 @@ c.tabs.new_position.related = 'last'
 ## invoked without parameters.
 ## Type: Bool
 # c.url.open_base_url = False
+c.url.open_base_url = True
 
 ## Search engines which can be used via the address bar. Maps a search
 ## engine name (such as `DEFAULT`, or `ddg`) to a URL with a `{}`
@@ -1357,9 +1358,13 @@ c.tabs.new_position.related = 'last'
 c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}'
         , 'g': 'https://www.google.com/search?hl=en&q={}'
         , 'y': 'http://www.youtube.com/results?search_query={}&aq=f'
-        , 'pmd': 'https://www.pornmd.com/straight/{}?quality=hd&min_duration=600'
-        , 'yw': 'http://no.yachtworld.com/core/listing/cache/searchResults.jsp?is=false&sm=3&searchtype=homepage&Ntk=boatsNO&type=%28Sail%29&slim=quick&currencyid=1012&luom=126&toLength=50&cit=true&fromLength=40&man={}&No=0&Ns=PBoat_sortByPriceAsc%7C0'
-        , 'aw': 'https://wiki.archlinux.org/?search{}'}
+        , 'pmd': 'https://www.pornmd.com/straight/{}?min_duration=600&quality=hd'
+        , 'yw': 'http://no.yachtworld.com/core/listing/cache/searchResults.jsp?is=false&sm=3&searchtype=homepage&Ntk=boatsNO&type=%28Sail%29&slim=quick&currencyid=1012&luom=126&toLength=50&cit=true&fromLength=40&fromYear=2003&toYear=&man={}&No=0&Ns=PBoat_sortByPriceAsc%7C0'
+        , 'w': 'https://en.wikipedia.org/?search{}'
+        , 'aw': 'https://wiki.archlinux.org/?search{}'
+        , 'sp': 'https://www.protondb.com/search?q={}'
+        , 'pj': 'https://www.prisjakt.no/search?search={}&searchInProps=false'
+        , 'd': 'https://dissenter.com/discussion/begin?url={}'}
 
 ## Page(s) to open at the start.
 ## Type: List of FuzzyUrl, or FuzzyUrl
@@ -1425,6 +1430,7 @@ config.bind('-', 'zoom-out')
 # config.bind('<Alt-7>', 'tab-focus 7')
 # config.bind('<Alt-8>', 'tab-focus 8')
 # config.bind('<Alt-9>', 'tab-focus -1')
+config.bind('<Alt-V>', 'spawn --userscript blackout_yt ;; spawn k_mpv -f {url}')
 # config.bind('<Ctrl-A>', 'navigate increment')
 # config.bind('<Ctrl-Alt-p>', 'print')
 # config.bind('<Ctrl-B>', 'scroll-page 0 -1')
@@ -1447,7 +1453,7 @@ config.bind('-', 'zoom-out')
 # config.bind('<Ctrl-X>', 'navigate decrement')
 # config.bind('<Ctrl-^>', 'tab-focus last')
 config.bind('<Ctrl-a>', 'spawn youtube-dl -x --audio-format mp3 --audio-quality 0 "{url}" -o "dwn/%(title)s.%(ext)s"')
-config.bind('<Ctrl-d>', 'spawn youtube-dl "{url}" -o "dwn/%(title)s.%(ext)s"')
+config.bind('<Ctrl-s>', 'spawn youtube-dl "{url}" -o "dwn/%(title)s.%(ext)s"')
 # config.bind('<Ctrl-h>', 'home')
 # config.bind('<Ctrl-p>', 'tab-pin')
 # config.bind('<Ctrl-s>', 'stop')
@@ -1463,6 +1469,8 @@ config.bind('<Shift-Backspace>', 'back')
 # config.bind('@', 'run-macro')
 # config.bind('B', 'set-cmd-text -s : quickmark-load -t')
 # config.bind('D', 'tab-close -o')
+config.bind('D', 'scroll-page 0 0')
+config.bind('<Ctrl-D>', 'tab-close -o')
 # config.bind('F', 'hint all tab')
 # config.bind('G', 'scroll-to-perc')
 # config.bind('H', 'back')
@@ -1482,6 +1490,12 @@ config.bind('K', 'scroll-page 0 -1')
 # config.bind('Sq', 'open qute://bookmarks')
 # config.bind('Ss', 'open qute://settings')
 # config.bind('T', 'tab-focus')
+
+#config.bind('V', 'spawn --userscript blackout_yt ;; spawn k_mpv {url}')
+#config.bind('v', 'hint links spawn k_mpv {hint-url}')
+#:spawn /home/eivind/dot/i3/scripts/focus-split ;; hint links spawn qutebrowser ":open -w {hint-url}"
+#config.bind('V', 'spawn k_focus-split ;; hint links spawn k_mpv {hint-url} ;; spawn k_focus-split ;; hint links spawn qutebrowser ":open -w {hint-url}"')
+config.bind('V', 'hint links spawn k_mpv -d {hint-url}')
 # config.bind('ZQ', 'quit')
 # config.bind('ZZ', 'quit --save')
 # config.bind('[[', 'navigate prev')
@@ -1492,6 +1506,9 @@ config.bind('K', 'scroll-page 0 -1')
 # config.bind('cd', 'download-clear')
 # config.bind('co', 'tab-only')
 # config.bind('d', 'tab-close')
+# config.bind('d', 'scroll-page 0 0')
+config.bind('d', 'spawn qutebrowser ":open -w https://dissenter.com/discussion/begin?url={url}"')
+config.bind('<Ctrl-d>', 'tab-close')
 # config.bind('f', 'hint')
 # config.bind('g$', 'tab-focus -1')
 # config.bind('g0', 'tab-focus 1')
@@ -1545,7 +1562,7 @@ config.bind('k', 'scroll-page 0 -0.5')
 # config.bind('tsu', 'config-cycle -p -t -u {url} content.javascript.enabled ;; reload')
 # config.bind('u', 'undo')
 # config.bind('v', 'enter-mode caret')
-config.bind('v', 'spawn --userscript blackout_yt ;; spawn k_mpv {url}')
+config.bind('v', 'hint links spawn k_mpv -f {hint-url}')
 # config.bind('wB', 'set-cmd-text -s :bookmark-load -w')
 # config.bind('wO', 'set-cmd-text :open -w {url:pretty}')
 # config.bind('wP', 'open -w -- {primary}')

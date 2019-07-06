@@ -1,0 +1,14 @@
+#!/bin/bash
+
+
+testBlockPriority=0
+testBlockInterval=1
+testBlock() {
+	if (( barTimer >= testBlockTimer )); then
+		testBlockTimer=$(( barTimer + testBlockInterval ))
+
+		clearText testBlock
+
+		addText testBlock "$barLength/$barMaxLength"
+	fi
+}

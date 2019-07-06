@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+clockBlockPriority=1
+clockBlockInterval=1
+clockBlock() {
+	if (( barTimer >= clockBlockTimer )); then
+		clockBlockTimer=$(( barTimer + clockBlockInterval ))
+
+		clearText clockBlock
+		addText clockBlock "$(/usr/bin/date '+%a')" "$colorDarkCyan"
+		addText clockBlock "$(/usr/bin/date '+ %y:%m:%d')" "$colorDarkMagenta"
+		addText clockBlock ":"
+		addText clockBlock "$(/usr/bin/date '+%H:%M:%S')" "$colorMagenta"
+	fi
+}

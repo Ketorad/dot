@@ -1,0 +1,45 @@
+#!/bin/bash
+
+
+batteryBlockPriority=2
+batteryBlockInterval=10
+batteryBlock() {
+	if [[ $(command -v acpi) ]] && (( barTimer >= batteryBlockTimer )); then
+		batteryBlockTimer=$(( barTimer + batteryBlockInterval ))
+
+		clearText batteryBlock
+
+		oldIFS=$IFS
+		IFS=$'\n'
+		batteries=( $(acpi -b) )
+		if (( ${#batteries[@]} )); then
+			addText batteryBlock "batt " "$colorWhite"
+			for battery in ${batteries[@]}; do
+				local remaining=$(echo "$battery" | cut -d "," -f 2 | tr -d " " | tr -d "%")
+				local status=$(echo "$battery" | cut -d " " -f 3 | tr -d ",")
+
+				if [[ $status == "Charging" ]]; then
+					local bracketColor=$colorCyan
+				elif [[ $status == "Discharging" ]]; then
+					local bracketColor=$colorWhite
+				else
+					local bracketColor=$colorGray
+				fi
+
+				if (( $remaining <= 25 )); then
+					local color=$colorRed
+				elif (( $remaining <= 50 )); then
+					local color=$colorYellow
+				else
+					local color=$colorGreen
+				fi
+
+				addText batteryBlock "[" "$bracketColor"
+				addText batteryBlock "$remaining%" "$color"
+				addText batteryBlock "]" "$bracketColor"
+			done
+		fi
+		IFS=$oldIFS
+
+	fi
+}

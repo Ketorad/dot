@@ -1,0 +1,95 @@
+#!/bin/bash
+
+
+diskUsageBlockPriority=4
+diskUsageBlockInterval=30
+diskUsageBlock() {
+	if (( barTimer >= diskUsageBlockTimer )); then
+		diskUsageBlockTimer=$(( barTimer + diskUsageBlockInterval ))
+
+		local mediumDiskUsage=80
+		local highDiskUsage=95
+
+# get mounts
+		local mounts=( $(mount -l -t ext2,ext3,ext4,vfat,fuseblk,fuse.sshfs | awk '{print $3}' | grep -v "/boot") )
+
+		clearText diskUsageBlock
+
+		for (( i=0; i < ${#mounts[@]}; i++ )); do
+
+# shrink mount point text length
+			local mountPath="$(echo ${mounts[$i]} | sed 's,'"/home/$USER"',~,' | sed 's/\/home/~/' | sed 's/^\/.*\//..\//')"
+
+# get available space and size of mounts
+			local mounts[$i]="${mounts[$i]} $(df --output=avail,size ${mounts[$i]} | tail -n 1)"
+
+# set available space color
+			local spaceAvail=$(echo ${mounts[$i]} | awk '{print $2}')
+			local spaceTotal=$(echo ${mounts[$i]} | awk '{print $3}')
+			if (( $spaceTotal - $spaceAvail < $spaceTotal * $mediumDiskUsage / 100 )); then
+				local spaceAvailColor=$colorGreen
+				local spaceAvailSizeColor=$colorDarkGreen
+			elif (( $spaceTotal - $spaceAvail < $spaceTotal * $highDiskUsage / 100 )); then
+				local spaceAvailColor=$colorYellow
+				local spaceAvailSizeColor=$colorDarkYellow
+			else
+				local spaceAvailColor=$colorRed
+				local spaceAvailSizeColor=$colorDarkRed
+			fi
+
+# convert available space KB to MB, GB, TB and PB as needed
+			local mb=1024
+			local gb=$(( $mb * $mb ))
+			local tb=$(( $gb * $mb ))
+			local pb=$(( $tb * $mb ))
+			if (( $spaceAvail < $mb )); then
+				local spaceAvailSize="KB"
+			elif (( $spaceAvail < $gb )); then
+				local spaceAvail="$spaceAvail $mb"
+				local spaceAvailSize="MB"
+			elif (( $spaceAvail < $tb )); then
+				local spaceAvail="$spaceAvail $gb"
+				local spaceAvailSize="GB"
+			elif (( $spaceAvail < $pb )); then
+				local spaceAvail="$spaceAvail $tb"
+				local spaceAvailSize="TB"
+			else
+				local spaceAvail="$spaceAvail $pb"
+				local spaceAvailSize="PB"
+			fi
+			local spaceAvail=$(echo "$spaceAvail" | awk '{converted=$1/$2; print converted}' | awk -F. '{print $1"."substr($2,1,1)}')
+
+# convert total space KB to MB, GB, TB and PB as needed
+			local mb=1024
+			local gb=$(( $mb * $mb ))
+			local tb=$(( $gb * $mb ))
+			local pb=$(( $tb * $mb ))
+			if (( $spaceTotal < $mb )); then
+				local spaceTotalSize="KB"
+			elif (( $spaceTotal < $gb )); then
+				local spaceTotal="$spaceTotal $mb"
+				local spaceTotalSize="MB"
+			elif (( $spaceTotal < $tb )); then
+				local spaceTotal="$spaceTotal $gb"
+				local spaceTotalSize="GB"
+			elif (( $spaceTotal < $pb )); then
+				local spaceTotal="$spaceTotal $tb"
+				local spaceTotalSize="TB"
+			else
+				local spaceTotal="$spaceTotal $pb"
+				local spaceTotalSize="PB"
+			fi
+			local spaceTotal=$(echo "$spaceTotal" | awk '{converted=$1/$2; print converted}' | awk -F. '{print $1"."substr($2,1,1)}')
+
+# print out
+			addText diskUsageBlock "$mountPath " "$colorBlue"
+			addText diskUsageBlock "$spaceAvail" "$spaceAvailColor"
+			addText diskUsageBlock "$spaceAvailSize" "$spaceAvailSizeColor"
+			if (( $i != ${#mounts[@]} - 1 )); then
+				addText diskUsageBlock ", " "$colorGray"
+			fi
+
+		done
+
+	fi
+}

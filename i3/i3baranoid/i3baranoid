@@ -1,0 +1,336 @@
+#!/bin/bash
+# Name: i3baranoid
+# Description: An i3bar status script for the i3 window manager.
+# Author: Ketorad, ketorad@gmail.com
+
+
+echo "{ \"version\": 1 }"
+echo "["
+echo "[]"
+
+# arguments: "block"
+clearText() {
+	local blockStringVariable="${1}String"
+	local blockTextVariable="${1}Text"
+	local blockTextLengthVariable="${1}TextLength"
+
+	typeset -g "$blockStringVariable="
+	typeset -g "$blockTextVariable="
+	typeset -g "$blockTextLengthVariable=0"
+}
+
+
+# arguments: "block" "string" ["color"(#000000-#FFFFFF)]
+addText() {
+	local blockStringVariable="${1}String"
+	local blockTextVariable="${1}Text"
+	local blockTextLengthVariable="${1}TextLength"
+
+	typeset -g "$blockTextVariable+=$2"
+	typeset -g "$blockTextLengthVariable=${#blockTextVariable}"
+
+	typeset -g "$blockStringVariable+=, {\"full_text\": \"$2\", \"separator\": false, \
+\"separator_block_width\": 0"
+	if [[ $3 != "" ]]; then
+		typeset -g "$blockStringVariable+=, \"color\": \"$3\""
+	fi
+	typeset -g "$blockStringVariable+=}"
+}
+
+
+# arguments: text "minimum length" ["alignment"(right|center)]
+alignText() {
+	local -n variableRef=$1
+	local stringLength=${#variableRef}
+	local minLength=$2
+	local alignment=$3
+
+	if (( stringLength < minLength )); then
+		for (( i = 0; i < $((minLength - stringLength)); i++ )); do
+			if [[ $alignment == "right" ]]; then
+				variableRef=" $variableRef"
+			elif [[ $alignment == "center" ]]; then
+				if (( $((i%2)) )); then
+					variableRef+=" "
+				else
+					variableRef=" $variableRef"
+				fi
+			else
+				variableRef+=" "
+		fi
+		done
+	fi
+}
+
+
+# arguments: text "maximum length" ["clamp from"](empty=clamp from right, "left"=clamp from left)
+clampText() {
+	local -n variableRef=$1
+	local stringLength=${#variableRef}
+	local maxLength=$2
+	local clampFrom=$3
+
+	if (( stringLength > maxLength )); then
+		if [[ ! $clampFrom ]]; then
+			variableRef=${variableRef:0:$maxLength}
+		elif [[ $clampFrom == "left" ]]; then
+			variableRef=${variableRef:(( ${#variableRef} - $maxLength ))}
+		fi
+	fi
+}
+
+
+printBar() {
+	if [[ $barString != "" ]]; then
+		barString="$(echo "$barString" | sed s/./'['/2)"
+		barString+="]"
+
+		echo "$barString"
+
+		barString=""
+	fi
+}
+
+
+# arguments: "string"
+printError() {
+	errorString=""
+	clearText barError
+	addText barError "Error: " "#FF0000"
+	addText barError "$1" "#FF0000"
+	barString="$barErrorString"
+	printBar
+	sleep 9999
+	exit 1
+}
+
+
+# arguments: array "string" ["arrayPosition"(empty=end, 0=beginning, 1,2,3,4...)]
+addArrayElement() {
+	local -n arrayRef=$1
+	local arrayName=$1
+	local string=$2
+	local arrayPosition=$3
+	local re='^[0-9]+$'
+
+	if [[ ! $arrayPosition ]]; then
+		arrayRef+=( "$string" )
+	elif [[ $arrayPosition == "0" ]]; then
+		arrayRef=( "$string" "${arrayRef[@]}" )
+	elif [[ $arrayPosition =~ $re ]]; then
+		if (( $arrayPosition < ${#arrayRef[@]} )); then
+			arrayRef=( "${arrayRef[@]:0:$arrayPosition}" "$string" "${arrayRef[@]:$arrayPosition}" )
+		else
+			printError "Out of bounds adding [$string] to array [$arrayName] at position [$arrayPosition]."
+		fi
+	else
+		printError "Failed to add [$string] to array [$arrayName] at position [$arrayPosition]."
+	fi
+}
+
+
+# arguments: array ["arrayPosition"(empty=end, 0=beginning, 1,2,3,4...)]
+delArrayElement() {
+	local -n arrayRef=$1
+	local arrayName=$1
+	local arrayPosition=$2
+	local re='^[0-9]+$'
+
+	if [[ ! $arrayPosition ]]; then
+#		unset arrayRef[${#arrayRef[@]}]
+		arrayRef=( ${arrayRef[@]:0:(( ${#arrayRef[@]} - 1 ))} )
+	elif [[ $arrayPosition == "0" ]]; then
+		arrayRef=( ${arrayRef[@]:1} )
+	elif [[ $arrayPosition =~ $re ]]; then
+		if (( $arrayPosition == ${#arrayRef[@]} - 1 )); then
+			arrayRef=( ${arrayRef[@]:0:(( ${#arrayRef[@]} - 1 ))} )
+		elif (( $arrayPosition < ${#arrayRef[@]} )); then
+			arrayRef=("${arrayRef[@]:0:$arrayPosition}" "${arrayRef[@]:(( $arrayPosition + 1 ))}")
+		else
+			printError "Out of bounds deleting element number [$arrayPosition] from array [$arrayName]."
+		fi
+	else
+		printError "Failed to delete element from [$arrayName]. [$arrayPosition] is not a valid element number."
+	fi
+}
+
+
+# arguments: array "string" "arrayPosition"(0,1,2,3...)
+replaceArrayElement() {
+	local -n arrayRef=$1
+	local arrayName=$1
+	local string=$2
+	local arrayPosition=$3
+	local re='^[0-9]+$'
+
+	if [[ $arrayPosition =~ $re ]]; then
+		if (( $arrayPosition < ${#arrayRef[@]} )); then
+			arrayRef[$arrayPosition]=$string
+		else
+			printError "Out of bounds replacing element number [$arrayPosition] from array [$arrayName]."
+		fi
+	else
+		printError "Failed to replace element from [$arrayName]. [$arrayPosition] is not a \
+			valid element number."
+	fi
+}
+
+
+# arguments: array "arrayPosition1" "arrayPosition2"
+swapArrayElements() {
+	local -n arrayRef=$1
+	local arrayPosition1=$2
+	local arrayPosition2=$3
+
+	local temp=${arrayRef[$arrayPosition1]}
+	arrayRef[$arrayPosition1]=${arrayRef[$arrayPosition2]}
+	arrayRef[$arrayPosition2]=$temp
+}
+
+
+updateBlocks() {
+	for block in ${blocks[@]}; do
+		local textVariable="${block}Text"
+		local updatedVariable="${block}Updated"
+		local lastText="${!textVariable}"
+
+		eval $block
+
+		if [[ "$lastText" != "${!textVariable}" ]]; then
+			typeset -g "$updatedVariable=1"
+			requestUpdate=true
+		else
+			local newUpdatedVal=$(( ${!updatedVariable} + 1 ))
+			typeset -g "$updatedVariable=0"
+		fi
+	done
+}
+
+
+assembleBar() {
+	if [[ $requestUpdate ]]; then
+		for block in ${blocks[@]}; do
+			local blockUpdatedVariable="${block}Updated"
+			local blockTextLengthVariable="${block}TextLength"
+			#check if block updated
+			if (( ${!blockUpdatedVariable} )); then
+				local blockPriorityVariable="${block}Priority"
+				#check if block is not already in visibleBlocks array
+				for visibleBlock in ${visibleBlocks[@]}; do
+					if [[ $visibleBlock == $block ]]; then
+						local foundBlock=1
+						break
+					fi
+				done
+				if (( ! foundBlock )); then
+					#find next block with < priority number and add in before it
+					for (( visibleBlocksPos=0; $visibleBlocksPos < ${#visibleBlocks[@]}; \
+						visibleBlocksPos++ )); do
+						local visibleBlockPriorityVariable="${visibleBlocks[$visibleBlocksPos]}Priority"
+						if (( ${!blockPriorityVariable} <= ${!visibleBlockPriorityVariable} + 0 )); then
+							local foundPosition=1
+							local chosenPosition=$visibleBlocksPos
+							break
+						fi
+					done
+					if (( foundPosition )); then
+						addArrayElement visibleBlocks "$block" "$chosenPosition"
+						(( barLength+= ${!blockTextLengthVariable} + $blockSeparatorWidth ))
+					else
+						addArrayElement visibleBlocks "$block"
+						(( barLength+= ${!blockTextLengthVariable} + $blockSeparatorWidth ))
+					fi
+					foundPosition=0
+				fi
+				foundBlock=0
+			fi
+		done
+
+		#delete end of visibleBlocks array until it is within maxbar length
+		for (( visibleBlocksPos=${#visibleBlocks[@]} - 1; $visibleBlocksPos > 0; visibleBlocksPos-- )); do
+			if (( $barLength + $blockSeparatorWidth > $barMaxLength )); then
+				local visibleBlockTextLengthVariable="${visibleBlocks[$visibleBlocksPos]}TextLength"
+				delArrayElement visibleBlocks "$visibleBlocksPos"
+				(( barLength-= ${!visibleBlockTextLengthVariable} + $blockSeparatorWidth ))
+			else
+				break
+			fi
+		done
+
+		#add blocks to barstring
+		for visibleBlock in ${visibleBlocks[@]}; do
+			local visibleBlockStringVariable="${visibleBlock}String"
+			if [[ $barString ]]; then
+				barString="$blockSeparator$barString"
+			fi
+			barString="${!visibleBlockStringVariable}$barString"
+		done
+
+		requestUpdate=""
+	fi
+}
+
+
+# read the config file
+configFile="$(dirname $0)/i3baranoid.conf"
+if [[ ! -f "$configFile" ]]; then
+	printError "$configFile not found!"
+fi
+source "$configFile"
+
+blockSeparator=", {\"full_text\": \" \", \"separator\": true\
+, \"separator_block_width\": $blockSeparatorWidth}\
+,{\"full_text\": \" \", \"separator\": false, \"separator_block_width\": 0}"
+
+
+# create array of blocks from /blocks folder
+blockPath="$(dirname $0)/blocks"
+if [[ ! -d "$blockPath" ]]; then
+	mkdir "$blockPath"
+fi
+for blockFile in $blockPath/*; do
+	source "$blockFile"
+done
+blocks=( $(find $blockPath -maxdepth 1 -type f -printf "%f\n") )
+
+
+# sort (bubblesort) blocks array by priority
+if (( ! ${#blocks[@]} ));then
+	printError "$blockPath is empty."
+fi
+for (( last=${#blocks[@]} - 1; last > 0; last-- )); do
+	for (( i=0; i < last; i++ )); do
+		priorityVariable1="${blocks[$i]}Priority"
+		priorityVariable2="${blocks[$((i+1))]}Priority"
+		if (( ${!priorityVariable1} > ${!priorityVariable2} )); then
+			swapArrayElements blocks $i $((i+1))
+		fi
+	done
+done
+
+
+# remove disabled (priority = 0) from blocks array
+while (( ${#blocks[@]} )); do
+	priorityVariable="${blocks[0]}Priority"
+	if [[ ${!priorityVariable} == "0" ]]; then
+		delArrayElement blocks "0"
+	else
+		break
+	fi
+done
+
+
+# main loop
+while :; do
+	barTimerMillis=$(($(date +%s%N)/1000000))
+	barTimer=$(($barTimerMillis/1000))
+
+	updateBlocks
+	assembleBar
+	printBar
+
+	loopTime=$(( $(( $(date +%s%N) / 1000000)) - barTimerMillis ))
+	if (( loopTime < 1000 )); then
+		sleep "0.$(( 1000 - loopTime ))"
+	fi
+done

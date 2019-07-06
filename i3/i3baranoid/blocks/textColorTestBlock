@@ -1,0 +1,26 @@
+#!/bin/bash
+
+
+textColorTestBlockPriority=0
+textColorTestBlockInterval=1
+textColorTestBlock() {
+	if (( barTimer >= textColorTestBlockTimer )); then
+		textColorTestBlockTimer=$(( barTimer + textColorTestBlockInterval ))
+
+		clearText textColorTestBlock
+		addText textColorTestBlock "wht" "$colorWhite"
+		addText textColorTestBlock " gra" "$colorGray"
+		addText textColorTestBlock " grn" "$colorGreen"
+		addText textColorTestBlock " dgrn" "$colorDarkGreen"
+		addText textColorTestBlock " ylo" "$colorYellow"
+		addText textColorTestBlock " dylo" "$colorDarkYellow"
+		addText textColorTestBlock " red" "$colorRed"
+		addText textColorTestBlock " dred" "$colorDarkRed"
+		addText textColorTestBlock " blu" "$colorBlue"
+		addText textColorTestBlock " dblu" "$colorDarkBlue"
+		addText textColorTestBlock " tel" "$colorCyan"
+		addText textColorTestBlock " dtel" "$colorDarkCyan"
+		addText textColorTestBlock " mag" "$colorMagenta"
+		addText textColorTestBlock " dmag" "$colorDarkMagenta"
+	fi
+}

@@ -1,0 +1,71 @@
+#!/bin/bash
+
+
+memoryUsageBlockPriority=3
+memoryUsageBlockInterval=5
+memoryUsageBlock() {
+	if (( barTimer >= memoryUsageBlockTimer )); then
+		memoryUsageBlockTimer=$(( barTimer + memoryUsageBlockInterval ))
+
+		local mediumMemAvailable=50
+		local lowMemAvailable=20
+
+		local memTotal=$(awk '/^MemTotal:/{print$2}' /proc/meminfo)
+		local memAvail=$(awk '/^MemAvailable:/{print$2}' /proc/meminfo)
+
+		# set memory usage color
+		if (( $memAvail > $memTotal * $mediumMemAvailable / 100 )); then
+			local memAvailColor="$colorGreen"
+			local memAvailSizeColor="$colorDarkGreen"
+		elif (( $memAvail > $memTotal * $lowMemAvailable / 100 )); then
+			local memAvailColor="$colorYellow"
+			local memAvailSizeColor="$colorDarkYellow"
+		else
+			local memAvailColor="$colorRed"
+			local memAvailSizeColor="$colorDarkRed"
+		fi
+
+		# convert available memory KB to MB, GB or TB as needed
+		local mb=1024
+		local gb=$(( $mb * $mb ))
+		local tb=$(( $gb * $mb ))
+		if (( $memAvail < $mb )); then
+			local memAvailSize="KB"
+		elif (( $memAvail < $gb )); then
+			local memAvail="$memAvail $mb"
+			local memAvailSize="MB"
+		elif (( $memAvail < $tb )); then
+			local memAvail="$memAvail $gb"
+			local memAvailSize="GB"
+		else
+			local memAvail="$memAvail $tb"
+			local memAvailSize="TB"
+		fi
+		local memAvail=$(echo "$memAvail" | awk '{converted=$1/$2; print converted}' | awk -F. '{print $1"."substr($2,1,1)}')
+
+		# convert total memory KB to MB, GB or TB as needed
+		if (( $memTotal < $mb )); then
+			local memTotalSize="KB"
+		elif (( $memTotal < $gb )); then
+			local memTotal="$memTotal $mb"
+			local memTotalSize="MB"
+		elif (( $memTotal < $tb )); then
+			local memTotal="$memTotal $gb"
+			local memTotalSize="GB"
+		else
+			local memTotal="$memTotal $tb"
+			local memTotalSize="TB"
+		fi
+		local memTotal=$(echo "$memTotal" | awk '{converted=$1/$2; print converted}' | awk -F. '{print $1"."substr($2,1,1)}')
+
+		# print out
+		clearText memoryUsageBlock
+
+		addText memoryUsageBlock "mem" "$colorWhite"
+		addText memoryUsageBlock " $memAvail" "$memAvailColor"
+		addText memoryUsageBlock "$memAvailSize" "$memAvailSizeColor"
+		addText memoryUsageBlock "/" "$colorWhite"
+		addText memoryUsageBlock "$memTotal" "$colorCyan"
+		addText memoryUsageBlock "$memTotalSize" "$colorDarkCyan"
+	fi
+}

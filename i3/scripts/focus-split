@@ -1,14 +1,10 @@
 #!/bin/bash
 # Toggle focused window's split between vertical and horizontal based on window size
 
-#xdotool getwindowfocus getwindowgeometry
-#stuff() {
-	width=$(xdotool getwindowfocus getwindowgeometry | grep Geometry: | cut -d ' ' -f4 | cut -d 'x' -f1)
-	height=$(xdotool getwindowfocus getwindowgeometry | grep Geometry: | cut -d ' ' -f4 | cut -d 'x' -f2)
-	if (( $width >= $height )); then
-		xdotool getwindowfocus exec i3-msg "split h"
-	else
-		xdotool getwindowfocus exec i3-msg "split v"
-	fi
-#}
-#xdotool search --onlyvisible . behave %@ focus exec stuff
+width=$(xdotool getwindowfocus getwindowgeometry | grep Geometry: | cut -d ' ' -f4 | cut -d 'x' -f1)
+height=$(xdotool getwindowfocus getwindowgeometry | grep Geometry: | cut -d ' ' -f4 | cut -d 'x' -f2)
+if (( $width >= $height )); then
+	xdotool getwindowfocus exec i3-msg "split h"
+else
+	xdotool getwindowfocus exec i3-msg "split v"
+fi

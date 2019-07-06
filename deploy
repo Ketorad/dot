@@ -116,3 +116,15 @@ if [[ $(command -v qutebrowser) ]]; then
 else
 	echo -e "'\t'X qutebrowser is not installed. Skipping."
 fi
+
+
+# bravebrowser
+if [[ $(command -v brave) ]]; then
+	echo "* Deploying brave browser config files"
+	if [[ -d $HOME/.config/BraveSoftware ]]; then
+		rm -rf $HOME/.config/BraveSoftware
+	fi
+	ln -sf $(pwd)/BraveSoftware $HOME/.config/BraveSoftware
+else
+	echo -e "'\t'X Brave browser is not installed. Skipping."
+fi

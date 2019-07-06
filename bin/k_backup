@@ -1,8 +1,8 @@
 #!/bin/bash
 # Backup chosen files or folders
 
-today=$(date '+%Y-%m-%d')
-dataFolder="$HOME/bak"
+today=$(date '+%Y-%m-%d-%H-%M-%S')
+dataFolder="/home/eivind/bak"
 
 # Check if backup folder is available
 if [ ! -e $dataFolder ]; then
@@ -11,9 +11,8 @@ else
 	# Create today's backup folder if not exist
 	if [ ! -e $dataFolder/$today ]; then
 		mkdir $dataFolder/$today
-		# delete old today link
-		rm -f $dataFolder/last
 		# create today link to the new today's folder
+		rm -f $dataFolder/last
 		ln -s $dataFolder/$today $dataFolder/last
 	fi
 fi
