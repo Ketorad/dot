@@ -35,8 +35,8 @@ increment=$(( increment * (maxBrightness / 100) ))
 
 currentBrightness=$((currentBrightness + increment))
 
-if (( $currentBrightness < 0 )); then
-	currentBrightness=0
+if (( $currentBrightness < $increment )); then
+	currentBrightness=$increment
 elif (( $currentBrightness > $maxBrightness )); then
 	currentBrightness=$maxBrightness
 fi

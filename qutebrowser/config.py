@@ -747,39 +747,39 @@ c.downloads.remove_finished = 5000
 
 ## Font used in the completion categories.
 ## Type: Font
-c.fonts.completion.category = 'bold 12pt monospace'
+c.fonts.completion.category = 'bold 14pt monospace'
 
 ## Font used in the completion widget.
 ## Type: Font
-c.fonts.completion.entry = '12pt monospace'
+c.fonts.completion.entry = '14pt monospace'
 
 ## Font used for the debugging console.
 ## Type: QtFont
-c.fonts.debug_console = '12pt monospace'
+c.fonts.debug_console = '14pt monospace'
 
 ## Font used for the downloadbar.
 ## Type: Font
-c.fonts.downloads = '12pt monospace'
+c.fonts.downloads = '14pt monospace'
 
 ## Font used for the hints.
 ## Type: Font
-c.fonts.hints = 'bold 12pt monospace'
+c.fonts.hints = 'bold 14pt monospace'
 
 ## Font used in the keyhint widget.
 ## Type: Font
-c.fonts.keyhint = '12pt monospace'
+c.fonts.keyhint = '14pt monospace'
 
 ## Font used for error messages.
 ## Type: Font
-c.fonts.messages.error = '12pt monospace'
+c.fonts.messages.error = '14pt monospace'
 
 ## Font used for info messages.
 ## Type: Font
-c.fonts.messages.info = '12pt monospace'
+c.fonts.messages.info = '14pt monospace'
 
 ## Font used for warning messages.
 ## Type: Font
-c.fonts.messages.warning = '12pt monospace'
+c.fonts.messages.warning = '14pt monospace'
 
 ## Default monospace fonts. Whenever "monospace" is used in a font
 ## setting, it's replaced with the fonts listed here.
@@ -788,15 +788,15 @@ c.fonts.messages.warning = '12pt monospace'
 
 ## Font used for prompts.
 ## Type: Font
-c.fonts.prompts = '12pt sans-serif'
+c.fonts.prompts = '14pt sans-serif'
 
 ## Font used in the statusbar.
 ## Type: Font
-c.fonts.statusbar = '12pt monospace'
+c.fonts.statusbar = '14pt monospace'
 
 ## Font used in the tab bar.
 ## Type: QtFont
-c.fonts.tabs = '12pt monospace'
+c.fonts.tabs = '14pt monospace'
 
 ## Font family for cursive fonts.
 ## Type: FontFamily
@@ -825,23 +825,19 @@ c.fonts.tabs = '12pt monospace'
 ## Default font size (in pixels) for regular text.
 ## Type: Int
 # c.fonts.web.size.default = 16
-c.fonts.web.size.default = 14
 
 ## Default font size (in pixels) for fixed-pitch text.
 ## Type: Int
 # c.fonts.web.size.default_fixed = 13
-c.fonts.web.size.default_fixed = 14
 
 ## Hard minimum font size (in pixels).
 ## Type: Int
 # c.fonts.web.size.minimum = 0
-c.fonts.web.size.minimum = 14
 
 ## Minimum logical font size (in pixels) that is applied when zooming
 ## out.
 ## Type: Int
 # c.fonts.web.size.minimum_logical = 6
-c.fonts.web.size.minimum_logical = 14
 
 ## When a hint can be automatically followed without pressing Enter.
 ## Type: String
@@ -1227,7 +1223,7 @@ c.tabs.mousewheel_switching = False
 ##   - next: After the current tab.
 ##   - first: At the beginning.
 ##   - last: At the end.
-c.tabs.new_position.related = 'last'
+c.tabs.new_position.related = 'next'
 
 ## Position of new tabs which aren't opened from another tab.
 ## Type: NewTabPosition
@@ -1364,7 +1360,8 @@ c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}'
         , 'aw': 'https://wiki.archlinux.org/?search{}'
         , 'sp': 'https://www.protondb.com/search?q={}'
         , 'pj': 'https://www.prisjakt.no/search?search={}&searchInProps=false'
-        , 'd': 'https://dissenter.com/discussion/begin?url={}'}
+        , 'd': 'https://dissenter.com/discussion/begin?url={}'
+        , 'ark': 'https://ark.intel.com/content/www/us/en/ark/search.html?_charset_=UTF-8&q={}'}
 
 ## Page(s) to open at the start.
 ## Type: List of FuzzyUrl, or FuzzyUrl
@@ -1698,3 +1695,6 @@ config.bind('L', 'tab-next')
 # config.bind('<Return>', 'prompt-accept', mode='yesno')
 # config.bind('n', 'prompt-accept no', mode='yesno')
 # config.bind('y', 'prompt-accept yes', mode='yesno')
+
+# user adds
+c.content.host_blocking.lists.append( str(config.configdir) + "/blockedHosts")

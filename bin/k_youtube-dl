@@ -118,7 +118,7 @@ else
 fi
 
 for (( i = 0; i < ${#URLs[@]}; i++ )); do
-		youtube-dl -q -f best -ciwv --dateafter $dateAfter --playlist-end $maxDownloads --match-filter "duration >= $minDuration" -o "$videoPath%(uploader)s - %(title)s.%(ext)s" "${URLs[$i]}" 2>/dev/null
+		youtube-dl -i --no-warnings -q -f best -ciwv --dateafter $dateAfter --playlist-end $maxDownloads --match-filter "duration >= $minDuration" -o "$videoPath%(uploader)s - %(title)s.%(ext)s" "${URLs[$i]}" 2>/dev/null
 done
 
 # convert video files into audio files
@@ -136,7 +136,7 @@ for (( i = 0; i < ${#videoFiles[@]}; i++ )); do
 		fi
 	done
 	if [[ $foundAudioFile == "false" ]]; then
-		ffmpeg -loglevel quiet -i "$videoPath${videoFiles[$i]}" "$videoPath$videoFileName.mp3"
+		ffmpeg -y -loglevel quiet -i "$videoPath${videoFiles[$i]}" "$videoPath$videoFileName.mp3"
 		mv "$videoPath$videoFileName.mp3" "$audioPath"
 	fi
 done

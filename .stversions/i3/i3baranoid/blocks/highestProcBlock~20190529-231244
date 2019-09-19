@@ -1,0 +1,112 @@
+#!/bin/bash
+
+
+highestProcBlockPriority=3
+highestProcBlockInterval=5
+highestProcBlock() {
+	if (( barTimer >= highestProcBlockTimer )); then
+		highestProcBlockTimer=$(( barTimer + highestProcBlockInterval ))
+
+		local minBrightness=100
+
+		local mediumCpuUsage=50
+		local highCpuUsage=100
+
+		local mediumMemUsage=50
+		local highMemUsage=80
+
+		# set proccess with highest cpu usage
+		local highestProc="$(ps -eo comm,%cpu,rss --sort=-%cpu --no-headers | head -n 1)"
+		local tempIFS=$IFS
+		IFS=' '
+		read -ra "ADDR" <<< "$highestProc"
+		local progName="${ADDR[0]}"
+		local cpu="${ADDR[1]}"
+		local mem="${ADDR[2]}"
+		IFS=$tempIFS
+
+		# set memory usage color
+		local memTotal=$(grep "MemTotal:" /proc/meminfo | tr -s ' ' | cut -d ' ' -f2)
+		if (( $mem < $memTotal * $mediumMemUsage / 100 )); then
+			local memColor="low"
+		elif (( $mem < $memTotal * $highMemUsage / 100 )); then
+			local memColor="medium"
+		else
+			local memColor="low"
+		fi
+
+		# convert memory usage KB to MB, GB or TB as needed
+		if (( ${#mem} < 4 )); then
+			local mem="${mem}KB"
+		elif (( ${#mem} < 7 )); then
+			local mem="${mem:0:3}.${mem:3:1}"
+			local mem="${mem}MB"
+		elif (( ${#mem} < 10 )); then
+			local mem="${mem:0:3}.${mem:3:1}"
+			local mem="${mem}GB"
+		elif (( ${#mem} < 13 )); then
+			local mem="${mem:0:3}.${mem:3:1}"
+			local mem="${mem}TB"
+		else
+			local mem="ERROR!"
+		fi
+
+		# set random color on proccess name seeded on the name
+		local progNameValue="0"
+		for (( i=0; i < ${#progName}; i++ )); do
+			local progNameValue=$(( $progNameValue + $(printf '%d' "'${progName:$i:1}") ))
+		done
+
+		local rgbValues=( $(bash -c "RANDOM=$progNameValue; echo \$RANDOM \$RANDOM \$RANDOM") )
+		local progNameColor=""
+		for (( i = 0; i < 3; i++ )); do
+			local rgbValues[$i]=$(( ${rgbValues[$i]} % 255 ))
+		done
+
+		# add brightness if below minimum brightness
+		local brightness=$(( (299 * ${rgbValues[0]} / 1000) + (587 * ${rgbValues[1]} / 1000) + (114 * ${rgbValues[2]}) / 1000 ))
+		if (( $brightness < $minBrightness )); then
+			local brightnessDiff=$(( $minBrightness - $brightness ))
+			for (( i = 0; i < 3; i++ )); do
+				local rgbValues[$i]=$(( ${rgbValues[$i]} + $brightnessDiff ))
+			done
+		fi
+
+		# prevent rgb values from exceeding 255
+		for (( i = 0; i < 3; i++ )); do
+			if (( ${rgbValues[i]} > 255 )); then
+				local rgbValues[i]=255
+			fi
+		done
+
+		# convert colors to hex and store them in a single string
+		for color in ${rgbValues[@]}; do
+			local progNameColor+=$(printf '%x' $color)
+		done
+
+		# print out proccess name
+		clearText highestProcBlock
+		alignText progName "15" "center"
+		addText highestProcBlock "$progName" "#$progNameColor"
+
+		# print out cpu usage
+		addText highestProcBlock " cpu " "$colorWhite"
+		if (( ${cpu%%.*} < $mediumCpuUsage )); then
+			addText highestProcBlock "${cpu}%" "$colorGreen"
+		elif (( ${cpu%%.*} < $highCpuUsage )); then
+			addText highestProcBlock "${cpu}%" "$colorYellow"
+		else
+			addText highestProcBlock "${cpu}%" "$colorRed"
+		fi
+
+		# print out memory usage
+		addText highestProcBlock " mem " "$colorWhite"
+		if (( $memColor == "low" )); then
+			addText highestProcBlock "${mem}" "$colorGreen"
+		elif (( $memColor == "medium" )); then
+			addText highestProcBlock "${mem}" "$colorYellow"
+		else
+			addText highestProcBlock "${mem}" "$colorRed"
+		fi
+	fi
+}

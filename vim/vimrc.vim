@@ -56,6 +56,9 @@ set numberwidth=4
 set splitbelow
 set splitright
 
+" How many lines before top and bottom to start scrolling the page
+set scrolloff=10
+
 " Key mapping
 map <F2> :NERDTree<CR>
 map <F6> :setlocal spell! spelllang=en<CR>
@@ -65,12 +68,8 @@ inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
 
 nnoremap Q <nop>		" prevent ex mode
 "nnoremap K <nop>		" prevent man pages for words under cursor
-nnoremap J <C-d>zz
-nnoremap K <C-u>zz
-
-" Normal navigation
-nnoremap j jzz
-nnoremap k kzz
+nnoremap J <C-d>
+nnoremap K <C-u>
 
 " Split navigation
 nnoremap <C-H> <C-W><C-H>

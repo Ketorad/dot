@@ -1,0 +1,7 @@
+2019/05/19-02:16:39.864 2dcd Recovering log #3
+2019/05/19-02:16:40.087 2dcd Level-0 table #5: started
+2019/05/19-02:16:40.271 2dcd Level-0 table #5: 2594780 bytes OK
+2019/05/19-02:16:40.277 2dcd Recovering log #6
+2019/05/19-02:16:40.284 2dcd Delete type=0 #6
+2019/05/19-02:16:40.284 2dcd Delete type=3 #2
+2019/05/19-02:16:40.284 2dcd Delete type=0 #3

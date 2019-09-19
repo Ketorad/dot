@@ -53,13 +53,13 @@ bindsym $mod+Shift+e exec $HOME/dot/i3/scripts/exit-i3
 
 bindsym $mod+Return exec $HOME/dot/i3/scripts/focus-split && $HOME/dot/i3/scripts/open-urxvt
 bindsym $mod+o exec $HOME/dot/i3/scripts/focus-split && qutebrowser
-bindsym $mod+Shift+q kill
+bindsym $mod+q kill
 bindsym $mod+d exec $HOME/dot/i3/scripts/focus-split && $HOME/dot/bin/k_rofi
 
 #bindsym $mod+Shift+x exec killall xset dpms 0 0 5 && i3lock -n --color "$bg-color" && xset -dpms && xset s off
 bindsym $mod+Shift+x exec $HOME/dot/i3/scripts/lock-screen-steam
 bindsym $mod+Shift+z exec xset dpms 0 0 5 && systemctl suspend && i3lock -n --color "$bg-color" && xset -dpms && xset s off
-bindsym $mod+q exec xclip -o -selection clipboard | qrencode -s 20 -o - | feh -
+bindsym $mod+r exec xclip -o -selection clipboard | qrencode -s 20 -o - | feh -
 
 bindsym $mod+h focus left
 bindsym $mod+j focus down

@@ -1,0 +1,11 @@
+#!/bin/bash
+# Executes antimicro with spesific config, and minecraft-launcher
+
+if (( ! $(pgrep -c antimicro) )); then
+	/usr/bin/antimicro --tray --profile ~/dot/antimicro/gamepad.minecraft.amgp &
+	/usr/bin/minecraft-launcher
+	killall antimicro
+else
+	/usr/bin/minecraft-launcher
+fi
+

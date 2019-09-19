@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount fileserver via sshfs for %I
+After=network.target
+
+[Service]
+User=%i
+ExecStart=/home/eivind/dot/bin/k_sshfs ketorad.com:/mnt/fileserver/shared eivind-server 192.168.0.1 /mnt/fileserver/shared
+ExecStop=/home/eivind/dot/bin/k_sshfs stop /mnt/fileserver/shared
+
+[Install]
+WantedBy=multi-user.target

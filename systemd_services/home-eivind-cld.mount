@@ -1,0 +1,14 @@
+[Unit]
+Description=Mount WebDAV Service for eivind. Don't forget to edit /etc/davfs2/davfs2.conf and /etc/davfs2/secrets. Also enable services systemd-networkd.service and systemd-networkd-wait-online.service.
+After=systemd-networkd-wait-online.service
+Wants=systemd-networkd-wait-online.service
+
+[Mount]
+What=https://nextcloud.ketorad.com/remote.php/webdav/
+Where=/home/eivind/cld
+Options=uid=eivind,gid=eivind
+Type=davfs
+TimeoutSec=15
+
+[Install]
+WantedBy=multi-user.target

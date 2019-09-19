@@ -2,17 +2,17 @@
 # kill steam, lock screen, and set monitor sleep to 5 seconds
 # when unlocked, turn off monitor sleep and start steam again
 
-#steamProcs=($(pgrep -i steam))
 
-if (($(pgrep -c steam))); then
-#if ((${#steamProcs[@]})); then
+if (($(pgrep -c -x steam))); then
 	echo "killing steam"
 	killall steam
-	#for steamProc in ${steamProcs[@]} ; do
-		#kill $steamProc
-	#done
+	for steamProc in ${steamProcs[@]} ; do
+		kill $steamProc
+	done
 	xset dpms 0 0 5
+
 	i3lock -n --color "#000000"
+
 	xset -dpms
 	xset s off
 	echo "starting steam"
@@ -20,7 +20,9 @@ if (($(pgrep -c steam))); then
 else
 	echo "Steam is not running. Continuing"
 	xset dpms 0 0 5
+
 	i3lock -n --color "#000000"
+
 	xset -dpms
 	xset s off
 fi
