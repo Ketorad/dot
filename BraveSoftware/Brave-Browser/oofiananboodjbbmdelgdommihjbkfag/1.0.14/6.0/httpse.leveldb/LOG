@@ -1,7 +1,7 @@
-2019/09/14-21:02:25.669 11dc6 Recovering log #3
-2019/09/14-21:02:25.773 11dc6 Level-0 table #5: started
-2019/09/14-21:02:25.826 11dc6 Level-0 table #5: 2771043 bytes OK
-2019/09/14-21:02:25.832 11dc6 Recovering log #9
-2019/09/14-21:02:25.835 11dc6 Delete type=0 #9
-2019/09/14-21:02:25.835 11dc6 Delete type=0 #3
-2019/09/14-21:02:25.837 11dc6 Delete type=3 #2
+2019/10/01-19:29:57.938 573a5 Recovering log #3
+2019/10/01-19:29:58.117 573a5 Level-0 table #5: started
+2019/10/01-19:29:58.164 573a5 Level-0 table #5: 2771043 bytes OK
+2019/10/01-19:29:58.167 573a5 Recovering log #28
+2019/10/01-19:29:58.170 573a5 Delete type=0 #3
+2019/10/01-19:29:58.170 573a5 Delete type=3 #2
+2019/10/01-19:29:58.170 573a5 Delete type=0 #28

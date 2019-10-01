@@ -1,5 +1,5 @@
 {
-   "checksum": "6409bcb50c51fcf64310f1222d41e97d",
+   "checksum": "2d7abb196641c837052d3f3a6ec6a8fd",
    "roots": {
       "bookmark_bar": {
          "children": [ {
@@ -11,12 +11,21 @@
          }, {
             "date_added": "13202735946384369",
             "id": "12",
+            "meta_info": {
+               "last_visited_desktop": "13213921638522503"
+            },
             "name": "Reddit",
             "type": "url",
             "url": "https://www.reddit.com/"
+         }, {
+            "date_added": "13213706142761510",
+            "id": "16",
+            "name": "Star Trek's Jeri Ryan on Returning to Seven of Nine for Picard",
+            "type": "url",
+            "url": "https://io9.gizmodo.com/star-treks-jeri-ryan-had-a-hard-time-finding-sevens-voi-1836998993"
          } ],
          "date_added": "13202692374284248",
-         "date_modified": "13202735946384369",
+         "date_modified": "13213706142761510",
          "id": "1",
          "name": "Bookmarks bar",
          "type": "folder"
