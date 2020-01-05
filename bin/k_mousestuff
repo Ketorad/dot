@@ -13,13 +13,18 @@ do
 	fi
 done
 
+
 # gaming mouse
-gamingmouseids=$(xinput list | grep "Logitech Gaming Mouse G502" | expand | tr -s ' ' | cut -d ' ' -f7 | tr -d 'id=')
-for i in $gamingmouseids
+mouseIDs=$(xinput --list | sed "/Virtual core keyboard/q" | grep -e "Mouse" -e "Logitech" | grep -v -e "Consumer Control" -e "System Control" -e "Keyboard" | cut -f 2 | tr -d "id=")
+for i in $mouseIDs
 do
 	checkAccelProp=$(xinput list-props $i | grep -c "Accel Speed")
-	if [ $checkAccelProp -gt 0 ]; then
-		accelProp=$(xinput list-props $i | grep "Accel Speed" | grep -v "Default" | expand | tr -s " " |cut -d "(" -f2 | cut -d ")" -f1)
-		xinput set-prop $i $accelProp -1
+	if (( checkAccelProp )); then
+		accelProp=$(xinput --list-props $i | grep "Accel Speed" | grep -v "Default" | cut -d "(" -f 2 | cut -d ")" -f 1)
+		xinput --set-prop $i $accelProp -1
 	fi
 done
+
+
+# also set keyboard properties
+setxkbmap -option "caps:swapescape" -option "grp:alt_shift_toggle" -layout us,no

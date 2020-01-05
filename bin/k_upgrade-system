@@ -2,11 +2,50 @@
 # Backup "/" and "/boot" partitions, then upgrade system.
 
 
-backupFolder="$HOME/bak/system_backups/$(cat /etc/hostname)"
-if [[ ! -d "$backupFolder" ]]; then
+backupPath="$HOME/bak/system_backups"
+backupFolder="$(cat /etc/hostname)"
+keepOldBackups=3
+
+
+throw_error() {
 	echo
-	echo "Error: Backup folder \"$backupFolder\" does not exist!"
+	echo "Error: $1!"
 	exit
+}
+
+
+yes_or_no() {
+    while true; do
+        read -p "$* [y/n]: " yn
+        case $yn in
+            [Yy]*) return 0  ;;
+            [Nn]*) echo "Aborted" ; return  1 ;;
+        esac
+    done
+}
+
+
+# Arguments: "partition to backup" "name of image file"
+backup() {
+	backupPartition=$1
+	imageFileName=$2
+
+	if [[ $(command -v pigz) ]]; then
+		sudo dd if=$backupPartition conv=sync,noerror bs=128K status=progress | pigz -c > "$backupPath/$backupFolder/$dateNow/$imageFileName"
+	else
+		echo "Using gzip. Install pigz for multithreaded compression."
+		sudo dd if=$backupPartition conv=sync,noerror bs=128K status=progress | gzip -c > "$backupPath/$backupFolder/$dateNow/$imageFileName"
+	fi
+}
+
+
+# Error checks
+if [[ ! -d "$backupPath" ]]; then
+	throw_error "$backupPath not available"
+fi
+
+if [[ ! -d "$backupPath/$backupFolder" ]]; then
+	mkdir "$backupPath/$backupFolder"
 fi
 
 bootEfiPartition=$(grep -w /boot/efi /proc/mounts | awk '{print $1}')
@@ -16,26 +55,40 @@ fi
 
 rootPartition=$(grep -w / /proc/mounts | awk '{print $1}')
 if [[ ! $rootPartition ]]; then
-	echo
-	echo "Error: Root partition does not exist!"
-	exit
+	throw_error "Root partition does not exist"
 fi
 
 
 # Backup system
-if [[ $bootEfiPartition ]]; then
+backup=0
+yes_or_no "Backup system first?" && backup=1
+
+if (( $backup )); then
+	dateNow=$(date '+%Y.%m.%d.%H.%M.%S')
+	mkdir "$backupPath/$backupFolder/$dateNow"
+
+	if [[ $bootEfiPartition ]]; then
+		echo
+		echo "Backing up $bootEfiPartition \"/boot/efi\" ..."
+		backup "$bootEfiPartition" "boot.efi.img.gz"
+	elif [[ $bootPartition ]]; then
+		echo
+		echo "Backing up $bootPartition \"/boot\" ..."
+		backup "$bootPartition" "boot.img.gz"
+	fi
+
 	echo
-	echo "Backing up $bootEfiPartition \"/boot/efi\" ..."
-	sudo dd if=$bootEfiPartition conv=sync,noerror bs=64K status=progress | gzip -c | dd of=$backupFolder/boot.efi.img.gz
-elif [[ $bootPartition ]]; then
-	echo
-	echo "Backing up $bootPartition \"/boot\" ..."
-	sudo dd if=$bootPartition conv=sync,noerror bs=64K status=progress | gzip -c | dd of=$backupFolder/boot.img.gz
+	echo "Backing up $rootPartition \"/\" ..."
+	backup "$rootPartition" "root.img.gz"
 fi
 
-echo
-echo "Backing up $rootPartition \"/\" ..."
-sudo dd if=$rootPartition conv=sync,noerror bs=64K status=progress | gzip -c | dd of=$backupFolder/root.img.gz
+
+# Delete superfluous old backups (keep X newest)
+oldBackupFolders=( $(ls -1 -d $backupPath/$backupFolder/*/) )
+while (( ${#oldBackupFolders[@]} > $keepOldBackups )); do
+	rm -R "${oldBackupFolders[0]}"
+	oldBackupFolders=( ${oldBackupFolders[@]:1} )
+done
 
 
 # Upgrade system
@@ -43,18 +96,20 @@ echo
 echo "Upgrading system ..."
 
 if [[ $(command -v pacman) ]]; then
-	sudo pacman -Syu # update and upgrade packages
-	sudo pacman -Rns $(pacman -Qtdq) # remove orphaned and unused packages
-	sudo pacman -Scc # remove unused downloaded files from cache
+	yes Y | sudo pacman -Syu # update and upgrade packages
+	yes Y | sudo pacman -Rns $(pacman -Qtdq) # remove orphaned and unused packages
+	yes Y | sudo pacman -Scc # remove unused downloaded files from cache
 
 	if [[ $(command -v yay) ]]; then
-		yay -Syua # update and upgrade AUR packages
+		yes Y | yay -Syua # update and upgrade AUR packages
 	fi
 
+elif [[ $(command -v apt) ]]; then
+	sudo apt update
+	yes Y | sudo apt dist-upgrade
+
 else
-	echo
-	echo "Error: No supported package managers found!"
-	exit
+	throw_error "No supported package managers found"
 fi
 
 echo

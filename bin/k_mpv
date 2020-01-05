@@ -41,7 +41,8 @@ if [[ ! $(echo $url | awk '/^https:\/\/|^http:\/\// {print}') ]]; then
 fi
 
 # get vertical resolution on first monitor
-resolution=$(xrandr | grep -m 1 "\*" | tr -s " " | cut -d " " -f 2 | cut -d "x" -f 2)
+#resolution=$(xrandr | grep -m 1 "\*" | tr -s " " | cut -d " " -f 2 | cut -d "x" -f 2)
+resolution=$(xrandr --listmonitors | grep -m 1 "0: " | tr -s " " | cut -d "x" -f 2 | cut -d "/" -f 1)
 
 # start streaming the video
 echo "Starting video in $resolution."

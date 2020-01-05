@@ -1,0 +1,31 @@
+#!/bin/bash
+# Update external ip address to file.
+
+helpText() {
+	echo "Usage: $(basename $0) FILE"
+	exit 1
+}
+
+# check number of arguments
+if [[ $# != 1 ]]; then
+	echo "Error: Wrong number of arguments!"
+	echo
+	helpText
+fi
+
+# check valid folderpath
+filePath="$(dirname $1)"
+if [[ ! -d $filePath ]]; then
+	echo "Error: $filePath does not exist!"
+	echo
+	helpText
+fi
+
+
+externalIP=$(ip a | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v -e '127.0.0.1' -e '192.168.0.1')
+oldExternalIP=$(cat $1)
+
+
+if [[ $externalIP ]] && [[ $externalIP != $oldExternalIP ]]; then
+	echo $externalIP > $1
+fi

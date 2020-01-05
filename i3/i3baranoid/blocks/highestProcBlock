@@ -20,9 +20,9 @@ highestProcBlock() {
 		local tempIFS=$IFS
 		IFS=' '
 		read -ra "ADDR" <<< "$highestProc"
-		local progName="${ADDR[0]}"
-		local cpu="${ADDR[1]}"
-		local mem="${ADDR[2]}"
+		local progName="${ADDR[@]::${#ADDR[@]}-2}" # all but last 2 elements of array
+		local cpu="${ADDR[-2]}" # second last element of array
+		local mem="${ADDR[-1]}" # last element of array
 		IFS=$tempIFS
 
 		# set random color on proccess name seeded on the name

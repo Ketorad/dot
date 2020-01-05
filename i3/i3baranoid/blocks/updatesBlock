@@ -11,7 +11,7 @@ updatesBlock() {
 
 		# pacman
 		addText updatesBlock "pac:" "$colorDarkYellow"
-		repoPackages=$(pacman -Qu | wc -l)
+		repoPackages=$(pacman -Quq | wc -l)
 		if (( $repoPackages > 0 )); then
 			addText updatesBlock "$repoPackages" "$colorWhite"
 		else
@@ -20,7 +20,7 @@ updatesBlock() {
 
 		# aur
 		addText updatesBlock " aur:" "$colorDarkBlue"
-		aurPackages=$(yay -Pua | wc -l)
+		aurPackages=$(yay -Quqa | wc -l)
 		if (( $aurPackages > 0 )); then
 			addText updatesBlock "$aurPackages" "$colorWhite"
 		else

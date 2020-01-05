@@ -4,17 +4,18 @@
 profile=$(uname -n)
 
 
-eivind-desktop() {
+desktop() {
 	nvidia-settings -l
+	transmission-daemon
 }
 
 
-eivind-x250() {
+x250() {
 	echo
 }
 
 
 case $profile in
-	eivind-desktop) "eivind-desktop" ;;
-	eivind-x250) "eivind-x250" ;;
+	desktop) "desktop" ;;
+	x250) "x250" ;;
 esac

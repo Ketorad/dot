@@ -1361,6 +1361,8 @@ c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}'
         , 'sp': 'https://www.protondb.com/search?q={}'
         , 'pj': 'https://www.prisjakt.no/search?search={}&searchInProps=false'
         , 'd': 'https://dissenter.com/discussion/begin?url={}'
+        , 'b': 'https://search.bitchute.com/renderer?use=bitchute-json&name=Search&login=bcadmin&key=7ea2d72b62aa4f762cc5a348ef6642b8&query={}'
+        , 'ip': 'https://iptorrents.com/t?q={}&qf=#torrents'
         , 'ark': 'https://ark.intel.com/content/www/us/en/ark/search.html?_charset_=UTF-8&q={}'}
 
 ## Page(s) to open at the start.

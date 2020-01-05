@@ -257,6 +257,7 @@ exec $HOME/dot/bin/k_mousestuff
 # swap esc, caps and set keyboard layout toggle
 exec setxkbmap -option "caps:swapescape" -option "grp:alt_shift_toggle" -layout us,no
 
-#exec --no-startup-id exec xdotool search --onlyvisible . behave %@ focus exec $HOME/dot/i3/scripts/focus-split
+exec --no-startup-id nm-applet
+exec --no-startup-id blueman-applet
 
 exec $HOME/dot/i3/profiles
