@@ -9,7 +9,7 @@ cpuTemperatureBlock() {
 		local cpuTemperatureMedium=60
 		local cpuTemperatureHigh=75
 
-		local cpuTemperature=$(sensors -u | grep -m 1 -A 1 "id 0:" | tail -n 1 | tr -s ' ' | cut -d ' ' -f3\
+		local cpuTemperature=$(sensors -u | grep -m 1 -A 1 -e "id 0:" -e "Tdie:" | tail -n 1 | tr -s ' ' | cut -d ' ' -f3\
 		  	| cut -d '.' -f1)
 
 		if (( $cpuTemperature < $cpuTemperatureMedium)); then

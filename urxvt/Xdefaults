@@ -46,7 +46,7 @@ URxvt.perl-ext-common:	default,matcher,resize-font,url-select,keyboard-select,cl
 URxvt.colorUL:		#4682B4
 !! url-select
 URxvt.keysym.M-u:	perl:url-select:select_next
-URxvt.url-select.launcher: linkhandler
+URxvt.url-select.launcher: qutebrowser
 URxvt.url-select.underline: true
 !! keyboard-select:
 URxvt.keysym.M-Escape: perl:keyboard-select:activate
@@ -54,7 +54,7 @@ URxvt.keysym.M-Escape: perl:keyboard-select:activate
 URxvt.resize-font.smaller:	C-j
 URxvt.resize-font.bigger:	C-k
 !! Matcher
-URxvt.url-launcher:	linkhandler
+URxvt.url-launcher:	qutebrowser
 URxvt.matcher.button:	1
 !! clipboard
 !!URxvt.keysym.M-c:		perl:clipboard:copy

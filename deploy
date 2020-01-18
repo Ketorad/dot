@@ -61,15 +61,6 @@ else
 fi
 
 
-# lxterminal
-#if [[ $(command -v lxterminal) ]]; then
-#	echo "* Deploying lxterminal.conf"
-#	ln -sf $(pwd)/lxterminal/lxterminal.conf $HOME/.config/lxterminal/lxterminal.conf
-#else
-#	echo -e "'\t'X lxterminal is not installed. Skipping."
-#fi
-
-
 # urxvt
 if [[ $(command -v urxvt) ]]; then
 	echo "* Deploying .Xdefaults for urxvt."
@@ -118,13 +109,10 @@ else
 fi
 
 
-# bravebrowser
-#if [[ $(command -v brave) ]]; then
-#	echo "* Deploying brave browser config files"
-#	if [[ -d $HOME/.config/BraveSoftware ]]; then
-#		rm -rf $HOME/.config/BraveSoftware
-#	fi
-#	ln -sf $(pwd)/BraveSoftware $HOME/.config/BraveSoftware
-#else
-#	echo -e "'\t'X Brave browser is not installed. Skipping."
-#fi
+# tmux
+if [[ $(command -v tmux) ]]; then
+	echo "* tmux found. Deploying config."
+	ln -sf $(pwd)/tmux/tmux.conf $HOME/.tmux.conf
+else
+	echo -e "'\t'X tmux not found. Skipping."
+fi

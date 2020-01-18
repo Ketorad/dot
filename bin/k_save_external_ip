@@ -22,7 +22,7 @@ if [[ ! -d $filePath ]]; then
 fi
 
 
-externalIP=$(ip a | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | grep -Eo '([0-9]*\.){3}[0-9]*' | grep -v -e '127.0.0.1' -e '192.168.0.1')
+externalIP=$(ip -4 a show eth0 | grep -Eo 'inet (addr:)?([0-9]*\.){3}[0-9]*' | cut -d ' ' -f2)
 oldExternalIP=$(cat $1)
 
 

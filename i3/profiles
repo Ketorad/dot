@@ -3,19 +3,23 @@
 
 profile=$(uname -n)
 
-
 desktop() {
 	nvidia-settings -l
-	transmission-daemon
+	if (( ! $(pgrep transmission-daemon) )); then
+		transmission-daemon
+	fi
 }
 
+desktop-mini() {
+	sh ~/.screenlayout/3x-dell.sh
+}
 
 x250() {
 	echo
 }
 
-
 case $profile in
 	desktop) "desktop" ;;
+	desktop-mini) "desktop-mini" ;;
 	x250) "x250" ;;
 esac
