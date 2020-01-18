@@ -56,7 +56,10 @@ c() {
 	fi
 	echo " --- $(pwd) ---";
 	ls;
-	pwd > /tmp/cwd
+	tempCwdFile="/tmp/cwd"
+	if [[ -G $tempCwdFile ]]; then
+		pwd > $tempCwdFile
+	fi
 }
 alias cd="c"
 
