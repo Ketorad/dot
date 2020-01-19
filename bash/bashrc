@@ -173,7 +173,8 @@ function nonzero_return() {
 	[ $RETVAL -ne 0 ] && echo "$RETVAL"
 }
 
-export PS1="\[\e[37m\][\[\e[m\]\[\e[36m\]\u\[\e[m\]\[\e[37m\]@\[\e[m\]\[\e[32m\]\H\[\e[m\]\[\e[37m\]]\[\e[m\] \[\e[31m\]\`nonzero_return\`\[\e[m\]\`parse_git_branch\` \[\e[34m\]\W\[\e[m\]\[\e[34m\]/\[\e[m\] \[\e[33m\]\\$\[\e[m\] "
+#export PS1="\[\e[37m\][\[\e[m\]\[\e[36m\]\u\[\e[m\]\[\e[37m\]@\[\e[m\]\[\e[32m\]\H\[\e[m\]\[\e[37m\]]\[\e[m\] \[\e[31m\]\`nonzero_return\`\[\e[m\]\`parse_git_branch\` \[\e[34m\]\W\[\e[m\]\[\e[34m\]/\[\e[m\] \[\e[33m\]\\$\[\e[m\] "
+export PS1="\[\e[37m\][\[\e[m\]\[\e[36m\]\u\[\e[m\]\[\e[37m\]@\[\e[m\]\[\e[32m\]\H\[\e[m\]\[\e[37m\]]\[\e[m\] \[\e[31m\]\`nonzero_return\`\[\e[m\]\`parse_git_branch\` \[\e[34m\]\W\[\e[m\] \[\e[33m\]\\$\[\e[m\] "
 # ----------------/
 
 
