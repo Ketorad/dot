@@ -38,14 +38,17 @@ alias sudo='sudo '
 # ls
 # enable color support of ls
 if [ -x /usr/bin/dircolors ]; then
-    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
-    alias ls='ls --color=auto --group-directories-first -h'
+	test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+	alias ls='ls --color=auto --group-directories-first -h'
+else
+	alias ls='ls -h --group-directories-first'
 fi
 
+alias lsr='ls -R'
 alias ll='ls -l'
 alias la='ls -A'
 alias lla='ls -lA'
-alias llr='ls -lRsAh'
+alias llr='ls -lRsA'
 
 # cd with ls
 c() {
