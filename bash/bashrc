@@ -136,6 +136,23 @@ function parse_git_branch() {
 	fi
 }
 
+function nonzero_return() {
+	RETVAL=$?
+	[ $RETVAL -ne 0 ] && echo "$RETVAL"
+}
+
+# get current branch in git repo
+function parse_git_branch() {
+	BRANCH=`git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/\1/'`
+	if [ ! "${BRANCH}" == "" ]
+	then
+		STAT=`parse_git_dirty`
+		echo "[${BRANCH}${STAT}]"
+	else
+		echo ""
+	fi
+}
+
 # get current status of git repo
 function parse_git_dirty {
 	status=`git status 2>&1 | tee`
@@ -171,13 +188,7 @@ function parse_git_dirty {
 	fi
 }
 
-function nonzero_return() {
-	RETVAL=$?
-	[ $RETVAL -ne 0 ] && echo "$RETVAL"
-}
-
-#export PS1="\[\e[37m\][\[\e[m\]\[\e[36m\]\u\[\e[m\]\[\e[37m\]@\[\e[m\]\[\e[32m\]\H\[\e[m\]\[\e[37m\]]\[\e[m\] \[\e[31m\]\`nonzero_return\`\[\e[m\]\`parse_git_branch\` \[\e[34m\]\W\[\e[m\]\[\e[34m\]/\[\e[m\] \[\e[33m\]\\$\[\e[m\] "
-export PS1="\[\e[37m\][\[\e[m\]\[\e[36m\]\u\[\e[m\]\[\e[37m\]@\[\e[m\]\[\e[32m\]\H\[\e[m\]\[\e[37m\]]\[\e[m\] \[\e[31m\]\`nonzero_return\`\[\e[m\]\`parse_git_branch\` \[\e[34m\]\W\[\e[m\] \[\e[33m\]\\$\[\e[m\] "
+export PS1="\[\e[36m\]\u\[\e[m\]@\[\e[32m\]\H\[\e[m\]:\[\e[34m\]\W\[\e[m\]\`parse_git_branch\`\[\e[31m\]\`nonzero_return\`\[\e[m\] \[\e[33m\]\\$\[\e[m\] "
 # ----------------/
 
 
