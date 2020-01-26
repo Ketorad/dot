@@ -62,9 +62,9 @@ set scrolloff=10
 " Key mapping
 map <F2> :NERDTree<CR>
 map <F6> :setlocal spell! spelllang=en<CR>
-map t :tabn<CR>
-map T :tabp<CR>
-inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
+"map t :tabn<CR>
+"map T :tabp<CR>
+"inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
 
 nnoremap Q <nop>		" prevent ex mode
 "nnoremap K <nop>		" prevent man pages for words under cursor
