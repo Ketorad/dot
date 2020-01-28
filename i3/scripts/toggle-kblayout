@@ -1,0 +1,65 @@
+#!/bin/bash
+# Description: Toggle between two keyboard layouts using setxkbmap
+# Dependencies: setxkbmap
+# Author: Eivind Engesbak
+
+
+# GLOBALS
+currentLayoutFile="/tmp/kbLayout"
+pidFile="/tmp/kbLayout_pid"
+primaryLayout="us"
+secondaryLayout="no"
+secondaryLayoutTimer=60 # how many seconds before automatic change back to primary. 0 to disable.
+# -----------------------------
+
+
+# FUNCTIONS
+setCurrentLayout() {
+	setxkbmap -option "caps:swapescape" -layout $1
+	echo $1 > $currentLayoutFile
+	echo "swapping to $1"
+}
+# -----------------------------
+
+
+# ERROR CHECKS
+# check if setxkbmp is installed on system
+if [[ ! $(command -v setxkbmap) ]]; then
+	echo "Error: setxkbmap is required for this script to function!"
+	exit 1
+fi
+# -----------------------------
+
+
+# MAIN
+# get current layout
+if [[ -f $currentLayoutFile ]]; then
+	currentLayout=$(cat $currentLayoutFile)
+fi
+
+# kill old script if already running
+if [[ -f $pidFile ]]; then
+	oldPid=$(cat $pidFile)
+	if [[ $oldPid ]]; then
+		kill $oldPid
+	fi
+fi
+
+# store current pid to file
+echo $$ > $pidFile
+
+# toggle layout
+if [[ $currentLayout == $primaryLayout ]]; then
+	if [[ $secondaryLayoutTimer > 0 ]]; then
+		setCurrentLayout $secondaryLayout
+		sleep $secondaryLayoutTimer
+		setCurrentLayout $primaryLayout
+	else
+		setCurrentLayout $secondaryLayout
+	fi
+else
+	setCurrentLayout $primaryLayout
+fi
+
+# clear pidFile and exit
+echo > $pidFile

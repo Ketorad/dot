@@ -1,0 +1,24 @@
+#!/bin/bash
+
+
+kbLayoutBlockPriority=1
+kbLayoutBlockInterval=1
+kbLayoutBlock() {
+	if (( barTimer >= kbLayoutBlockTimer )); then
+		kbLayoutBlockTimer=$(( barTimer + kbLayoutBlockInterval ))
+
+		kbLayoutFile="/tmp/kbLayout"
+		if [[ -f $kbLayoutFile ]]; then
+			kbLayout=$(cat $kbLayoutFile)
+
+			clearText kbLayoutBlock
+			if [[ $kbLayout == "no" ]]; then
+				addText kbLayoutBlock "$kbLayout" "$colorRed"
+			elif [[ $kbLayout == "us" ]]; then
+				addText kbLayoutBlock "$kbLayout" "$colorBlue"
+			else
+				addText kbLayoutBlock "$kbLayout"
+			fi
+		fi
+	fi
+}
