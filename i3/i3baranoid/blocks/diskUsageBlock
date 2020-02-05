@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-diskUsageBlockPriority=4
+diskUsageBlockPriority=5
 diskUsageBlockInterval=30
 diskUsageBlock() {
 	if (( barTimer >= diskUsageBlockTimer )); then

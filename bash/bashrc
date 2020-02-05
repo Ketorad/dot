@@ -193,11 +193,12 @@ colorsArray=("00;31" "00;32" "00;33" "00;34" "00;35" "00;36" "01;31" "01;32" "01
 user=$(logname)
 fqdn=$(hostname -f)
 
-userValue=0
-for (( i=0; i < ${#user}; i++ )); do
-	userValue=$(( $userValue + $(printf '%d' "'${user:$i:1}") ))
-done
-userValue=$(( $userValue % ${#colorsArray[@]} ))
+#userValue=0
+#for (( i=0; i < ${#user}; i++ )); do
+	#userValue=$(( $userValue + $(printf '%d' "'${user:$i:1}") ))
+##done
+#userValue=$(( $userValue % ${#colorsArray[@]} ))
+userValue=5
 
 fqdnValue=0
 for (( i=0; i < ${#fqdn}; i++ )); do

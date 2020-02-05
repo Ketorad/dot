@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-cpuLoadBlockPriority=3
+cpuLoadBlockPriority=4
 cpuLoadBlockInterval=10
 cpuLoadBlock() {
 	if (( barTimer >= cpuLoadBlockTimer )); then

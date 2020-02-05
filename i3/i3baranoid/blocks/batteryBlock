@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-batteryBlockPriority=2
+batteryBlockPriority=3
 batteryBlockInterval=10
 batteryBlock() {
 	if [[ $(command -v acpi) ]] && (( barTimer >= batteryBlockTimer )); then

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-memoryUsageBlockPriority=3
+memoryUsageBlockPriority=4
 memoryUsageBlockInterval=5
 memoryUsageBlock() {
 	if (( barTimer >= memoryUsageBlockTimer )); then

@@ -150,7 +150,8 @@ assign [class="Steam"] $workspace10
 
 # Startup programs-------------
 #exec --no-startup-id compton -b --backend glx --vsync opengl-swc
-exec --no-startup-id compton -b --backend glx --vsync
+#exec --no-startup-id compton -b --backend glx --vsync
+exec --no-startup-id picom -b --backend glx --vsync
 exec_always $HOME/dot/bin/k_wallpaper
 
 # remove screen timeout and console beep
@@ -159,9 +160,14 @@ exec xset -dpms
 exec xset b off
 
 # monitors
-set $monitor_one DP-0
-set $monitor_two DP-4
-set $monitor_three DP-2
+#set $monitor_one DP-0
+#set $monitor_two DP-4
+#set $monitor_three DP-2
+
+set $monitor_one DisplayPort-0
+set $monitor_two DisplayPort-1
+#set $monitor_three DisplayPort-2
+set $monitor_three HDMI-A-0
 
 workspace $workspace1 output $monitor_one
 workspace $workspace2 output $monitor_one
@@ -181,6 +187,7 @@ bar {
 	status_command ~/dot/i3/i3baranoid/i3baranoid
 #	output $monitor_one
 #	tray_output none
+	tray_output primary
 	colors {
 		background $bg-color
 		separator #757575
@@ -257,9 +264,8 @@ for_window [class="feh"] floating enable
 #exec --no-startup-id i3-msg "exec sleep 2 && $HOME/dot/bin/k_mousestuff"
 exec $HOME/dot/bin/k_mousestuff
 
-# swap esc, caps and set keyboard layout toggle
-#exec setxkbmap -option "caps:swapescape" -option "grp:alt_shift_toggle" -layout us,no
-exec setxkbmap -option "caps:swapescape" -layout us
+exec $HOME/dot/i3/scripts/toggle-kblayout
+
 
 exec --no-startup-id nm-applet
 exec --no-startup-id blueman-applet

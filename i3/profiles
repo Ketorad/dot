@@ -5,13 +5,13 @@ profile=$(uname -n)
 
 desktop() {
 	nvidia-settings -l
-	if (( ! $(pgrep transmission-daemon) )); then
+	if [[ ! $(pgrep transmission-da) ]]; then
 		transmission-daemon
 	fi
 }
 
 desktop-mini() {
-	sh ~/.screenlayout/3x-dell.sh
+	sh $HOME/.screenlayout/3x-dell.sh
 }
 
 x250() {

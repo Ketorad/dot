@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-kbLayoutBlockPriority=1
+kbLayoutBlockPriority=2
 kbLayoutBlockInterval=1
 kbLayoutBlock() {
 	if (( barTimer >= kbLayoutBlockTimer )); then

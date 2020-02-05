@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-highestProcBlockPriority=3
+highestProcBlockPriority=4
 highestProcBlockInterval=5
 highestProcBlock() {
 	if (( barTimer >= highestProcBlockTimer )); then
