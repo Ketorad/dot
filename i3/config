@@ -131,8 +131,8 @@ bindsym $mod+Shift+Up exec --no-startup-id sudo /usr/local/sbin/k_brightness 10
 bindsym $mod+Shift+Down exec --no-startup-id sudo /usr/local/sbin/k_brightness -10
 
 # monitor control
-bindsym $mod+Shift+m exec --no-startup-id $HOME/dot/bin/k_screencontrol all switch && $HOME/dot/bin/k_wallpaper
-bindsym $mod+Shift+n exec --no-startup-id $HOME/dot/bin/k_screencontrol one switch && $HOME/dot/bin/k_wallpaper
+bindsym $mod+Shift+m exec --no-startup-id $HOME/.screenlayout/all.sh && $HOME/dot/bin/k_wallpaper
+bindsym $mod+Shift+n exec --no-startup-id $HOME/.screenlayout/one.sh && $HOME/dot/bin/k_wallpaper
 
 # media player
 bindsym XF86AudioPlay exec playerctl play
@@ -164,9 +164,16 @@ exec xset b off
 #set $monitor_two DP-4
 #set $monitor_three DP-2
 
+#set $monitor_one DisplayPort-0
+#set $monitor_two DisplayPort-1
+#set $monitor_three HDMI-A-0
+
+#set $monitor_one DisplayPort-0
+#set $monitor_two DisplayPort-2
+#set $monitor_three DisplayPort-1
+
 set $monitor_one DisplayPort-0
-set $monitor_two DisplayPort-1
-#set $monitor_three DisplayPort-2
+set $monitor_two DisplayPort-2
 set $monitor_three HDMI-A-0
 
 workspace $workspace1 output $monitor_one

@@ -9,7 +9,7 @@ currentLayoutFile="/tmp/kbLayout"
 pidFile="/tmp/kbLayout_pid"
 primaryLayout="us"
 secondaryLayout="no"
-secondaryLayoutTimer=60 # how many seconds before automatic change back to primary. 0 to disable.
+secondaryLayoutTimer=300 # how many seconds before automatic change back to primary. 0 to disable.
 # -----------------------------
 
 

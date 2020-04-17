@@ -22,6 +22,14 @@ if [[ $userName == "eivind-desktop" ]]; then
 	positionOne="2560x0"
 	positionTwo="5120x0"
 	positionThree="0x0"
+elif [[ $userName == "desktop-mini" ]]; then
+	monitorOne="DisplayPort-0"
+	monitorTwo="DisplayPort-2"
+	monitorThree="HDMI-A-0"
+
+	positionOne="2560x0"
+	positionTwo="0x0"
+	positionThree="5120x0"
 elif [[ $userName == "eivind-laptop" ]]; then
 	monitorOne="eDP1"
 	monitorTwo="HDMI2"

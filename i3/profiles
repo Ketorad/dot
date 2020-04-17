@@ -8,10 +8,11 @@ desktop() {
 	if [[ ! $(pgrep transmission-da) ]]; then
 		transmission-daemon
 	fi
+	blueman-tray &
 }
 
 desktop-mini() {
-	sh $HOME/.screenlayout/3x-dell.sh
+	sh $HOME/.screenlayout/all.sh
 }
 
 x250() {
