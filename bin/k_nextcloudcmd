@@ -7,11 +7,6 @@ helpText() {
 	exit 0
 }
 
-# check if nextcloudcmd is already running.
-if (( $(pgrep -c -x nextcloudcmd) )); then
-	echo "nextcloudcmd is already running. ...exiting."
-	exit 1
-fi
 
 # check number of arguments.
 if [[ $# != 4 ]]; then
@@ -20,6 +15,7 @@ if [[ $# != 4 ]]; then
 	helpText
 fi
 
+
 # check if argument 3 is a valid folder path.
 if [[ ! -d $3 ]]; then
 	echo "Error: $3 does not exist!"
@@ -27,6 +23,8 @@ if [[ ! -d $3 ]]; then
 	helpText
 fi
 sourceDir=$3
+sourceDirBase="$(basename $sourceDir)"
+
 
 # check if argument 4 is an url.
 if [[ ! $(echo $4 | awk '/^https:\/\/|^http:\/\// {print}') ]]; then
@@ -36,4 +34,28 @@ if [[ ! $(echo $4 | awk '/^https:\/\/|^http:\/\// {print}') ]]; then
 fi
 nextcloudURL=$4
 
+
+# adjustable variables
+tempFile="/tmp/$(basename $0)_$sourceDirBase"
+
+
+# check if nextcloudcmd is already syncing this folder
+if [[ -f "$tempFile" ]]; then
+    read -r tempFileVal < <(cat "$tempFile")
+    if (( $tempFileVal )); then
+        echo "nextcloudcmd is already running for folder $sourceDirBase. ...exiting."
+        exit 1
+    fi
+fi
+
+
+# lock for another instance to run on sourceDir
+echo 1 > "$tempFile"
+
+
+# execute the command
 nextcloudcmd -u $1 -p $2 --trust --silent --non-interactive $sourceDir $nextcloudURL
+
+
+# unlock for another instance to run on sourceDir
+echo 0 > "$tempFile"

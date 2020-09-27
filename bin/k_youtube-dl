@@ -2,7 +2,7 @@
 # Download all videoes bigger than x and newer than y. Also convert mp3 audio file from video files downloaded.
 
 daysOld=1
-minDuration=1800 # seconds
+minDuration=900 # seconds
 maxDownloads=5 # per url
 
 helpText() {

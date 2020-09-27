@@ -12,8 +12,8 @@ else
 	if [ ! -e $dataFolder/$today ]; then
 		mkdir $dataFolder/$today
 		# create today link to the new today's folder
-		rm -f $dataFolder/last
-		ln -s $dataFolder/$today $dataFolder/last
+		#rm -f $dataFolder/last
+		#ln -s $dataFolder/$today $dataFolder/last
 	fi
 fi
 

@@ -1,0 +1,88 @@
+#!/bin/bash
+# Download audio from videoes with youtube-dl.
+
+
+helpText() {
+	echo "\
+Usage: $(basename $0) URL|FILE [OPTIONS] DESTINATION
+
+When used with url argument, $(basename $0) processes that url.
+When used with file argument, $(basename $0) processes all urls found in plain text file.
+
+OPTIONS
+    -h --help
+        Print this help text and exit
+
+    -a --max-days-old
+        Ignore files older than x
+
+    -l --min-length
+        Ignore files shorter than x
+"
+
+	exit 0
+}
+
+
+printError() {
+    echo -e "\033[0;31mError:\033[0m $1\n"
+    helpText
+}
+
+
+# ERROR CHECKS
+
+# check if minimum number of arguments are met
+(( $# < 2 )) && printError "Not enough arguments!"
+
+# check if argument 1 is a URL or valid file
+if [[ $(echo $1 | awk '/^https:\/\/|^http:\/\// {print}') ]]; then
+	sourceURL=$1
+else
+    [[ -f $1 ]] && sourceFile=$1 || printError "$1 is not a valid URL or file!"
+fi
+
+# check for optional arguments
+for (( i=2; i < $#; i++ )); do
+    case ${!i} in
+
+        -h | --help)
+            helpText
+            ;;
+        -a | --max-days-old)
+            (( i++ ))
+            [[ ${!i} == ?(-)+([0-9]) ]] && maxDaysOld=${!i} || printError "${!i} is not an integer!"
+            ;;
+        -l | --min-length)
+            (( i++ ))
+            [[ ${!i} == ?(-)+([0-9]) ]] && minLength=${!i} || printError "${!i} is not an integer!"
+            ;;
+        *)
+            printError "${!i} is not a valid option!"
+            ;;
+
+    esac
+done
+
+# check if last argument is a valid folder
+[[ -d "${@: -1}" ]] && destFolder="${@: -1}" || printError "${@: -1} is not a valid folder!"
+
+# add / on the end if missing
+[[ ${destFolder: -1} == "/" ]] || destFolder+="/"
+
+
+# MAIN PROGRAM
+
+# build array of url(s) to download
+[[ $sourceURL ]] && URLs=( $sourceURL ) || URLs=( $(cat $sourceFile | awk '/^https:\/\/|^http:\/\// {print}') )
+
+# download audio from url(s) found in array
+for (( i = 0; i < ${#URLs[@]}; i++ )); do
+    command="youtube-dl -i --no-warnings -q -x --audio-format mp3 --audio-quality 5"
+    [[ $maxDaysOld ]] && command+=" --playlist-end 10 --dateafter now-${maxDaysOld}days"
+    [[ $minLength ]] && command+=" --match-filter \"duration >= $minLength\""
+    command+=" -o \"$destFolder%(uploader)s - %(title)s.%(ext)s\" \"${URLs[$i]}\""
+
+    # execute command
+    eval $command
+done

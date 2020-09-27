@@ -3,7 +3,6 @@
 
 helpText() {
 	echo "Usage:"
-#	echo "  $(basename $0) [folder path] [days] 		Delete files not accessed for [x] days."
 	echo "  $(basename $0) [folder path] [days] 		Delete files older than [days]."
 	exit 0
 }
@@ -22,8 +21,7 @@ if [[ ! -d $folderPath ]]; then
 fi
 
 # make sure folder path ends with "/"
-folderPath+="/"
-folderPath=$(echo $folderPath | tr -s "/")
+[[ ${folderPath: -1} == "/" ]] || folderPath+="/"
 
 # check if argument nr 2 is a valid number
 daysOlder=$2
@@ -35,7 +33,6 @@ if [[ ! $daysOlder =~ $re ]]; then
 fi
 
 # find and delete all files with access time older than argument
-#find $folderPath -type f -atime +$daysOlder -delete
 find $folderPath -type f -ctime +$daysOlder -delete
 
 # find and delete all empty folders

@@ -114,3 +114,11 @@ fi
 
 echo
 echo "... done."
+
+
+# Print out all .pacnew files found in /etc
+echo
+echo
+echo "--- .packnew files found in /etc ---"
+echo
+echo $(sudo find /etc -name *.pacnew)
