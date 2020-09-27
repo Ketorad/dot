@@ -1,3 +1,12 @@
 let g:netrw_dirhistmax  =10
-let g:netrw_dirhist_cnt =1
-let g:netrw_dirhist_1='/home/eivind/.i3/i3blocks'
+let g:netrw_dirhistcnt =4
+let g:netrw_dirhist_4='/home/eivind/dot/bin'
+let g:netrw_dirhist_3='/home/eivind/dot'
+let g:netrw_dirhist_2='/home/eivind'
+let g:netrw_dirhist_1='/home'
+let g:netrw_dirhist_0='/home/eivind'
+let g:netrw_dirhist_9='/home/eivind/dks/dot/bin'
+let g:netrw_dirhist_8='/home/eivind/dks/dot/i3/i3baranoid'
+let g:netrw_dirhist_7='/home/eivind/dks/dot/i3'
+let g:netrw_dirhist_6='/home/eivind/dks/dot'
+let g:netrw_dirhist_5='/home/eivind/dks/dot/bin'

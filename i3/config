@@ -164,17 +164,13 @@ exec xset b off
 #set $monitor_two DP-4
 #set $monitor_three DP-2
 
-#set $monitor_one DisplayPort-0
-#set $monitor_two DisplayPort-1
-#set $monitor_three HDMI-A-0
+set $monitor_one DisplayPort-0
+set $monitor_two DisplayPort-1
+set $monitor_three HDMI-A-0
 
 #set $monitor_one DisplayPort-0
 #set $monitor_two DisplayPort-2
 #set $monitor_three DisplayPort-1
-
-set $monitor_one DisplayPort-0
-set $monitor_two DisplayPort-2
-set $monitor_three HDMI-A-0
 
 workspace $workspace1 output $monitor_one
 workspace $workspace2 output $monitor_one

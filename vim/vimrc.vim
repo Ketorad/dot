@@ -1,99 +1,64 @@
-"colorscheme 0x7A69_dark
-"colorscheme space-vim-dark
-"colorscheme molokai
-"colorscheme adventurous
-"colorscheme MountainDew
-colorscheme ketoradColors
-"colorscheme random
+syntax on
 
-set backspace=2		" Backspace deletes like most programs in insert mode
-set nocompatible	" Use Vim settings, rather than Vi settings
-set ruler		" show the cursor position all the time
-set showcmd		" display incomplete commands
-set incsearch 		" do incremental searching
-set hlsearch		" highlight matches
-set autowrite		" automaticly :write before running commands
-set noswapfile
-set nocursorline
-
-" Switch syntax highlighting on, when the terminal has colors
-if(&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
-	syntax on
-endif
-
-" Set background outside range to get transparency.
-hi Normal ctermbg=NONE
-
-" For all text files set 'textwidth' to X(78) characters.
-autocmd FileType text setlocal textwidth=110
-
-" Autoindent
-"filetype plugin indent on
-filetype plugin on
-
-" Tabs
-set noexpandtab
-set shiftround
+set noerrorbells
+set tabstop=4 softtabstop=4
+set shiftwidth=4
+set expandtab
 set smartindent
-set autoindent
-
-set tabstop=3
-set shiftwidth=3
-
-" Display extra whitespace
-"set list listchars=tab:»·,trail:·
-set list listchars=tab:»·,trail:·
-
-" Highlight line number of where cursor currently is
-"hi CursorLineNr guifg=#050505
-
-" Numbers
+set nu
+set nowrap
+set smartcase
+set noswapfile
+set nobackup
+set undodir=~/.vim/undodir
+set undofile
+set incsearch
 set number relativenumber
-"set number
-set numberwidth=4
-
-" Open new split panes to right and bottom, wich feels more natural
-set splitbelow
-set splitright
-
-" How many lines before top and bottom to start scrolling the page
 set scrolloff=10
 
-" Key mapping
-map <F2> :NERDTree<CR>
-map <F6> :setlocal spell! spelllang=en<CR>
-"map t :tabn<CR>
-"map T :tabp<CR>
-"inoremap <Space><Space> <Esc>/<++><Enter>"_c4l
+set colorcolumn=80
+highlight ColorColumn ctermbg=0 guibg=lightgrey
 
-nnoremap Q <nop>		" prevent ex mode
-"nnoremap K <nop>		" prevent man pages for words under cursor
-nnoremap J <C-d>
-nnoremap K <C-u>
+call plug#begin('~/.vim/plugged')
 
-" Split navigation
-nnoremap <C-H> <C-W><C-H>
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
+Plug 'morhetz/gruvbox'
+Plug 'git@github.com:Valloric/YouCompleteMe.git'
+Plug 'jremmen/vim-ripgrep'
+Plug 'tpope/vim-fugitive'
+Plug 'leafgarland/typescript-vim'
+Plug 'vim-utils/vim-man'
+Plug 'lyuts/vim-rtags'
+Plug 'git@github.com:kien/ctrlp.vim.git'
+Plug 'mbbill/undotree'
 
-" Clear search
-nnoremap /<CR> :let @/=""<cr>
+call plug#end()
 
-" Autocomplete curly brackets
-inoremap {<CR> {<CR>}<C-O>k<C-O>A<cr>
-inoremap {; {<CR>};<C-O>k<C-O>A<cr>
+colorscheme gruvbox
+set background=dark
 
-" Copy and Paste
-vnoremap <C-c> "*y :let @+=@*<CR>
-"map <C-v> "+P
+if executable('rg')
+    let g:rg_derive_root='true'
+endif
 
-" HTML filetype mappings
-autocmd FileType html,php call SetHtmlOptions()
-function SetHtmlOptions()
-	nnoremap <F3> ggO<!DOCTYPE html><CR><html lang="<++>"><CR><Tab><head><CR><Tab><meta charset="UTF-8"><CR><meta name="description" content="<++>"><CR><meta name="viewport" content="width=device-width, initial-scale=1.0"><CR><meta http-equiv="X-UA-Compatible" content="ie=edge"><CR><!--<link rel="stylesheet" type="text/css" href="">--><CR><!--<script type="text/javascript" src=""></script>--><CR><title><++></title><CR><BS></head><CR><body><CR></body><CR><BS></html><Esc>gg0
-	inoremap ;i <em></em><Space><++><Esc>FeT>i
-	inoremap ;b <b></b><Space><++><Esc>FbT>i
-	inoremap ;p <p></p><Space><++><Esc>FpT>i
-endfunction
-set autoindent
+let g:ctrlp_user_command = ['.git/', 'git --git-dir=%s/.git ls-files -oc --exclude-standard']
+let mapleader = " "
+let g:netrw_browse_split = 0
+let g:netrw_banner = 0
+let g:netrw_winsize = 25
+let g:netrw_preview = 1
+
+let g:ctrlp_use_caching = 0
+
+nnoremap <leader>h :wincmd h<CR>
+nnoremap <leader>j :wincmd j<CR>
+nnoremap <leader>k :wincmd k<CR>
+nnoremap <leader>l :wincmd l<CR>
+nnoremap <leader>u :UndotreeShow<CR>
+nnoremap <leader>pv :Lexplore<CR>
+nnoremap <leader>ps :Rg<SPACE>
+nnoremap <leader>pf :e #<CR>
+nnoremap <silent> <leader>+ :vertical resize +5<CR>
+nnoremap <silent> <leader>- :vertical resize -5<CR>
+
+nnoremap <silent> <leader>gd :YcmCompleter GoTo<CR>
+nnoremap <silent> <leader>gf :YcmCompleter FixIt<CR>
