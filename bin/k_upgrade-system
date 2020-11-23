@@ -2,7 +2,10 @@
 # Backup "/" and "/boot" partitions, then upgrade system.
 
 
-backupPath="$HOME/bak/system_backups"
+echo broken
+exit 1
+
+backupPath="$HOME/cld/bak/system_backups"
 backupFolder="$(cat /etc/hostname)"
 keepOldBackups=3
 

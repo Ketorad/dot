@@ -1,0 +1,2 @@
+# /etc/fstab    
+https://nextcloud.ketorad.com/remote.php/webdav/ /mnt/nextcloud/eivind davfs rw,user,uid=eivind,gid=eivind,_netdev,auto 0 0

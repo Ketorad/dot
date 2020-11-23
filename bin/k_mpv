@@ -48,7 +48,11 @@ resolution=$(xrandr --listmonitors | grep -m 1 "0: " | tr -s " " | cut -d "x" -f
 echo "Starting video in $resolution."
 if [[ $1 == "-f" ]]; then
 	echo "starting in fullscreen"
-	mpv --fs --ytdl-format="best[height<=$resolution]" $url
+	#mpv --fs --ytdl-format="best[height<=$resolution]" $url || echo "mpv ytdl error" >> /tmp/dwm-status_bottom_messages
+	#mpv --fs --ytdl-format="best" $url
+	#mpv --fs $url || mpv --fs --ytdl-format="worst" $url
+	#mpv --fs $url || echo "mpv ytdl error" >> /tmp/dwm-status_bottom_messages
+    mpv --fs --ytdl-format="best[height<=$resolution]" $url || mpv --fs $url || mpv --fs --ytdl-format="mp4" $url || mpv --fs --ytdl-format="worst" $url || echo "$(date) - mpv ytdl error" >> /tmp/dwm-status_bottom_messages
 elif [[ $1 == "-d" ]]; then
 	#k_focus-split && mpv --ytdl-format="best[height<=$resolution]" $url & sleep 5 && k_focus-split && qutebrowser ":open -w $dissenterUrl$url"
 	k_focus-split && qutebrowser ":open -w $dissenterUrl$url" & sleep 1 && k_focus-split && mpv --ytdl-format="best[height<=$resolution]" $url

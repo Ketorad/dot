@@ -78,7 +78,7 @@ done
 
 # download audio from url(s) found in array
 for (( i = 0; i < ${#URLs[@]}; i++ )); do
-    command="youtube-dl -i --no-warnings -q -x --audio-format mp3 --audio-quality 5"
+    command="youtube-dl -i --no-warnings -q -x --audio-format mp3 --audio-quality 0 --embed-thumbnail"
     [[ $maxDaysOld ]] && command+=" --playlist-end 10 --dateafter now-${maxDaysOld}days"
     [[ $minLength ]] && command+=" --match-filter \"duration >= $minLength\""
     command+=" -o \"$destFolder%(uploader)s - %(title)s.%(ext)s\" \"${URLs[$i]}\""

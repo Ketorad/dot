@@ -1,0 +1,15 @@
+wiki; https://wiki.archlinux.org/index.php/Davfs2
+
+install davfs2
+
+mount once
+    # mount -t davfs http(s)://addres:<port>/path /mount/point
+
+edit fstab file
+
+edit secrets file
+make sure secrets file has 600 permission to prevent access to password
+
+edit davfs2.conf file
+
+mount -a

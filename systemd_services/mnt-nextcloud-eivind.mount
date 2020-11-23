@@ -1,0 +1,14 @@
+[Unit]
+Description=Mount WebDAV Service
+After=network-online.target
+Wants=network-online.target
+
+[Mount]
+What=https://nextcloud.ketorad.com/remote.php/webdav/
+Where=/mnt/nextcloud/eivind
+Options=uid=eivind,gid=eivind
+Type=davfs
+TimeoutSec=15
+
+[Install]
+WantedBy=multi-user.target

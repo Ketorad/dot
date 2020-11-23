@@ -1,0 +1,11 @@
+[Unit]
+Description=Mount WebDAV Service
+After=network-online.target
+Wants=network-online.target
+
+[Automount]
+Where=/mnt/nextcloud
+TimeoutIdleSec=300
+
+[Install]
+WantedBy=remote-fs.target

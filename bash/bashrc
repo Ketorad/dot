@@ -83,6 +83,8 @@ alias shutdown='sudo shutdown'
 
 # transmission torrent client
 alias trc='transmission-remote-cli'
+
+alias pgrep='pgrep -il'
 # ----------------/
 
 

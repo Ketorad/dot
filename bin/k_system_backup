@@ -1,0 +1,80 @@
+#!/bin/bash
+# Backup "/" and "/boot" partitions, then upgrade system.
+
+
+echo broken
+exit 0
+
+backupPath="$HOME/cld/bak/system_backups"
+backupFolder="$(cat /etc/hostname)"
+keepOldBackups=3
+
+
+throw_error() {
+	echo
+	echo "Error: $1!"
+	exit
+}
+
+
+# Arguments: "partition to backup" "name of image file"
+backup() {
+	backupPartition=$1
+	imageFileName=$2
+
+	if [[ $(command -v pigz) ]]; then
+		#sudo dd if=$backupPartition conv=sync,noerror bs=128K status=progress | pigz -c > "$backupPath/$backupFolder/$dateNow/$imageFileName"
+		sudo dd if=$backupPartition conv=sync,noerror bs=128K status=progress | pigz -c | ssh eivind@ketorad.com dd of="$backupPath/$backupFolder/$dateNow/$imageFileName"
+	else
+		echo "Using gzip. Install pigz for multithreaded compression."
+		#sudo dd if=$backupPartition conv=sync,noerror bs=128K status=progress | gzip -c > "$backupPath/$backupFolder/$dateNow/$imageFileName"
+		sudo dd if=$backupPartition conv=sync,noerror bs=128K status=progress | gzip -c | ssh eivind@ketorad.com dd of="$backupPath/$backupFolder/$dateNow/$imageFileName"
+	fi
+}
+
+
+# Error checks
+if [[ ! -d "$backupPath" ]]; then
+	throw_error "$backupPath not available"
+fi
+
+if [[ ! -d "$backupPath/$backupFolder" ]]; then
+	mkdir "$backupPath/$backupFolder"
+fi
+
+bootEfiPartition=$(grep -w /boot/efi /proc/mounts | awk '{print $1}')
+if [[ ! $bootEfiPartition ]]; then
+	bootPartition=$(grep -w /boot /proc/mounts | awk '{print $1}')
+fi
+
+rootPartition=$(grep -w / /proc/mounts | awk '{print $1}')
+if [[ ! $rootPartition ]]; then
+	throw_error "Root partition does not exist"
+fi
+
+
+# Backup system
+dateNow=$(date '+%Y.%m.%d.%H.%M.%S')
+mkdir "$backupPath/$backupFolder/$dateNow"
+
+if [[ $bootEfiPartition ]]; then
+    echo
+    echo "Backing up $bootEfiPartition \"/boot/efi\" ..."
+    backup "$bootEfiPartition" "boot.efi.img.gz"
+elif [[ $bootPartition ]]; then
+    echo
+    echo "Backing up $bootPartition \"/boot\" ..."
+    backup "$bootPartition" "boot.img.gz"
+fi
+
+echo
+echo "Backing up $rootPartition \"/\" ..."
+backup "$rootPartition" "root.img.gz"
+
+
+# Delete superfluous old backups (keep X newest)
+oldBackupFolders=( $(ls -1 -d $backupPath/$backupFolder/*/) )
+while (( ${#oldBackupFolders[@]} > $keepOldBackups )); do
+	rm -R "${oldBackupFolders[0]}"
+	oldBackupFolders=( ${oldBackupFolders[@]:1} )
+done

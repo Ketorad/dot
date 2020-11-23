@@ -1,0 +1,245 @@
+#!/bin/bash
+
+# Hiragana & Katakana training simulator
+# test your skills in Japanese Hiragana and Katakana
+
+# Author: Eivind Engesbak
+
+
+# adjustable variables
+maxTime=2000
+maxSpeedMultiplier=10
+xpFailLossPercentage=25
+xpBarSegments=20
+emptyMultiplierText="        "
+#val=0; echo -n "0 "; for (( i=0; i<19;i++ )); do (( val+= 100 + (val / 10) )); echo -n "$val "; done; echo
+levels=(0 100 220 364 536 743 991 1289 1646 2075 2590 3208 3949 4838 5905 7186 8723 10567 12780 15436)
+#levels=(0 100)
+
+
+# variable inits 
+xp=${levels[0]}
+level=1
+comboMultiplier=1
+comboMultiplierText=$emptyMultiplierText
+speedMultiplierText=$emptyMultiplierText
+response="Type the correct Romanji to score points!"
+maxLevelTimer=$(( $(date +%s%N) / 1000000 ))
+mistakes=0
+
+dataArray=(\
+あ a い i う u え e お o \
+か ka き ki く ku け ke こ ko \
+さ sa し si/shi す su せ se そ so \
+た ta ち ti/chi つ tu/tsu て te と to \
+な na に ni ぬ nu ね ne の no \
+は ha ひ hi ふ hu/fu へ he/e ほ ho \
+ま ma み mi む mu め me も mo \
+や ya ゆ yu よ yo \
+ら ra り ri る ru れ re ろ ro \
+わ wa を wo/o ん n \
+が ga ぎ gi ぐ gu げ ge ご go \
+ざ za じ zi/ji ず zu ぜ ze ぞ zo \
+だ da ぢ di づ du/zu で de ど do \
+ば ba び bi ぶ bu べ be ぼ bo \
+ぱ pa ぴ pi ぷ pu ぺ pe ぽ po \
+きゃ kya きゅ kyu きょ kyo \
+しゃ sya/sha しゅ syu/shu しょ syo/sho \
+ちゃ tya/cha ちゅ tyu/chu ちょ tyo/cho \
+にゃ nya にゅ nyu にょ nyo \
+ひゃ hya ひゅ hyu ひょ hyo \
+みゃ mya みゅ myu みょ myo \
+りゃ rya りゅ ryu りょ ryo \
+ぎゃ gya ぎゅ gyu ぎょ gyo \
+じゃ zya/ja じゅ zyu/ju じょ zyo/jo \
+ぢゃ dya/ja ぢゅ dyu/ju ぢょ dyo/jo \
+びゃ bya びゅ byu びょ byo \
+ぴゃ pya ぴゅ pyu ぴょ pyo \
+\
+ア a イ i ウ u エ e オ o \
+カ ka キ ki ク ku ケ ke コ ko \
+サ sa シ si/shi ス su セ se ソ so \
+タ ta チ ti/chi ツ tu/tsu テ te ト to \
+ナ na ニ ni ヌ nu ネ ne ノ no \
+ハ ha ヒ hi フ hu/fu ヘ he/e ホ ho \
+マ ma ミ mi ム mu メ me モ mo \
+ヤ ya ユ yu ヨ yo \
+ラ ra リ ri ル ru レ re ロ ro \
+ワ wa ヲ wo/o ン n \
+ガ ga ギ gi グ gu ゲ ge ゴ go \
+ザ za ジ zi/ji ズ zu ゼ ze ゾ zo \
+ダ da ヂ di/ji ヅ du/zu デ de ド do \
+バ ba ビ bi ブ bu ベ be ボ bo \
+パ pa ピ pi プ pu ペ pe ポ po \
+キャ kya キュ kyu キョ kyo \
+シャ sya/sha シュ syu/shu ショ syo/sho \
+チャ tya/cha チュ tyu/chu チョ tyo/cho \
+ニャ nya ニュ nyu ニョ nyo \
+ヒャ hya ヒュ hyu ヒョ hyo \
+ミャ mya ミュ myu ミョ myo \
+リャ rya リュ ryu リョ ryo \
+ギャ gya ギュ gyu ギョ gyo \
+ジャ zya/ja ジュ zyu/ju ジョ zyo/jo \
+ヂャ dya/ja ヂュ dyu/ju ヂョ dyo/jo \
+ビャ bya ビュ byu ビョ byo \
+ピャ pya ピュ pyu ピョ pyo \
+)
+
+
+# functions
+displayDebug() {
+    echo -e "\n--- DEBUG INFO ---"
+    echo "symbols: $(( ${#dataArray[@]} / 2 )), levels: ${#levels[@]}, symbols unlocked: $difficulty, max level timer: $maxLevelTimer - $maxLevelTime"
+    echo "your last answer: $answer"
+    echo "current answer: $correctAnswerFull - $correctAnswerA - $correctAnswerB"
+    echo "answerTime: $answerTime"
+    echo "comboMultiplier: $comboMultiplier"
+    echo "speedMultiplier: $speedMultiplier"
+    echo "mistakes: $mistakes - $mistakesString"
+    echo "xp: $xp"
+    echo "xpLevelTotal: $xpLevelTotal"
+    echo "xpLevelProgress: $xpLevelProgress"
+    echo "xpFailLoss: $xpFailLoss"
+    echo "xpBarProgress: $xpBarProgress"
+    echo -e "------------------\n"
+}
+
+
+displayStats() {
+    echo -e "\e[0;31;1;47m Hiragana & Katakana training simulator \e[0m"
+    echo -en "\n   Level $level"
+    echo -e "  $comboMultiplierText  $speedMultiplierText"
+    echo -en "   $xpBar\e[0m"
+    [[ $maxLevelTimeString ]] && echo -en " $maxLevelTimeString $mistakesString"
+    echo
+    echo -en " $response"
+    (( levelUp )) && echo -e "     \e[1;1;42;30mLevel Up!\e[0m" || echo
+}
+
+
+# check for debug argument
+[[ $1 == "-d" ]] && debug=1
+
+
+# game loop
+while true; do
+    # calculate level
+    if (( level < ${#levels[@]} )); then
+        if (( xp >= ${levels[level]} )); then
+            (( level++ ))
+            levelUp=1
+        else
+            levelUp=0
+        fi
+
+        xpLevelTotal=$(( ${levels[level]} - ${levels[level - 1]} ))
+    else
+        xpLevelTotal=0
+        levelUp=0
+    fi
+
+    xpLevelProgress=$(( xp - ${levels[level - 1]} ))
+
+
+    # calculate xp bar
+    if (( level < ${#levels[@]} )); then
+        xpBarProgress=$(( xpBarSegments * xpLevelProgress / xpLevelTotal ))
+        xpBar=""
+        for (( i=0; i < xpBarSegments; i++ )) {
+            (( i < xpBarProgress )) && xpBar+="\\e[1;43m " || xpBar+="\\e[1;40m "
+        }
+    else
+        xpBarProgress=0
+        xpBar="\\e[0;30;1;45m  マキシマムレベル  "
+    fi
+
+
+    # set max level time if not already set and maxlevel is reached
+    if (( level == ${#levels[@]} )) && [[ ! $maxLevelTime ]]; then
+        maxLevelTime=$(( ($(date +%s%N) / 1000000) - maxLevelTimer ))
+        while (( maxLevelTime >= 3600000 )); do (( hh++ )); (( maxLevelTime-=3600000 )); done
+        [[ $hh ]] && maxLevelTimeString="${hh}h"
+        while (( maxLevelTime >= 60000 )); do (( mm++ )); (( maxLevelTime-=60000 )); done
+        [[ $mm ]] && maxLevelTimeString+=" ${mm}m"
+        while (( maxLevelTime >= 1000 )); do (( ss++ )); (( maxLevelTime-=1000 )); done
+        [[ $ss ]] && maxLevelTimeString+=" ${ss}."
+        maxLevelTimeString+="${maxLevelTime}s"
+    fi
+    
+
+    # calculate how many symbols to pool from
+    (( level < ${#levels[@]} - 1 )) && difficulty=$(( ( (${#dataArray[@]} / 2) / (${#levels[@]} - 1) ) * level )) || difficulty=$(( ${#dataArray[@]} / 2 ))
+
+    # get random symbol, but prevent picking same symbol as last time
+    lastQuestion=$question
+    while [[ $question == $lastQuestion ]]; do
+        question=$(( 2 * (RANDOM % difficulty) ))
+    done
+
+
+    # get correct answer(s)
+    correctAnswerFull=${dataArray[$(($question+1))]}
+    if [[ $correctAnswerFull == */* ]]; then
+        correctAnswerA=${correctAnswerFull%/*}
+        correctAnswerB=${correctAnswerFull#*/}
+    else
+        correctAnswerA=$correctAnswerFull
+        correctAnswerB=""
+    fi
+
+
+    # create the string for displaying number of wrong answers
+    (( mistakes )) && mistakesString=" mistakes \\e[31m$mistakes\\e[0m" || mistakesString=" \\e[32mPERFECT!\\e[0m"
+
+
+    # show text
+    clear
+    (( debug )) && displayDebug
+    displayStats
+    (( question < ${#dataArray[@]} / 2 )) && echo -en " \e[30;1;46m" || echo -en " \e[30;1;44m"
+    echo -en "${dataArray[$question]}\e[0m "
+
+
+    # get answer and time it
+    startTimer=$(( $(date +%s%N) / 1000000 ))
+    #echo -en " "
+    read answer
+    answerTime=$(( ($(date +%s%N) / 1000000) - startTimer ))
+    (( answerTime > maxTime )) && answerTime=$maxTime
+
+
+    # calculate speed multiplier and set text
+    speedMultiplier=$(( (maxTime - answerTime) / (maxTime / maxSpeedMultiplier) + 1 ))
+
+    # calculate xp loss for wrong answer
+    xpFailLoss=$(( xpLevelTotal * xpFailLossPercentage / 100 ))
+    (( xpFailLoss > xpLevelProgress )) && xpFailLoss=$xpLevelProgress
+
+
+    # check if answer is correct
+    if [[ $answer == $correctAnswerA ]] || [[ $answer == $correctAnswerB && $correctAnswerB ]]; then
+        (( xp+= 1 * comboMultiplier * speedMultiplier ))
+        (( xp > ${levels[-1]} )) && xp=${levels[-1]}
+
+        (( comboMultiplier > 1 )) && comboMultiplierText="combo ${comboMultiplier}x"
+        (( speedMultiplier > 1 )) && speedMultiplierText="speed ${speedMultiplier}x" || speedMultiplierText=$emptyMultiplierText
+
+        (( comboMultiplier++ ))
+
+        response="\\e[32mCorrect!\\e[0m"
+
+    else
+        (( xp >= xpFailLoss )) && (( xp-=xpFailLoss )) || (( xp=${levels[level - 1]} ))
+        (( xp < ${levels[0]} )) && xp=${levels[0]}
+
+        comboMultiplierText=$emptyMultiplierText
+        speedMultiplierText=$emptyMultiplierText
+
+        comboMultiplier=1
+
+        (( level < ${#levels[@]} )) && (( mistakes++ ))
+
+        response="\\e[31mWrong!\\e[0m \\e[30;1;41m${dataArray[$question]}\\e[0m is \"$correctAnswerA\""
+        [[ $correctAnswerB ]] && response+=" or \"$correctAnswerB\""
+    fi
+done

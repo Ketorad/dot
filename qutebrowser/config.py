@@ -223,7 +223,7 @@ c.tabs.mousewheel_switching = False
 #   - next: After the current tab.
 #   - first: At the beginning.
 #   - last: At the end.
-c.tabs.new_position.related = 'next'
+c.tabs.new_position.related = 'last'
 
 # Open base URL of the searchengine if a searchengine shortcut is
 # invoked without parameters.
@@ -248,7 +248,7 @@ c.url.open_base_url = True
 # the search engine name to the search term, e.g. `:open google
 # qutebrowser`.
 # Type: Dict
-c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}', 'g': 'https://www.google.com/search?hl=en&q={}', 'y': 'http://www.youtube.com/results?search_query={}&aq=f', 'pmd': 'https://www.pornmd.com/straight/{}?min_duration=600&quality=hd', 'yw': 'http://no.yachtworld.com/core/listing/cache/searchResults.jsp?is=false&sm=3&searchtype=homepage&Ntk=boatsNO&type=%28Sail%29&slim=quick&currencyid=1012&luom=126&toLength=50&cit=true&fromLength=40&fromYear=2003&toYear=&man={}&No=0&Ns=PBoat_sortByPriceAsc%7C0', 'w': 'https://en.wikipedia.org/?search{}', 'aw': 'https://wiki.archlinux.org/?search{}', 'sp': 'https://www.protondb.com/search?q={}', 'pj': 'https://www.prisjakt.no/search?search={}&searchInProps=false', 'd': 'https://dissenter.com/discussion/begin?url={}', 'b': 'https://search.bitchute.com/renderer?use=bitchute-json&name=Search&login=bcadmin&key=7ea2d72b62aa4f762cc5a348ef6642b8&query={}', 'ip': 'https://iptorrents.com/t?q={}&qf=#torrents', 'ark': 'https://ark.intel.com/content/www/us/en/ark/search.html?_charset_=UTF-8&q={}'}
+c.url.searchengines = {'DEFAULT': 'https://duckduckgo.com/?q={}', 'g': 'https://www.google.com/search?hl=en&q={}', 'y': 'http://www.youtube.com/results?search_query={}&aq=f', 'pmd': 'https://www.pornmd.com/straight/{}?min_duration=600&qualies=hd', 'yw': 'http://no.yachtworld.com/core/listing/cache/searchResults.jsp?is=false&sm=3&searchtype=homepage&Ntk=boatsNO&type=%28Sail%29&slim=quick&currencyid=1012&luom=126&toLength=50&cit=true&fromLength=40&fromYear=2003&toYear=&man={}&No=0&Ns=PBoat_sortByPriceAsc%7C0', 'w': 'https://en.wikipedia.org/?search{}', 'aw': 'https://wiki.archlinux.org/?search{}', 'sp': 'https://www.protondb.com/search?q={}', 'pj': 'https://www.prisjakt.no/search?search={}&searchInProps=false', 'd': 'https://dissenter.com/discussion/begin?url={}', 'b': 'https://search.bitchute.com/renderer?use=bitchute-json&name=Search&login=bcadmin&key=7ea2d72b62aa4f762cc5a348ef6642b8&query={}', 'ip': 'https://iptorrents.com/t?q={}&qf=#torrents', 'ark': 'https://ark.intel.com/content/www/us/en/ark/search.html?_charset_=UTF-8&q={}'}
 
 # Default zoom level.
 # Type: Perc
@@ -309,9 +309,10 @@ c.fonts.statusbar = '14pt monospace'
 # Bindings for normal mode
 config.bind('-', 'zoom-out')
 config.bind('<Alt+v>', 'spawn k_mpv -f {url}')
-config.bind('<Ctrl+a>', 'spawn youtube-dl -x --audio-format mp3 --audio-quality 0 "{url}" -o "dwn/%(title)s.%(ext)s"')
+#config.bind('<Ctrl+a>', 'spawn youtube-dl -x --audio-format mp3 --audio-quality 0 --embed-thumbnail "{url}" -o "dwn/%(title)s.%(ext)s"')
+config.bind('<Ctrl+a>', 'spawn k_youtube-dl-audio "{url}" dwn')
 config.bind('<Ctrl+d>', 'tab-close')
-config.bind('<Ctrl+s>', 'spawn youtube-dl "{url}" -o "dwn/%(title)s.%(ext)s"')
+config.bind('<Ctrl+s>', 'spawn youtube-dl "{url}" --audio-quality 0 -o "dwn/%(title)s.%(ext)s"')
 config.bind('<Shift+Backspace>', 'back')
 config.bind('=', 'zoom-in')
 config.bind('D', 'scroll-page 0 0')
@@ -325,3 +326,5 @@ config.bind('j', 'scroll-page 0 0.5')
 config.bind('k', 'scroll-page 0 -0.5')
 config.bind('v', 'hint links spawn k_mpv -f {hint-url}')
 config.bind('yf', 'hint links yank {hint-url}')
+config.bind('sa', 'hint links spawn k_youtube-dl-audio "{hint-url}" dwn')
+config.bind('sv', 'hint links spawn youtube-dl "{hint-url}" --audio-quality 0 -o "dwn/%(title)s.%(ext)s"')

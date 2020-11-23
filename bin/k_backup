@@ -2,7 +2,7 @@
 # Backup chosen files or folders
 
 today=$(date '+%Y.%m.%d.%H.%M.%S')
-dataFolder="/home/eivind/bak"
+dataFolder="/home/eivind/cld/bak"
 
 # Check if backup folder is available
 if [ ! -e $dataFolder ]; then
